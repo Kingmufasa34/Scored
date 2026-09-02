@@ -50,7 +50,25 @@ RTT_PASSWORD=your-rtt-password
 
 `credentials.json`, `gmail-token.json` and `.env` are gitignored — never commit them.
 
-## Commands
+## Phone app (mobile web dashboard)
+
+There's a mobile-first web front end so you can run everything from your phone — see your journeys, delays and estimated payouts, and prepare a claim with one tap. It installs to your home screen as a PWA.
+
+```bash
+npm run dev:serve      # dev (tsx), http://localhost:3000
+# or, built:
+npm run build && npm run serve
+```
+
+Open it on your phone, then **Add to Home Screen** for an app icon. Until you set up Gmail + RTT it runs on the bundled **sample data** (a "Demo data" badge shows), so you can try the whole flow immediately.
+
+Because it reads your private email and files real claims, the app runs **with your credentials** — so host it yourself rather than on a public site:
+- **Same Wi-Fi:** run it on a laptop/Pi and open `http://<that-machine-ip>:3000` on your phone.
+- **From anywhere:** put it behind a tunnel (`cloudflared tunnel --url http://localhost:3000` or ngrok), or deploy to a private host (Render/Railway/Fly). Set `PORT` via env; mount `credentials.json`, `gmail-token.json`, `.env` as secrets.
+
+API (same server): `GET /api/state`, `POST /api/refresh`, `POST /api/claims/:id/prepare`, `POST /api/claims/:id/submit`, `GET /api/claims/:id/markdown`.
+
+## Commands (CLI)
 
 | Command | What it does |
 |---|---|
@@ -93,8 +111,11 @@ For a **return** ticket, one delayed leg is compensated on **half** the total fa
 ## Architecture
 
 ```
+public/                 mobile PWA front end (index.html · styles.css · app.js · sw.js)
 src/
   index.ts              CLI (run · demo · list · operators)
+  server.ts             Express API + serves the phone app
+  web/                  web deps factory + claim DTO
   pipeline.ts           orchestrator: email → parse → delay → build → submit
   config.ts             .env-driven configuration
   types.ts              domain model

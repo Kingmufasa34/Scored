@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b1220" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Scored" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <title>Scored — Delay Repay</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="logo" aria-hidden="true">🚆</span>
+          <div>
+            <h1>Scored</h1>
+            <p class="tagline">Delay Repay, sorted for you</p>
+          </div>
+        </div>
+        <span id="demoBadge" class="badge hidden">Demo data</span>
+      </header>
+
+      <section class="summary" id="summary" aria-live="polite">
+        <div class="stat">
+          <span class="stat-value" id="statPayout">£0.00</span>
+          <span class="stat-label">Owed to you</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="statEligible">0</span>
+          <span class="stat-label">Claimable</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="statTotal">0</span>
+          <span class="stat-label">Journeys</span>
+        </div>
+      </section>
+
+      <p class="lastrun" id="lastRun">Not checked yet.</p>
+
+      <main id="list" class="list">
+        <div class="empty" id="empty">
+          <div class="spinner" id="spinner"></div>
+          <p id="emptyText">Checking your journeys…</p>
+        </div>
+      </main>
+
+      <div class="footerspace"></div>
+    </div>
+
+    <button class="fab" id="refreshBtn" aria-label="Refresh">
+      <span class="fab-icon" id="fabIcon">⟳</span>
+      <span>Check delays</span>
+    </button>
+
+    <!-- Claim detail sheet -->
+    <div class="sheet-backdrop hidden" id="sheetBackdrop"></div>
+    <section class="sheet hidden" id="sheet" aria-modal="true" role="dialog">
+      <div class="sheet-handle" id="sheetClose"></div>
+      <div id="sheetBody"></div>
+    </section>
+
+    <div class="toast hidden" id="toast"></div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
