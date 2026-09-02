@@ -1,0 +1,36 @@
+{
+  "name": "scored",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Delay Repay agent: pulls train tickets from your email, checks actual train times, and prepares (or auto-submits) UK Delay Repay compensation claims.",
+  "type": "module",
+  "bin": {
+    "scored": "./dist/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "scored": "tsx src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "auth:gmail": "tsx src/email/authorize.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "googleapis": "^144.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "playwright": "^1.47.2",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1"
+  },
+  "optionalDependencies": {},
+  "peerDependenciesMeta": {}
+}

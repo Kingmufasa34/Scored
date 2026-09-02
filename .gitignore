@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment & secrets
+.env
+.env.local
+*.local
+
+# OAuth / credentials — NEVER commit these
+credentials.json
+token.json
+gmail-token.json
+secrets/
+
+# Local runtime state (processed claims, prepared claim files)
+data/
+prepared-claims/
+*.log
+
+# Playwright
+test-results/
+playwright-report/
+.playwright/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
