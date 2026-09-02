@@ -9,6 +9,7 @@ import { PrepareSubmitter } from './claim/submitter.js';
 import { PlaywrightSubmitter } from './claim/playwrightSubmitter.js';
 import { renderClaimMarkdown } from './claim/render.js';
 import { buildWebDeps } from './web/deps.js';
+import { authRoutes } from './web/authRoutes.js';
 import { toClaimDTO } from './web/dto.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -18,14 +19,15 @@ const PUBLIC_DIR = path.resolve(__dirname, '..', 'public');
 const cfg = loadConfig();
 const app = express();
 app.use(express.json());
+app.use(authRoutes(cfg));
 
 /** In-memory view of the latest run so per-claim actions have something to act on. */
 const cache = new Map<string, Claim>();
 let lastRun: string | null = null;
-let deps = buildWebDeps(cfg);
+let deps = await buildWebDeps(cfg);
 
 async function refresh(): Promise<void> {
-  deps = buildWebDeps(cfg); // re-evaluate demo/real each refresh
+  deps = await buildWebDeps(cfg); // re-evaluate demo/real each refresh
   // previewOnly means the submitter is never invoked here — actions do that on demand.
   const summary = await runPipeline(
     { ...deps, submitter: new PrepareSubmitter(cfg.preparedDir) },

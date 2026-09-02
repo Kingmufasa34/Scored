@@ -60,7 +60,9 @@ npm run dev:serve      # dev (tsx), http://localhost:3000
 npm run build && npm run serve
 ```
 
-Open it on your phone, then **Add to Home Screen** for an app icon. Until you set up Gmail + RTT it runs on the bundled **sample data** (a "Demo data" badge shows), so you can try the whole flow immediately.
+Open it on your phone, then **Add to Home Screen** for an app icon. It opens on a **sign-in page** where you connect your accounts — **Continue with Google** for email and a **Connect** form for your Realtime Trains login — no files or terminal needed. Until both are connected it runs on the bundled **sample data** ("Explore with sample data"), so you can try the whole flow immediately.
+
+**One-time server setup for the Google button:** browser sign-in needs a Google OAuth **Web application** client. Create one in the Google Cloud Console with an authorised redirect URI of `<your app origin>/auth/google/callback` (e.g. `http://localhost:3000/auth/google/callback`), then either drop it in `credentials.json` or set `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`. After that, every sign-in is just a tap. (The CLI `npm run auth:gmail` still works with a "Desktop app" client if you prefer.)
 
 Because it reads your private email and files real claims, the app runs **with your credentials** — so host it yourself rather than on a public site:
 - **Same Wi-Fi:** run it on a laptop/Pi and open `http://<that-machine-ip>:3000` on your phone.

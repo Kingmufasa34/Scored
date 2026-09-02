@@ -71,19 +71,44 @@ export async function loadAuthorizedClient(
 
 /** Construct an OAuth2 client (no token yet) from a Google client-secret file. */
 export async function buildOAuthClient(credentialsPath: string): Promise<OAuth2Client> {
+  const { clientId, clientSecret, redirect } = await readClientSecret(credentialsPath);
+  return new google.auth.OAuth2(clientId, clientSecret, redirect ?? 'urn:ietf:wg:oauth:2.0:oob');
+}
+
+/**
+ * OAuth2 client for the browser redirect flow used by the in-app sign-in page.
+ * Client id/secret come from env (GOOGLE_CLIENT_ID/SECRET) or credentials.json;
+ * the redirect URI is this server's own callback for the current origin.
+ */
+export async function buildWebOAuthClient(
+  credentialsPath: string,
+  redirectUri: string,
+): Promise<OAuth2Client> {
+  const envId = process.env.GOOGLE_CLIENT_ID;
+  const envSecret = process.env.GOOGLE_CLIENT_SECRET;
+  if (envId && envSecret) {
+    return new google.auth.OAuth2(envId, envSecret, redirectUri);
+  }
+  const { clientId, clientSecret } = await readClientSecret(credentialsPath);
+  return new google.auth.OAuth2(clientId, clientSecret, redirectUri);
+}
+
+async function readClientSecret(
+  credentialsPath: string,
+): Promise<{ clientId: string; clientSecret: string; redirect?: string }> {
   let parsed: any;
   try {
     parsed = JSON.parse(await fs.readFile(credentialsPath, 'utf8'));
   } catch {
     throw new Error(
-      `Could not read Google OAuth client secret at ${credentialsPath}. Download it from the ` +
-        'Google Cloud Console (OAuth client ID → Desktop app) and set GMAIL_CREDENTIALS_PATH.',
+      `Could not read Google OAuth client secret at ${credentialsPath}. Create one in the ` +
+        'Google Cloud Console (OAuth client ID) and set GMAIL_CREDENTIALS_PATH, or set ' +
+        'GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET.',
     );
   }
   const key = parsed.installed ?? parsed.web;
   if (!key) throw new Error('Credentials file is missing an "installed"/"web" section.');
-  const redirect = key.redirect_uris?.[0] ?? 'urn:ietf:wg:oauth:2.0:oob';
-  return new google.auth.OAuth2(key.client_id, key.client_secret, redirect);
+  return { clientId: key.client_id, clientSecret: key.client_secret, redirect: key.redirect_uris?.[0] };
 }
 
 // ── Gmail message → EmailMessage ─────────────────────────────────────────────

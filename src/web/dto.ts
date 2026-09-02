@@ -8,6 +8,9 @@ export interface ClaimDTO {
   date: string;
   origin: string;
   destination: string;
+  originCrs?: string;
+  destinationCrs?: string;
+  serviceUid?: string;
   operator: string;
   scheme: string;
   claimUrl?: string;
@@ -34,6 +37,9 @@ export function toClaimDTO(claim: Claim): ClaimDTO {
     date: j.date,
     origin: j.originName,
     destination: j.destinationName,
+    originCrs: j.originCrs,
+    destinationCrs: j.destinationCrs,
+    serviceUid: claim.delay.serviceUid,
     operator: claim.operator.name,
     scheme: claim.operator.scheme.name,
     claimUrl: claim.operator.claimUrl,
