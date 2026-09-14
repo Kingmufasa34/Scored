@@ -108,7 +108,10 @@
   .book { touch-action:pan-y; }
   .book .page { position:relative; container-type:size; overflow:hidden; background:#fff; }
   .book .page .layer { position:absolute; }
+  .book .page .layer, .book .page img, .book .pagebg { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+  .book .page img { image-rendering:auto; }
   .book .page .cnum, .book .page .crole { display:none; }
+  .stf__item, .stf__parent, .stf__block { will-change:transform; }
   .reader .rnav { position:absolute; top:50%; transform:translateY(-50%); width:44px; height:64px; border:0; background:rgba(26,23,18,.72); color:#fff; font-size:26px; cursor:pointer; z-index:3; }
   .reader .rnav.prev { left:-8px; } .reader .rnav.next { right:-8px; }
   .reader .rcount { font:700 12px/1 var(--mono); letter-spacing:.1em; color:var(--ink); text-transform:uppercase; }
@@ -409,30 +412,45 @@
   }
 
   // ---------- reader: realistic book flip via StPageFlip ----------
-  let book=null, bookW=0, bookH=0;
+  let book=null, bookW=0, bookH=0, stfBusy=false, buildToken=0;
   function bookDims(){
-    const h = Math.min(Math.round((window.innerHeight||700)*0.70), 560);
+    const h = Math.min(Math.round((window.innerHeight||700)*0.72), 620);
     const w = Math.round(h * pageAspect(state.paper));
     return { w, h };
   }
-  function buildBook(){
+  // Decode every photo before the book animates, so the fold never stutters
+  // waiting on an image to paint.
+  function preloadImages(){
+    const urls=new Set();
+    state.pages.forEach((p)=>p.layers.forEach((L)=>{ if(L.type==="image"&&L.src) urls.add(L.src); }));
+    return Promise.all([...urls].map((u)=> new Promise((res)=>{ const im=new Image(); im.onload=()=>{ im.decode?im.decode().then(res,res):res(); }; im.onerror=res; im.src=u; })));
+  }
+  const raf2 = () => new Promise((r)=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  async function buildBook(){
     const host=el("book"); if(!host) return;
+    const my=++buildToken;
     try{ if(book){ book.destroy(); book=null; } }catch(_){ book=null; }
+    stfBusy=false;
     host.innerHTML="";
     const {w,h}=bookDims(); bookW=w; bookH=h;
     host.style.width=w+"px"; host.style.height=h+"px";
-    for(let i=0;i<8;i++){ const pg=document.createElement("div"); pg.className="page"; pg.setAttribute("data-density", i===0||i===7?"hard":"soft"); pg.style.background=state.pages[i].bg; renderPage(pg,i,false); host.appendChild(pg); }
+    for(let i=0;i<8;i++){ const pg=document.createElement("div"); pg.className="page"; pg.setAttribute("data-density", i===0||i===7?"hard":"soft"); renderPage(pg,i,false); host.appendChild(pg); }
     const Lib = window.St && window.St.PageFlip;
-    if(Lib){
-      book = new Lib(host, { width:w, height:h, size:"fixed", drawShadow:true, flippingTime:800, usePortrait:true, showCover:true, maxShadowOpacity:0.5, autoSize:false, mobileScrollSupport:false, clickEventForward:false, swipeDistance:20 });
-      book.loadFromHTML(host.querySelectorAll(".page"));
-      try{ book.turnToPage(clamp(readerPage,0,7)); }catch(_){}
-      book.on("flip",(e)=>{ readerPage=e.data; updateReaderMeta(); });
-      book.on("changeState",()=>{});
-    } else {
-      host.dataset.fallback="1"; // no library: show one page, arrows/dots switch
-      showFallbackPage();
-    }
+    if(!Lib){ host.dataset.fallback="1"; showFallbackPage(); updateReaderMeta(); return; }
+    await preloadImages();
+    await raf2();                       // let fonts/layout settle before measuring
+    if(my!==buildToken) return;         // a newer build superseded this one
+    book = new Lib(host, {
+      width:w, height:h, size:"fixed",
+      flippingTime:620, usePortrait:true, showCover:true,
+      drawShadow:true, maxShadowOpacity:0.4, showPageCorners:true,
+      autoSize:false, mobileScrollSupport:false, clickEventForward:false,
+      useMouseEvents:true, swipeDistance:16, disableFlipByClick:false,
+    });
+    book.loadFromHTML(host.querySelectorAll(".page"));
+    try{ book.turnToPage(clamp(readerPage,0,7)); }catch(_){}
+    book.on("flip",(e)=>{ readerPage=e.data; updateReaderMeta(); });
+    book.on("changeState",(e)=>{ stfBusy = (e.data!=="read"); });
     updateReaderMeta();
   }
   function showFallbackPage(){
@@ -446,11 +464,11 @@
   function renderReader(){ buildBook(); }
   function readerGoTo(target){
     target=clamp(target,0,7);
-    if(book){ try{ book.turnToPage(target); }catch(_){ readerPage=target; } return; }
+    if(book){ if(stfBusy) return; try{ book.turnToPage(target); }catch(_){ readerPage=target; } return; }
     readerPage=target; showFallbackPage(); updateReaderMeta();
   }
   function readerGo(d){
-    if(book){ try{ d>0?book.flipNext():book.flipPrev(); }catch(_){} return; }
+    if(book){ if(stfBusy) return; try{ d>0?book.flipNext("top"):book.flipPrev("top"); }catch(_){} return; }
     readerPage=clamp(readerPage+d,0,7); showFallbackPage(); updateReaderMeta();
   }
 
