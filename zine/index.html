@@ -3,598 +3,568 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Riso Zine Studio</title>
+<title>Zine Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" />
-<style>
-  /* ============================================================
-     Riso Zine Studio — print-ready 8-panel folding mini-zine maker.
-     Aesthetic: risograph print shop — warm paper, spot-colour inks,
-     halftone, Anton display caps, a 4-colour registration bar.
-     Rebuilt upload: tap / drag-drop / paste, auto-downscaled.
-     Single sheet, landscape, folds + one cut into an 8-page booklet.
-     ============================================================ */
-
+<style id="appcss">
+  /* ================================================================
+     Zine Studio — a visual mini-zine maker.
+     Upload photos, drag & resize them and text on each page, then
+     Save & Share a link people open and flip through. Print composes
+     the 8 pages into a fold-and-cut sheet.
+     Persistence: self-publishing Artifact when available, else local.
+     ================================================================ */
   :root {
     color-scheme: light;
-    /* paper + ink */
-    --paper:   #f4efe4;
-    --paper-2: #ebe4d4;
-    --paper-3: #e2d9c5;
-    --ink:     #1a1712;
-    --ink-2:   #5c5445;
-    --line:    #cdc2a9;
-    --line-2:  #b7aa8c;
-    /* riso spot inks */
-    --pink:   #ff3d92;
-    --pink-2: #e42d7e;
-    --orange: #ff6a2b;
-    --blue:   #1f6fd0;
-    --yellow: #ffcf2e;
-    --teal:   #0f9d8c;
-    --accent: var(--pink);
-    --focus:  #1f6fd0;
-    --tap: 48px;
-    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px;
-    --disp: "Anton", "Arial Narrow", Impact, sans-serif;
-    --ui: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --paper:#f4efe4; --paper-2:#ebe4d4; --paper-3:#e0d7c2;
+    --ink:#1a1712; --ink-2:#5c5445; --line:#cdc2a9; --line-2:#b3a684;
+    --pink:#ff3d92; --pink-2:#e42d7e; --orange:#ff6a2b; --blue:#1f6fd0; --yellow:#ffcf2e;
+    --focus:#1f6fd0; --tap:48px;
+    --disp:"Anton","Arial Narrow",Impact,sans-serif;
+    --ui:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --mono:"Space Mono",ui-monospace,Menlo,monospace;
   }
-
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { margin:0; height:100%; }
   body {
-    background: var(--paper);
-    color: var(--ink);
-    font: 15px/1.5 var(--ui);
-    -webkit-font-smoothing: antialiased;
-    /* faint halftone grain on the whole app */
-    background-image: radial-gradient(var(--paper-3) .5px, transparent .6px);
-    background-size: 4px 4px;
+    background:var(--paper); color:var(--ink); font:15px/1.5 var(--ui);
+    -webkit-font-smoothing:antialiased; overscroll-behavior:none;
+    background-image:radial-gradient(var(--paper-3) .5px,transparent .6px); background-size:4px 4px;
   }
-  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-  .mono { font-family: var(--mono); }
+  :focus-visible { outline:3px solid var(--focus); outline-offset:2px; }
+  button { font:inherit; }
 
-  /* ---------------- App shell ---------------- */
-  .app { display: flex; flex-direction: column; min-height: 100dvh; }
+  .app { display:flex; flex-direction:column; height:100dvh; }
 
-  header.bar {
-    position: sticky; top: 0; z-index: 30;
-    background: var(--paper);
-    border-bottom: 2px solid var(--ink);
-    padding-top: env(safe-area-inset-top);
+  /* ---- top bar ---- */
+  header.bar { background:var(--paper); border-bottom:2px solid var(--ink); padding-top:env(safe-area-inset-top); flex:0 0 auto; }
+  .bar-in { display:flex; align-items:center; gap:10px; padding:9px 12px; }
+  .plate { width:30px; height:30px; flex:0 0 auto; background:var(--pink); transform:rotate(45deg); display:grid; place-items:center; box-shadow:2px 2px 0 var(--ink); }
+  .plate span { transform:rotate(-45deg); font:400 14px/1 var(--disp); color:#fff; }
+  .word { flex:1; min-width:0; line-height:1; }
+  .word b { display:block; font:400 19px/.9 var(--disp); text-transform:uppercase; letter-spacing:.02em; }
+  .word small { font:10px/1 var(--mono); color:var(--ink-2); letter-spacing:.1em; text-transform:uppercase; }
+  .seg { display:flex; border:1.5px solid var(--ink); overflow:hidden; flex:0 0 auto; }
+  .seg button { min-height:38px; padding:0 12px; border:0; background:transparent; color:var(--ink-2); font:700 11px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; cursor:pointer; }
+  .seg button[aria-pressed="true"] { background:var(--ink); color:var(--paper); }
+  .reg { display:flex; height:5px; }
+  .reg i { flex:1; } .reg .c1{background:var(--pink)} .reg .c2{background:var(--orange)} .reg .c3{background:var(--yellow)} .reg .c4{background:var(--blue)}
+
+  .icon-btn { min-height:38px; min-width:38px; padding:0 10px; border:1.5px solid var(--ink); background:#fff; color:var(--ink); font:700 13px/1 var(--ui); cursor:pointer; display:inline-flex; align-items:center; gap:6px; }
+  .icon-btn:hover { background:var(--paper-2); }
+  .icon-btn.pink { background:var(--pink); color:#fff; box-shadow:2px 2px 0 var(--ink); }
+  .icon-btn.pink:hover { background:var(--pink-2); }
+
+  /* ---- workspace ---- */
+  .work { flex:1; min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:14px; position:relative; background:radial-gradient(var(--paper-3) .5px,transparent .6px) 0 0/5px 5px, var(--paper-2); overflow:hidden; }
+
+  /* the page canvas (one zine page, portrait) */
+  .canvas {
+    position:relative; background:var(--page-bg,#fff); container-type:size;
+    aspect-ratio:var(--aspect,0.647); height:min(62dvh,520px); max-width:calc(100vw - 28px);
+    box-shadow:6px 6px 0 rgba(26,23,18,.18), 0 18px 46px rgba(0,0,0,.28); touch-action:none;
+    background-image:var(--page-tex,none); background-size:var(--page-tex-size,auto);
   }
-  .bar-in { display: flex; align-items: center; gap: var(--sp-3); padding: 10px var(--sp-4); }
-  .plate {
-    width: 34px; height: 34px; flex: 0 0 auto; background: var(--pink);
-    transform: rotate(45deg); display: grid; place-items: center;
-    box-shadow: 2px 2px 0 var(--ink);
+  .canvas .cnum { position:absolute; top:5px; left:6px; z-index:1; font:700 9px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--page-ink,#111); opacity:.4; pointer-events:none; }
+  .canvas .crole { position:absolute; bottom:5px; right:6px; z-index:1; font:9px/1 var(--mono); text-transform:uppercase; color:var(--page-ink,#111); opacity:.35; pointer-events:none; }
+
+  .layer { position:absolute; user-select:none; }
+  .layer img { display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; }
+  .layer .txt { width:100%; font-family:var(--lf,var(--disp)); font-weight:800; line-height:1.02; color:var(--lc,#111); text-align:var(--la,left); word-break:break-word; white-space:pre-wrap; outline:none; }
+  .canvas.edit .layer { cursor:grab; }
+  .canvas.edit .layer.sel { outline:2px solid var(--pink); outline-offset:1px; }
+  .layer .handle { position:absolute; right:-13px; bottom:-13px; width:26px; height:26px; border-radius:50%; background:var(--pink); border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.4); display:none; cursor:nwse-resize; touch-action:none; z-index:5; }
+  .canvas.edit .layer.sel .handle { display:block; }
+  .layer.editing { cursor:text; }
+  .layer.editing .txt { outline:2px dashed var(--blue); outline-offset:2px; }
+
+  /* add-first-photo hint */
+  .empty { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:var(--ink-2); text-align:center; padding:20px; pointer-events:none; }
+  .empty .big { font:400 22px/1 var(--disp); color:var(--ink); text-transform:uppercase; }
+  .empty .small { font:12px/1.5 var(--mono); }
+
+  /* ---- editor toolbars ---- */
+  .add-bar { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .layer-bar {
+    position:absolute; left:0; right:0; bottom:0; z-index:20; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom)); background:var(--paper); border-top:2px solid var(--ink);
+    transform:translateY(110%); transition:transform .18s ease;
   }
-  .plate span { transform: rotate(-45deg); font: 700 15px/1 var(--disp); color: #fff; }
-  .word { display: flex; flex-direction: column; line-height: 1; flex: 1; min-width: 0; }
-  .word b { font: 400 22px/.92 var(--disp); letter-spacing: .02em; text-transform: uppercase; }
-  .word small { font-family: var(--mono); font-size: 10px; color: var(--ink-2); letter-spacing: .12em; text-transform: uppercase; margin-top: 3px; }
-  .reg { display: flex; height: 6px; }
-  .reg i { flex: 1; }
-  .reg .c1{background:var(--pink)} .reg .c2{background:var(--orange)} .reg .c3{background:var(--yellow)} .reg .c4{background:var(--blue)}
+  .layer-bar.show { transform:translateY(0); }
+  .layer-bar label.swatch { display:inline-flex; }
+  .layer-bar input[type=color] { width:38px; height:38px; border:1.5px solid var(--ink); background:#fff; padding:2px; cursor:pointer; }
 
-  /* ---------------- Stage ---------------- */
-  .stage {
-    padding: var(--sp-5) var(--sp-4);
-    display: flex; flex-direction: column; align-items: center; gap: var(--sp-3);
-    background:
-      radial-gradient(var(--paper-3) .5px, transparent .6px) 0 0 / 5px 5px,
-      var(--paper-2);
-  }
-  .sheet-scaler { transform-origin: top center; }
-  .stage-note { font-family: var(--mono); font-size: 11px; color: var(--ink-2); text-align: center; max-width: 52ch; letter-spacing: .02em; }
-  .stage-note b { color: var(--ink); }
+  /* page strip */
+  .pages { display:flex; gap:6px; align-items:center; }
+  .pages .pg { width:30px; height:40px; border:1.5px solid var(--line-2); background:#fff; color:var(--ink-2); font:700 12px/1 var(--mono); cursor:pointer; display:grid; place-items:center; padding:0; }
+  .pages .pg[aria-current="true"] { border-color:var(--pink); box-shadow:0 0 0 2px var(--pink) inset; color:var(--ink); }
+  .pages .arrow { min-width:38px; min-height:40px; border:1.5px solid var(--ink); background:#fff; font-size:18px; cursor:pointer; }
 
-  .sheet {
-    position: relative; background: var(--page-bg, #fff); color: var(--page-ink, #111);
-    box-shadow: 6px 6px 0 rgba(26,23,18,.18), 0 20px 50px rgba(0,0,0,.28);
-    display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr);
-    /* physical size set inline by JS */
-  }
-  .panel {
-    position: relative; overflow: hidden; padding: var(--panel-margin, .35in);
-    display: flex; flex-direction: column; gap: 6px;
-    background: var(--panel-bg, transparent); color: var(--panel-ink, inherit);
-    cursor: pointer; border: 0; text-align: left; font: inherit;
-  }
-  .sheet.fold .panel.flip { transform: rotate(180deg); }
-  .panel .badge { position: absolute; top: 4px; left: 5px; font: 700 8px/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--panel-ink,#111); opacity: .45; pointer-events: none; }
-  .panel .role  { position: absolute; bottom: 4px; right: 5px; font: 8px/1 var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--panel-ink,#111); opacity: .38; pointer-events: none; }
-  .panel img.p-img { display: block; width: 100%; max-height: 52%; object-fit: cover; }
-  .panel .p-title { font-family: var(--panel-title-font); font-weight: 800; line-height: 1.02; letter-spacing: -.01em; word-break: break-word; }
-  .panel .p-body  { font-family: var(--panel-body-font); font-size: 10px; line-height: 1.35; flex: 1; white-space: pre-wrap; word-break: break-word; }
-  .panel .ph { opacity: .3; font-style: italic; }
-  .panel.sel { box-shadow: inset 0 0 0 3px var(--pink); }
-  .panel .selflag { position: absolute; top: 3px; right: 4px; z-index: 3; background: var(--pink); color: #fff; font: 700 8px/1 var(--mono); padding: 3px 4px; display: none; }
-  .panel.sel .selflag { display: block; }
+  /* ---- reader ---- */
+  .reader { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; gap:14px; background:var(--paper-2); z-index:15; }
+  .reader.show { display:flex; }
+  .reader .stagep { position:relative; touch-action:pan-y; }
+  .reader .rnav { position:absolute; top:50%; transform:translateY(-50%); width:44px; height:64px; border:0; background:rgba(26,23,18,.72); color:#fff; font-size:26px; cursor:pointer; z-index:3; }
+  .reader .rnav.prev { left:-8px; } .reader .rnav.next { right:-8px; }
+  .reader .rcount { font:700 12px/1 var(--mono); letter-spacing:.1em; color:var(--ink); text-transform:uppercase; }
+  .reader .dots { display:flex; gap:7px; }
+  .reader .dot { width:9px; height:9px; border-radius:50%; background:var(--line-2); border:0; padding:0; cursor:pointer; }
+  .reader .dot[aria-current="true"] { background:var(--pink); }
 
-  .guides { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
-  .guides .v { position: absolute; top: 0; bottom: 0; border-left: 1px dashed rgba(0,0,0,.32); }
-  .guides .h { position: absolute; left: 0; right: 0; border-top: 1px dashed rgba(0,0,0,.32); }
-  .guides .cut { position: absolute; height: 0; border-top: 2px solid rgba(0,0,0,.6); top: 50%; left: 25%; width: 50%; }
-  .guides .cut:before { content: "✂ CUT"; position: absolute; left: 50%; top: -13px; transform: translateX(-50%); font: 700 8px/1 var(--mono); color: rgba(0,0,0,.65); background: rgba(255,255,255,.75); padding: 1px 4px; }
-  .sheet:not(.show-guides) .guides { display: none; }
+  /* ---- toast + modal ---- */
+  .toast { position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom)); transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--paper); padding:12px 18px; font:600 13px/1.3 var(--ui); z-index:100; opacity:0; transition:.22s; max-width:88vw; text-align:center; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .sheet-modal { position:fixed; inset:0; background:rgba(26,23,18,.55); display:none; align-items:center; justify-content:center; z-index:90; padding:18px; }
+  .sheet-modal.show { display:flex; }
+  .card { background:var(--paper); border:2px solid var(--ink); box-shadow:8px 8px 0 rgba(26,23,18,.35); max-width:440px; width:100%; padding:22px; }
+  .card h3 { margin:0 0 8px; font:400 24px/1 var(--disp); text-transform:uppercase; }
+  .card p { margin:0 0 12px; font:14px/1.5 var(--ui); color:var(--ink-2); }
+  .card .link { font:12px/1.4 var(--mono); background:#fff; border:1.5px solid var(--line-2); padding:10px; word-break:break-all; margin-bottom:12px; }
+  .card .row { display:flex; gap:8px; } .card .row > * { flex:1; }
 
-  /* ---------------- Controls ---------------- */
-  .controls { flex: 1; background: var(--paper); border-top: 2px solid var(--ink); }
-  .tabs { display: flex; position: sticky; top: 0; z-index: 20; background: var(--paper); border-bottom: 1.5px solid var(--line-2); }
-  .tab {
-    flex: 1; min-height: var(--tap); border: 0; background: transparent; color: var(--ink-2);
-    font: 700 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
-    border-bottom: 3px solid transparent; padding: 0 4px;
-  }
-  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--pink); }
+  .hidden-print { display:none; }
 
-  .pane { display: none; padding: var(--sp-5) var(--sp-4); padding-bottom: max(var(--sp-8), env(safe-area-inset-bottom)); }
-  .pane.active { display: block; }
-
-  .sect { border: 1.5px solid var(--line-2); background: var(--paper); padding: var(--sp-4); margin-bottom: var(--sp-4); position: relative; }
-  .sect > h2 { margin: 0 0 var(--sp-3); font: 700 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); display: flex; align-items: center; gap: 8px; }
-  .sect > h2:before { content: ""; width: 12px; height: 12px; background: var(--accent); flex: 0 0 auto; }
-
-  .field { margin-bottom: var(--sp-3); }
-  .field:last-child { margin-bottom: 0; }
-  .field > label { display: block; font: 600 12px/1.2 var(--ui); color: var(--ink-2); margin-bottom: 6px; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
-
-  select, input[type="text"], textarea {
-    width: 100%; min-height: var(--tap); background: #fff; color: var(--ink);
-    border: 1.5px solid var(--line-2); border-radius: 0; padding: 11px 12px; font: 15px/1.3 var(--ui);
-  }
-  textarea { min-height: 88px; resize: vertical; }
-  input[type="color"] { width: 100%; height: var(--tap); border: 1.5px solid var(--line-2); background: #fff; padding: 3px; cursor: pointer; }
-  input[type="range"] { width: 100%; height: var(--tap); accent-color: var(--pink); }
-
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    min-height: var(--tap); width: 100%; padding: 11px 14px; border-radius: 0;
-    background: #fff; color: var(--ink); border: 1.5px solid var(--ink);
-    font: 700 14px/1 var(--ui); cursor: pointer;
-  }
-  .btn:hover { background: var(--paper-2); }
-  .btn.primary { background: var(--pink); border-color: var(--ink); color: #fff; box-shadow: 3px 3px 0 var(--ink); }
-  .btn.primary:hover { background: var(--pink-2); transform: translate(1px,1px); box-shadow: 2px 2px 0 var(--ink); }
-  .btn.ink { background: var(--ink); color: var(--paper); }
-  .btn.ink:hover { background: #000; }
-  .btn.sm { min-height: 40px; font-size: 12px; width: auto; padding: 9px 12px; }
-
-  .row { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
-  .row > * { flex: 1; }
-  .hint { font: 12px/1.5 var(--mono); color: var(--ink-2); margin: var(--sp-2) 0 0; }
-  .switch { display: flex; align-items: center; gap: 10px; min-height: var(--tap); cursor: pointer; font: 500 14px/1.3 var(--ui); }
-  .switch input { width: 20px; height: 20px; accent-color: var(--pink); flex: 0 0 auto; }
-
-  /* page picker */
-  .picker { display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-4); }
-  .picker .nav { flex: 0 0 var(--tap); font-size: 20px; }
-  .picker .who { flex: 1; text-align: center; }
-  .picker .who b { font: 400 26px/1 var(--disp); text-transform: uppercase; }
-  .picker .who small { display: block; font: 700 10px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--pink); margin-top: 4px; }
-
-  /* dropzone — the reliable upload target */
-  .drop {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-    min-height: 120px; padding: var(--sp-4); text-align: center; cursor: pointer;
-    border: 2px dashed var(--line-2); background: #fff; color: var(--ink-2);
-  }
-  .drop:hover, .drop.over { border-color: var(--pink); color: var(--ink); background: var(--paper-2); }
-  .drop .big { font: 700 14px/1.2 var(--ui); color: var(--ink); }
-  .drop .small { font: 11px/1.4 var(--mono); }
-  .drop.has { padding: 0; border-style: solid; overflow: hidden; }
-  .drop.has img { width: 100%; max-height: 220px; object-fit: contain; background: var(--paper-3); }
-
-  .swatches { display: flex; flex-wrap: wrap; gap: 8px; margin-top: var(--sp-2); }
-  .swatch { width: var(--tap); height: var(--tap); border: 2px solid rgba(0,0,0,.15); cursor: pointer; padding: 0; box-shadow: 2px 2px 0 rgba(0,0,0,.12); }
-  .swatch:hover { border-color: var(--ink); }
-  .thumb { width: 100%; aspect-ratio: 3/2; object-fit: cover; border: 1.5px solid var(--line-2); background: #fff; margin-bottom: var(--sp-2); }
-
-  ol.steps { margin: 0; padding-left: 1.2em; }
-  ol.steps li { font: 13px/1.6 var(--ui); margin-bottom: 8px; }
-  ol.steps b { font-weight: 700; }
-
-  /* ---------------- Desktop: rail ---------------- */
-  @media (min-width: 940px) {
-    .app { display: grid; grid-template-columns: 1fr 420px; grid-template-rows: auto 1fr; height: 100dvh; }
-    header.bar { grid-column: 1 / -1; }
-    .stage { overflow: auto; }
-    .controls { border-top: 0; border-left: 2px solid var(--ink); overflow-y: auto; }
-  }
-
-  /* ---------------- Print ---------------- */
+  /* ---- print imposition ---- */
   @media print {
-    header.bar, .controls, .stage-note, .selflag { display: none !important; }
-    .app { display: block; } .stage { padding: 0; background: #fff; }
-    .sheet-scaler { transform: none !important; height: auto !important; }
-    .sheet { box-shadow: none; } .panel.sel { box-shadow: none; }
-    .panel .badge, .panel .role { display: var(--print-labels, none); }
-    html, body { background: #fff; background-image: none; }
-    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    header.bar, .add-bar, .layer-bar, .pages, .reader, .toast, .sheet-modal, .work .canvas, .empty { display:none !important; }
+    .app, .work { display:block; height:auto; padding:0; background:#fff; }
+    html, body { background:#fff; background-image:none; }
+    .hidden-print { display:block; }
+    #printSheet { position:relative; display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(2,1fr); }
+    .pp { position:relative; overflow:hidden; container-type:size; background:var(--pp-bg,#fff); }
+    .pp.flip { transform:rotate(180deg); }
+    .pp .layer { position:absolute; } .pp .layer img { width:100%; height:100%; object-fit:cover; }
+    .pp .layer .txt { width:100%; }
+    .pp .cut { position:absolute; }
+    * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
   }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
 </style>
 </head>
 <body>
-<style id="page-style">@page { size: 11in 8.5in; margin: 0; }</style>
+<div id="root"></div>
 
-<div class="app">
-  <header class="bar">
-    <div class="bar-in">
-      <div class="plate" aria-hidden="true"><span>Z</span></div>
-      <div class="word"><b>Zine Studio</b><small>risograph · 8-page fold</small></div>
-      <button class="btn primary sm" id="printBtn" style="width:auto">🖨 Print / PDF</button>
-    </div>
-    <div class="reg" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i></div>
-  </header>
-
-  <main class="stage">
-    <div class="sheet-scaler" id="scaler">
-      <div class="sheet fold show-guides" id="sheet"><div class="guides" id="guides"></div></div>
-    </div>
-    <p class="stage-note">PRINT LANDSCAPE · <b>100% / ACTUAL SIZE</b> · BACKGROUND GRAPHICS ON — fold, cut the ✂ slit, collapse → pages 1→8</p>
-  </main>
-
-  <section class="controls">
-    <div class="tabs" role="tablist" aria-label="Editor">
-      <button class="tab" role="tab" aria-selected="true"  aria-controls="p-content" id="t-content">Content</button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="p-design"  id="t-design">Design</button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="p-colour"  id="t-colour">Colour</button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="p-guide"   id="t-guide">Fold</button>
-    </div>
-
-    <!-- CONTENT -->
-    <div class="pane active" id="p-content" role="tabpanel" aria-labelledby="t-content">
-      <div class="picker">
-        <button class="btn nav" id="prevPage" aria-label="Previous page">‹</button>
-        <div class="who"><b id="whoNum">Page 1</b><small id="whoRole">cover</small></div>
-        <button class="btn nav" id="nextPage" aria-label="Next page">›</button>
-      </div>
-
-      <div class="sect">
-        <h2>Photo</h2>
-        <div class="drop" id="drop" role="button" tabindex="0" aria-label="Add photo: tap, or drop / paste an image">
-          <div class="big" id="dropBig">Tap to add a photo</div>
-          <div class="small">or drag &amp; drop · or paste (⌘/Ctrl-V)</div>
+<!-- The whole app UI lives in this template; boot clones it into #root.
+     Self-publish re-embeds this template verbatim, so it reproduces. -->
+<template id="app-shell">
+  <div class="app">
+    <header class="bar">
+      <div class="bar-in">
+        <div class="plate" aria-hidden="true"><span>Z</span></div>
+        <div class="word"><b>Zine Studio</b><small>make · flip · share</small></div>
+        <div class="seg" role="group" aria-label="Mode">
+          <button id="mEdit" aria-pressed="true">Edit</button>
+          <button id="mRead" aria-pressed="false">Read</button>
         </div>
-        <input type="file" id="fileInput" accept="image/*" hidden />
-        <div class="row" style="margin-top:12px">
-          <button class="btn sm" id="pickBtn">📷 Choose photo</button>
-          <button class="btn sm" id="pImgClear">Remove photo</button>
+        <button class="icon-btn" id="printBtn" title="Print fold sheet">🖨</button>
+        <button class="icon-btn pink" id="shareBtn">Share</button>
+      </div>
+      <div class="reg" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i></div>
+    </header>
+
+    <main class="work" id="work">
+      <!-- editor -->
+      <div class="canvas edit" id="canvas" aria-label="Zine page — drag items to move, drag the pink handle to resize">
+        <div class="empty" id="emptyHint">
+          <div class="big">Page 1 · Cover</div>
+          <div class="small">Tap ＋ Photo to add an image,<br>then drag it and pinch/handle to resize.</div>
         </div>
       </div>
 
-      <div class="sect">
-        <h2>Words</h2>
-        <div class="field"><label for="pTitle">Heading</label><input type="text" id="pTitle" /></div>
-        <div class="field"><label for="pBody">Text</label><textarea id="pBody"></textarea></div>
+      <div class="add-bar" id="addBar">
+        <div class="pages" id="pages"></div>
+      </div>
+      <div class="add-bar" id="addBar2">
+        <button class="icon-btn pink" id="addPhoto">＋ Photo</button>
+        <button class="icon-btn" id="addText">＋ Text</button>
+        <label class="icon-btn" title="Page colour">Page <input type="color" id="pageBg" value="#f4efe4" style="width:26px;height:26px;border:0;padding:0;margin-left:6px;background:none"></label>
+        <input type="file" id="fileInput" accept="image/*" hidden>
       </div>
 
-      <div class="sect">
-        <h2>Panel colour</h2>
-        <div class="grid2">
-          <div class="field"><label for="pBg">Background</label><input type="color" id="pBg" value="#ffffff" /></div>
-          <div class="field"><label for="pInk">Text</label><input type="color" id="pInk" value="#111111" /></div>
-        </div>
-        <div class="row" style="margin-top:4px">
-          <button class="btn sm" id="pFromPhoto" style="flex:2">🎨 Colour from this photo</button>
-          <button class="btn sm" id="pClearColour">Clear</button>
-        </div>
+      <!-- selected-layer action bar -->
+      <div class="layer-bar" id="layerBar">
+        <button class="icon-btn" id="lEdit">✎ Edit text</button>
+        <label class="icon-btn swatch" id="lColorWrap">Colour<input type="color" id="lColor" value="#111111"></label>
+        <button class="icon-btn" id="lFont">Font: Display</button>
+        <button class="icon-btn" id="lDup">⧉ Copy</button>
+        <button class="icon-btn" id="lFront">⤒ Front</button>
+        <button class="icon-btn" id="lDel">🗑 Delete</button>
       </div>
-    </div>
 
-    <!-- DESIGN -->
-    <div class="pane" id="p-design" role="tabpanel" aria-labelledby="t-design" hidden>
-      <div class="sect">
-        <h2>Paper</h2>
-        <div class="field"><label for="paper">Size (landscape)</label>
-          <select id="paper"><option value="letter">US Letter — 8.5 × 11 in</option><option value="a4">A4 — 210 × 297 mm</option></select>
+      <!-- reader -->
+      <div class="reader" id="reader">
+        <div class="stagep" id="readerStage">
+          <button class="rnav prev" id="rPrev" aria-label="Previous page">‹</button>
+          <div class="canvas" id="readerCanvas" style="box-shadow:8px 8px 0 rgba(26,23,18,.2),0 22px 50px rgba(0,0,0,.32)"></div>
+          <button class="rnav next" id="rNext" aria-label="Next page">›</button>
         </div>
-        <div class="field"><label for="margin">Panel margin — <span class="mono" id="marginVal">0.35 in</span></label>
-          <input type="range" id="margin" min="0.1" max="0.6" step="0.05" value="0.35" />
-        </div>
+        <div class="rcount" id="rCount">Page 1 / 8</div>
+        <div class="dots" id="rDots"></div>
       </div>
-      <div class="sect">
-        <h2>Style</h2>
-        <div class="field"><select id="theme">
-          <option value="riso">Riso — spot-colour halftone</option>
-          <option value="punk">DIY Punk — high-contrast ink</option>
-          <option value="cyber">Cyberpunk — neon duotone</option>
-          <option value="botanical">Botanical — earthy</option>
-          <option value="journal">Personal Journal — handwritten</option>
-        </select></div>
-        <div class="grid2">
-          <div class="field"><label for="pageBg">Page colour</label><input type="color" id="pageBg" value="#f4efe4" /></div>
-          <div class="field"><label for="pageInk">Ink colour</label><input type="color" id="pageInk" value="#1a1712" /></div>
-        </div>
-      </div>
-      <div class="sect">
-        <h2>Draft</h2>
-        <div class="row"><button class="btn sm" id="saveBtn">Save draft</button><button class="btn sm" id="resetBtn">Reset all</button></div>
+    </main>
+  </div>
+
+  <div class="hidden-print"><div id="printSheet"></div></div>
+
+  <div class="toast" id="toast"></div>
+  <div class="sheet-modal" id="modal">
+    <div class="card">
+      <h3 id="modalTitle">Shared!</h3>
+      <p id="modalBody"></p>
+      <div class="link" id="modalLink" hidden></div>
+      <div class="row">
+        <button class="icon-btn" id="modalCopy" hidden>Copy link</button>
+        <button class="icon-btn pink" id="modalClose">Done</button>
       </div>
     </div>
+  </div>
+</template>
 
-    <!-- COLOUR -->
-    <div class="pane" id="p-colour" role="tabpanel" aria-labelledby="t-colour" hidden>
-      <div class="sect">
-        <h2>Colour from a photo</h2>
-        <p class="hint" style="margin-top:0">Pick a photo, tap one of its inks, choose where it lands.</p>
-        <button class="btn sm" id="paletteBtn" style="width:100%;margin-top:10px">📷 Choose source photo</button>
-        <input type="file" id="paletteInput" accept="image/*" hidden />
-        <div id="paletteWrap" hidden>
-          <img class="thumb" id="paletteThumb" alt="" style="margin-top:12px" />
-          <label style="font:600 12px/1 var(--ui);color:var(--ink-2)">Tap a colour</label>
-          <div class="swatches" id="swatches"></div>
-          <div class="field" style="margin-top:14px"><label for="applyTarget">Apply to</label>
-            <select id="applyTarget">
-              <option value="page">Whole page background</option>
-              <option value="page-ink">Ink (text) colour</option>
-              <option value="all-panels">Every panel</option>
-              <option value="selected">Selected panel only</option>
-            </select>
-          </div>
-          <label class="switch"><input type="checkbox" id="autoInk" checked /> Auto-pick readable text colour</label>
-          <button class="btn sm" id="avgBtn" style="width:100%;margin-top:8px">Use the photo's average colour</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- FOLD / GUIDE -->
-    <div class="pane" id="p-guide" role="tabpanel" aria-labelledby="t-guide" hidden>
-      <div class="sect">
-        <h2>Guides</h2>
-        <label class="switch"><input type="checkbox" id="foldMode" checked /> Fold-ready imposition (top row flipped)</label>
-        <label class="switch"><input type="checkbox" id="showGuides" checked /> Show fold &amp; cut guides</label>
-        <label class="switch"><input type="checkbox" id="printLabels" /> Print page numbers</label>
-      </div>
-      <div class="sect">
-        <h2>Fold &amp; cut</h2>
-        <ol class="steps">
-          <li>Print single-sided, landscape, <b>100% / actual size</b>, background graphics <b>ON</b>.</li>
-          <li>Fold the sheet in half the long way; unfold. Fold in half the short way twice to crease the 4×2 grid.</li>
-          <li>Unfold flat and <b>cut the centre slit</b> (✂) — only across the middle two panels.</li>
-          <li>Fold long-ways again, push the ends together so the slit opens to a diamond, and collapse into a booklet reading <b>1→8</b>.</li>
-        </ol>
-        <p class="hint">Generating art? Match the ratio: <b>--ar 11:8.5</b> (Letter) or <b>--ar 1.41:1</b> (A4), landscape.</p>
-      </div>
-    </div>
-  </section>
-</div>
-
-<script>
+<script id="appjs">
 (() => {
   "use strict";
+
   const PAPER = {
-    letter: { w:"11in", h:"8.5in", css:"11in 8.5in", unit:"in", min:0.1, max:0.6, step:0.05, def:0.35 },
-    a4:     { w:"297mm", h:"210mm", css:"297mm 210mm", unit:"mm", min:3, max:16, step:1, def:9 },
+    letter:{ wIn:11, hIn:8.5, css:"11in 8.5in" },
+    a4:{ wMm:297, hMm:210, css:"297mm 210mm" },
   };
-  const POSITIONS = [
-    { page:5, flip:true }, { page:4, flip:true }, { page:3, flip:true }, { page:2, flip:true },
-    { page:6, flip:false }, { page:7, flip:false }, { page:8, flip:false }, { page:1, flip:false },
-  ];
+  // single page aspect = (sheetW/4) / (sheetH/2)
+  const pageAspect = (p) => p==="a4" ? (297/4)/(210/2) : (11/4)/(8.5/2);
+  const H = 1000; // logical page height (square units); W = H*aspect
+  // print imposition: grid cell -> page number (+flip on top row)
+  const CELLS = [ {p:5,f:1},{p:4,f:1},{p:3,f:1},{p:2,f:1}, {p:6,f:0},{p:7,f:0},{p:8,f:0},{p:1,f:0} ];
   const ROLE = { 1:"cover", 8:"back cover" };
-  const THEMES = {
-    riso:      { pageBg:"#f4efe4", pageInk:"#1a1712", title:'"Anton","Arial Narrow",Impact,sans-serif', body:'"Space Mono",monospace', tex:"radial-gradient(rgba(255,61,146,.16) 1px,transparent 1.5px)", texSize:"7px 7px" },
-    punk:      { pageBg:"#fdfdf7", pageInk:"#111111", title:'"Arial Black",Impact,sans-serif', body:'"Courier New",monospace', tex:"radial-gradient(rgba(0,0,0,.14) 1px,transparent 1.6px)", texSize:"6px 6px" },
-    cyber:     { pageBg:"#0a0a12", pageInk:"#f2ff5e", title:'"Arial Black",Impact,sans-serif', body:'Consolas,"Courier New",monospace', tex:"repeating-linear-gradient(0deg,rgba(242,255,94,.06) 0 2px,transparent 2px 4px)", texSize:"auto" },
-    botanical: { pageBg:"#efe7d6", pageInk:"#33402a", title:'Georgia,"Times New Roman",serif', body:'Georgia,serif', tex:"radial-gradient(rgba(51,64,42,.08) 1px,transparent 1.4px)", texSize:"10px 10px" },
-    journal:   { pageBg:"#faf6ee", pageInk:"#2b2622", title:'"Comic Sans MS","Segoe Print",cursive', body:'"Comic Sans MS","Segoe Print",cursive', tex:"repeating-linear-gradient(0deg,transparent 0 22px,rgba(43,38,34,.1) 22px 23px)", texSize:"auto" },
-  };
-  const PLACE = { title:(p)=> p===1?"ZINE TITLE":ROLE[p]?"CREDITS":"HEADING", body:(p)=> p===1?"cover blurb…":"write something…" };
+  const FONTS = [ ["Display","var(--disp)"], ["Body","var(--ui)"], ["Mono","var(--mono)"] ];
 
-  const $ = (id) => document.getElementById(id);
-  const sheet = $("sheet"), guides = $("guides"), scaler = $("scaler");
+  let claudeApi = null; // window.claude
+  const el = (id) => document.getElementById(id);
+  let uid = 0; const nid = () => "l" + (Date.now().toString(36)) + (uid++).toString(36);
 
+  // ---------- state ----------
+  function blankPage(i){ return { bg: i===0 ? "#ff3d92" : "#ffffff", ink:"#111111", layers:[] }; }
   const state = {
-    paper:"letter", margin:PAPER.letter.def, theme:"riso",
-    pageBg:THEMES.riso.pageBg, pageInk:THEMES.riso.pageInk,
-    fold:true, showGuides:true, printLabels:false, autoInk:true, applyTarget:"page",
-    selected:1, panels:{},
+    v:1, paper:"letter",
+    pages: Array.from({length:8}, (_,i)=>blankPage(i)),
   };
-  for (let p=1;p<=8;p++) state.panels[p] = { title:"", body:"", img:"", bg:"", ink:"" };
+  let cur = 0;          // current page index (0..7) in editor
+  let readerPage = 0;   // page index in reader
+  let mode = "edit";    // 'edit' | 'read'
+  let sel = null;       // selected layer id
+  let editingText = false;
 
-  // ---------- panels ----------
-  function buildPanels() {
-    [...sheet.querySelectorAll(".panel")].forEach((e)=>e.remove());
-    POSITIONS.forEach((pos)=>{
-      const p = pos.page;
-      const el = document.createElement("button");
-      el.type="button"; el.className="panel"+(pos.flip?" flip":""); el.dataset.page=p;
-      el.setAttribute("aria-label","Edit page "+p+(ROLE[p]?" ("+ROLE[p]+")":""));
-      el.innerHTML = `<span class="badge">P${p}</span>`+(ROLE[p]?`<span class="role">${ROLE[p]}</span>`:"")+
-        `<span class="selflag">EDIT</span><div class="p-media"></div><div class="p-title"></div><div class="p-body"></div>`;
-      el.addEventListener("click", ()=>selectPage(p));
-      sheet.insertBefore(el, guides);
-      renderPanel(p);
+  function loadEmbedded(){
+    const tag = el("zine-state");
+    if (!tag) return false;
+    try { const data = JSON.parse(tag.textContent||"{}"); if (data && Array.isArray(data.pages) && data.pages.length===8){ Object.assign(state, data); return hasContent(); } } catch(_){}
+    return false;
+  }
+  function loadLocal(){
+    try { const r = localStorage.getItem("zine-studio-maker"); if(r){ const d=JSON.parse(r); if(d&&Array.isArray(d.pages)&&d.pages.length===8){ Object.assign(state,d); } } } catch(_){}
+  }
+  function saveLocal(){ try { localStorage.setItem("zine-studio-maker", JSON.stringify(state)); } catch(_){} }
+  const hasContent = () => state.pages.some((p)=>p.layers.length>0);
+
+  // ---------- geometry ----------
+  const W = () => Math.round(H * pageAspect(state.paper));
+  function applyPaperVars(canvas){ canvas.style.setProperty("--aspect", pageAspect(state.paper)); }
+
+  // ---------- render one page into a container (interactive on editor canvas) ----------
+  function renderPage(container, pageIdx, interactive){
+    const page = state.pages[pageIdx];
+    container.style.setProperty("--page-bg", page.bg);
+    container.style.setProperty("--page-ink", page.ink||"#111");
+    container.style.setProperty("--aspect", pageAspect(state.paper));
+    // keep non-layer children (nums), rebuild layers
+    [...container.querySelectorAll(".layer")].forEach((n)=>{ if(n.parentNode) n.parentNode.removeChild(n); });
+    let num = container.querySelector(".cnum"); if(!num){ num=document.createElement("div"); num.className="cnum"; container.appendChild(num); }
+    num.textContent = "Page " + (pageIdx+1);
+    let role = container.querySelector(".crole");
+    if (ROLE[pageIdx+1]){ if(!role){ role=document.createElement("div"); role.className="crole"; container.appendChild(role);} role.textContent=ROLE[pageIdx+1]; }
+    else if (role) role.remove();
+
+    const w = W();
+    page.layers.forEach((L)=>{
+      const d = document.createElement("div");
+      d.className = "layer" + (interactive && L.id===sel ? " sel":"");
+      d.dataset.id = L.id;
+      d.style.left = (L.x/w*100)+"%"; d.style.top = (L.y/H*100)+"%"; d.style.width = (L.w/w*100)+"%";
+      if (L.type==="image"){ d.style.height = (L.h/H*100)+"%"; d.innerHTML = `<img src="${imgSrc(L)}" alt="">`; }
+      else { d.innerHTML = `<div class="txt">${escapeHtml(L.text||"")}</div>`;
+        const t=d.firstChild; t.style.setProperty("--lc", L.color||"#111"); t.style.setProperty("--lf", L.font||"var(--disp)"); t.style.setProperty("--la", L.align||"left");
+        t.style.fontSize = "calc(" + (L.fs/10) + " * 1cqh)"; }
+      if (interactive){ const h=document.createElement("div"); h.className="handle"; h.dataset.resize="1"; d.appendChild(h); }
+      container.appendChild(d);
+    });
+    const empt = container.querySelector(".empty"); if (empt) empt.style.display = page.layers.length? "none":"flex";
+  }
+  const imgSrc = (L) => L.src || "";
+
+  // ---------- editor ----------
+  const canvas = () => el("canvas");
+  function renderEditor(){
+    applyPaperVars(canvas());
+    // update empty hint text for cover/others
+    const eh = el("emptyHint"); if (eh){ eh.querySelector(".big").textContent = "Page "+(cur+1)+(ROLE[cur+1]?" · "+ROLE[cur+1]:""); }
+    renderPage(canvas(), cur, true);
+    el("pageBg").value = state.pages[cur].bg;
+    renderPageStrip();
+    updateLayerBar();
+  }
+  function renderPageStrip(){
+    const strip = el("pages"); strip.innerHTML = "";
+    const prev = document.createElement("button"); prev.className="arrow"; prev.textContent="‹"; prev.setAttribute("aria-label","Previous page"); prev.onclick=()=>gotoPage(cur-1); strip.appendChild(prev);
+    for (let i=0;i<8;i++){ const b=document.createElement("button"); b.className="pg"; b.textContent=(i+1); if(i===cur)b.setAttribute("aria-current","true"); b.onclick=()=>gotoPage(i); strip.appendChild(b); }
+    const next = document.createElement("button"); next.className="arrow"; next.textContent="›"; next.setAttribute("aria-label","Next page"); next.onclick=()=>gotoPage(cur+1); strip.appendChild(next);
+  }
+  function gotoPage(i){ i=(i+8)%8; commitTextEdit(); cur=i; sel=null; renderEditor(); }
+
+  // ---------- layer ops ----------
+  const curLayers = () => state.pages[cur].layers;
+  const findLayer = (id) => curLayers().find((L)=>L.id===id);
+  function addImageLayer(src, natW, natH){
+    const w = W(); const aspect = natW/natH;
+    let lw = w*0.55, lh = lw/aspect; if (lh > H*0.6){ lh=H*0.6; lw=lh*aspect; }
+    const L = { id:nid(), type:"image", src, x:(w-lw)/2, y:(H-lh)/2, w:lw, h:lh, aspect };
+    curLayers().push(L); sel=L.id; changed();
+  }
+  function addTextLayer(){
+    const w=W(); const L={ id:nid(), type:"text", text:"Your text", x:w*0.1, y:H*0.12, w:w*0.8, fs:90, color:state.pages[cur].ink||"#111", font:"var(--disp)", align:"left" };
+    curLayers().push(L); sel=L.id; changed(); setTimeout(()=>startTextEdit(L.id),30);
+  }
+  function deleteLayer(id){ const a=curLayers(); const i=a.findIndex((L)=>L.id===id); if(i>=0)a.splice(i,1); if(sel===id)sel=null; changed(); }
+  function bringFront(id){ const a=curLayers(); const i=a.findIndex((L)=>L.id===id); if(i>=0){ const [L]=a.splice(i,1); a.push(L);} changed(); }
+  function dupLayer(id){ const L=findLayer(id); if(!L)return; const c=JSON.parse(JSON.stringify(L)); c.id=nid(); c.x=Math.min(L.x+40, W()-30); c.y=Math.min(L.y+40, H-30); curLayers().push(c); sel=c.id; changed(); }
+
+  function changed(){ saveLocal(); renderEditor(); }
+
+  // ---------- pointer drag / resize ----------
+  let drag = null;
+  function onPointerDown(e){
+    if (mode!=="edit" || editingText) return;
+    const layerEl = e.target.closest(".layer"); const isHandle = e.target.dataset && e.target.dataset.resize;
+    if (!layerEl){ if(!e.target.closest(".empty")){ sel=null; renderEditor(); } return; }
+    const id = layerEl.dataset.id; sel=id; const L=findLayer(id); if(!L) return;
+    const rect = canvas().getBoundingClientRect(); const sx=W()/rect.width, sy=H/rect.height;
+    drag = { id, mode:isHandle?"resize":"move", startX:e.clientX, startY:e.clientY, ox:L.x, oy:L.y, ow:L.w, oh:L.h||0, ofs:L.fs||0, sx, sy };
+    try{ (isHandle?e.target:layerEl).setPointerCapture(e.pointerId); }catch(_){}
+    renderEditor();
+    e.preventDefault();
+  }
+  function onPointerMove(e){
+    if(!drag) return; const L=findLayer(drag.id); if(!L){ drag=null; return; }
+    const dx=(e.clientX-drag.startX)*drag.sx, dy=(e.clientY-drag.startY)*drag.sy;
+    const w=W();
+    if (drag.mode==="move"){
+      L.x = clamp(drag.ox+dx, -L.w*0.4, w-L.w*0.6);
+      L.y = clamp(drag.oy+dy, -( (L.type==="image"?L.h:L.fs) )*0.4, H-( (L.type==="image"?L.h:L.fs) )*0.4);
+    } else {
+      if (L.type==="image"){ let nw=clamp(drag.ow+dx, w*0.08, w*1.2); L.w=nw; L.h=nw/(L.aspect||1); }
+      else { L.fs = clamp(drag.ofs + dy, 20, 400); L.w = clamp(drag.ow+dx, w*0.15, w*1.05); }
+    }
+    // live update without full rebuild for smoothness
+    const d = canvas().querySelector('.layer[data-id="'+drag.id+'"]'); if(d){ d.style.left=(L.x/w*100)+"%"; d.style.top=(L.y/H*100)+"%"; d.style.width=(L.w/w*100)+"%";
+      if(L.type==="image") d.style.height=(L.h/H*100)+"%"; else { const t=d.querySelector(".txt"); if(t) t.style.fontSize="calc("+(L.fs/10)+" * 1cqh)"; } }
+    e.preventDefault();
+  }
+  function onPointerUp(){ if(drag){ drag=null; saveLocal(); } }
+  const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+
+  // ---------- text editing ----------
+  function startTextEdit(id){
+    const L=findLayer(id); if(!L||L.type!=="text") return; sel=id; editingText=true;
+    renderEditor();
+    const d=canvas().querySelector('.layer[data-id="'+id+'"]'); if(!d) return; d.classList.add("editing");
+    const t=d.querySelector(".txt"); t.setAttribute("contenteditable","true"); t.focus();
+    const rng=document.createRange(); rng.selectNodeContents(t); const s=getSelection(); s.removeAllRanges(); s.addRange(rng);
+    // live-save on input; blur just cleans up this node (no re-render, avoids removal races)
+    t.oninput = ()=>{ L.text = t.innerText; saveLocal(); };
+    t.onblur = ()=>{ L.text = t.innerText.replace(/\n{3,}/g,"\n\n"); editingText=false; t.removeAttribute("contenteditable"); if(d.parentNode) d.classList.remove("editing"); saveLocal(); };
+    updateLayerBar();
+  }
+  function commitTextEdit(){ if(!editingText) return; const t=canvas().querySelector(".layer.editing .txt"); if(t){ const L=findLayer(sel); if(L) L.text=t.innerText; t.blur(); } editingText=false; }
+
+  function updateLayerBar(){
+    const bar=el("layerBar"); const L=sel?findLayer(sel):null;
+    if(!L){ bar.classList.remove("show"); return; }
+    bar.classList.add("show");
+    const isText = L.type==="text";
+    el("lEdit").style.display = isText?"":"none";
+    el("lColorWrap").style.display = isText?"":"none";
+    el("lFont").style.display = isText?"":"none";
+    if(isText){ el("lColor").value = L.color||"#111"; el("lFont").textContent = "Font: " + (FONTS.find((f)=>f[1]===L.font)||FONTS[0])[0]; }
+  }
+
+  // ---------- reader ----------
+  function renderReader(){
+    const rc=el("readerCanvas"); rc.style.height="min(74dvh,560px)"; rc.style.maxWidth="calc(100vw - 40px)";
+    renderPage(rc, readerPage, false);
+    el("rCount").textContent = "Page " + (readerPage+1) + " / 8";
+    const dots=el("rDots"); dots.innerHTML="";
+    for(let i=0;i<8;i++){ const b=document.createElement("button"); b.className="dot"; if(i===readerPage)b.setAttribute("aria-current","true"); b.setAttribute("aria-label","Go to page "+(i+1)); b.onclick=()=>{readerPage=i;renderReader();}; dots.appendChild(b); }
+  }
+  function readerGo(d){ readerPage=clamp(readerPage+d,0,7); renderReader(); }
+
+  // ---------- modes ----------
+  function setMode(m){
+    mode=m; commitTextEdit(); sel=null;
+    el("mEdit").setAttribute("aria-pressed", String(m==="edit"));
+    el("mRead").setAttribute("aria-pressed", String(m==="read"));
+    el("reader").classList.toggle("show", m==="read");
+    el("canvas").style.display = m==="edit"?"":"none";
+    el("addBar").style.display = m==="edit"?"":"none";
+    el("addBar2").style.display = m==="edit"?"":"none";
+    el("layerBar").classList.remove("show");
+    if(m==="read"){ readerPage=0; renderReader(); } else renderEditor();
+  }
+
+  // ---------- print ----------
+  function buildPrint(){
+    const sheet=el("printSheet"); sheet.innerHTML="";
+    const P=PAPER[state.paper];
+    sheet.style.width = state.paper==="a4" ? "297mm":"11in";
+    sheet.style.height = state.paper==="a4" ? "210mm":"8.5in";
+    el("page-style-print").textContent = "@page { size:"+P.css+"; margin:0; }";
+    const w=W();
+    CELLS.forEach((cell)=>{
+      const idx=cell.p-1, page=state.pages[idx];
+      const pp=document.createElement("div"); pp.className="pp"+(cell.f?" flip":""); pp.style.setProperty("--pp-bg", page.bg);
+      page.layers.forEach((L)=>{
+        const d=document.createElement("div"); d.className="layer";
+        d.style.left=(L.x/w*100)+"%"; d.style.top=(L.y/H*100)+"%"; d.style.width=(L.w/w*100)+"%";
+        if(L.type==="image"){ d.style.height=(L.h/H*100)+"%"; d.innerHTML=`<img src="${imgSrc(L)}">`; }
+        else { d.innerHTML=`<div class="txt">${escapeHtml(L.text||"")}</div>`; const t=d.firstChild; t.style.color=L.color||"#111"; t.style.fontFamily=L.font||"var(--disp)"; t.style.textAlign=L.align||"left"; t.style.fontWeight="800"; t.style.fontSize="calc("+(L.fs/10)+" * 1cqh)"; }
+        pp.appendChild(d);
+      });
+      sheet.appendChild(pp);
     });
   }
-  const panelEl = (p) => sheet.querySelector('.panel[data-page="'+p+'"]');
-  function renderPanel(p) {
-    const el = panelEl(p), st = state.panels[p], th = THEMES[state.theme];
-    el.querySelector(".p-media").innerHTML = st.img ? `<img class="p-img" src="${st.img}" alt="">` : "";
-    const t = el.querySelector(".p-title"); t.textContent = st.title||PLACE.title(p); t.classList.toggle("ph", !st.title);
-    const b = el.querySelector(".p-body");  b.textContent = st.body||PLACE.body(p);  b.classList.toggle("ph", !st.body);
-    el.style.setProperty("--panel-bg", st.bg||"transparent");
-    el.style.setProperty("--panel-ink", st.ink||"");
-    el.style.setProperty("--panel-title-font", th.title);
-    el.style.setProperty("--panel-body-font", th.body);
-  }
-  const renderAll = () => { for (let p=1;p<=8;p++) renderPanel(p); };
 
-  function selectPage(p) {
-    state.selected = p;
-    sheet.querySelectorAll(".panel").forEach((e)=>e.classList.toggle("sel", +e.dataset.page===p));
-    const st = state.panels[p];
-    $("whoNum").textContent = "Page "+p; $("whoRole").textContent = ROLE[p]||"inner spread";
-    $("pTitle").value = st.title; $("pTitle").placeholder = PLACE.title(p);
-    $("pBody").value = st.body;   $("pBody").placeholder = PLACE.body(p);
-    $("pBg").value = st.bg||"#ffffff"; $("pInk").value = st.ink||"#111111";
-    renderDrop(st.img);
-    showTab("content");
-  }
-  function renderDrop(img) {
-    const d = $("drop");
-    if (img) { d.classList.add("has"); d.innerHTML = `<img src="${img}" alt="photo on this page">`; }
-    else { d.classList.remove("has"); d.innerHTML = `<div class="big">Tap to add a photo</div><div class="small">or drag &amp; drop · or paste (⌘/Ctrl-V)</div>`; }
-  }
-
-  // ---------- image handling (downscale for speed + storage) ----------
-  function fileToImage(file) {
-    return new Promise((res, rej) => {
-      if (!file || !/^image\//.test(file.type)) return rej(new Error("not an image"));
-      const r = new FileReader(); r.onerror = rej;
-      r.onload = () => { const i = new Image(); i.onload = ()=>res(i); i.onerror = rej; i.src = r.result; };
-      r.readAsDataURL(file);
-    });
-  }
-  function downscale(img, max) {
-    let { width:w, height:h } = img;
-    if (w > max || h > max) { const s = max/Math.max(w,h); w = Math.round(w*s); h = Math.round(h*s); }
-    const c = document.createElement("canvas"); c.width = w; c.height = h;
-    c.getContext("2d").drawImage(img, 0, 0, w, h);
-    try { return c.toDataURL("image/jpeg", 0.85); } catch(_) { return c.toDataURL(); }
-  }
-  async function acceptFile(file, onDone) {
+  // ---------- persistence: self-publishing artifact ----------
+  async function share(){
+    commitTextEdit();
+    if(!hasContent()){ toast("Add a photo or text first."); return; }
+    if(!claudeApi || !claudeApi.use){ // repo / offline
+      saveLocal(); openModal("Saved on this device","This copy is running as a plain file, so it can't create a shareable link. Open the published Zine Studio artifact to Save & Share.",null); return;
+    }
+    let artifact=null; try{ artifact=await claudeApi.use("artifact"); }catch(_){}
+    if(!artifact){ saveLocal(); openModal("Can't publish here","This view can't publish a new version — you may be opening someone else's zine. Ask them to share the link.",null); return; }
+    const btn=el("shareBtn"); const old=btn.textContent; btn.textContent="Saving…"; btn.disabled=true;
     try {
-      const img = await fileToImage(file);
-      onDone(downscale(img, 1400), img);
-    } catch(_) { alert("Sorry — that file couldn't be read as an image. Try a JPG or PNG."); }
+      await artifact.publish(buildPublishDoc());
+      openModal("Saved & shared!","Everyone with this link now sees your zine and can flip through it in Read mode. Use the artifact's Share menu (top-right of this window) to send the link or make it public.", location.href);
+    } catch(err){
+      const code=(err&&err.code)||"";
+      if(code==="conflict"){ toast("Someone else just saved — reloading to their version."); }
+      else openModal("Couldn't publish","Saving the share version failed ("+(code||"unknown")+"). Your work is kept on this device; try Save & Share again.",null);
+    } finally { btn.textContent=old; btn.disabled=false; }
   }
-  function setPanelPhoto(file) {
-    acceptFile(file, (data) => { state.panels[state.selected].img = data; renderPanel(state.selected); renderDrop(data); });
-  }
-
-  // ---------- colour sampling ----------
-  const clamp = (n)=>Math.max(0,Math.min(255,Math.round(n)));
-  const hex = (r,g,b)=>"#"+[r,g,b].map((v)=>clamp(v).toString(16).padStart(2,"0")).join("");
-  const toRgb = (h)=>({ r:parseInt(h.slice(1,3),16), g:parseInt(h.slice(3,5),16), b:parseInt(h.slice(5,7),16) });
-  function readableInk(h){ const {r,g,b}=toRgb(h), lin=(v)=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);};
-    return (0.2126*lin(r)+0.7152*lin(g)+0.0722*lin(b))>0.5 ? "#111111" : "#f7f7f2"; }
-  function sampleDataUrl(src) {
-    return new Promise((res)=>{ const img = new Image(); img.onload = ()=>{
-      const N=64, c=document.createElement("canvas"); c.width=N; c.height=N;
-      const ctx=c.getContext("2d"); ctx.drawImage(img,0,0,N,N); const d=ctx.getImageData(0,0,N,N).data;
-      let ar=0,ag=0,ab=0,n=0; const b=new Map();
-      for (let i=0;i<d.length;i+=4){ if(d[i+3]<125)continue; const r=d[i],g=d[i+1],bl=d[i+2]; ar+=r;ag+=g;ab+=bl;n++;
-        const k=((r>>4)<<8)|((g>>4)<<4)|(bl>>4); const c2=b.get(k)||{r:0,g:0,b:0,n:0}; c2.r+=r;c2.g+=g;c2.b+=bl;c2.n++; b.set(k,c2); }
-      n=n||1; res({ average:hex(ar/n,ag/n,ab/n), palette:[...b.values()].sort((x,y)=>y.n-x.n).slice(0,6).map((v)=>hex(v.r/v.n,v.g/v.n,v.b/v.n)) });
-    }; img.src = src; });
-  }
-
-  // ---------- apply state → DOM ----------
-  function applyPaper() {
-    const P = PAPER[state.paper];
-    sheet.style.width = P.w; sheet.style.height = P.h;
-    $("page-style").textContent = `@page { size: ${P.css}; margin: 0; }`;
-    const m = $("margin"); m.min=P.min; m.max=P.max; m.step=P.step;
-    if (state.paper==="a4" && state.margin<3) state.margin=P.def;
-    if (state.paper==="letter" && state.margin>1) state.margin=P.def;
-    m.value = state.margin; applyMargin(); fit();
-  }
-  function applyMargin(){ const u=PAPER[state.paper].unit; sheet.style.setProperty("--panel-margin",state.margin+u); $("marginVal").textContent=state.margin+" "+u; }
-  function applyTheme(){ const t=THEMES[state.theme]; sheet.style.backgroundImage=t.tex; sheet.style.backgroundSize=t.texSize; renderAll(); }
-  function applyPage(){ sheet.style.setProperty("--page-bg",state.pageBg); sheet.style.setProperty("--page-ink",state.pageInk); }
-  function applyFlags(){ sheet.classList.toggle("fold",state.fold); sheet.classList.toggle("show-guides",state.showGuides); sheet.style.setProperty("--print-labels",state.printLabels?"block":"none"); }
-  function drawGuides(){ guides.querySelectorAll(".v,.h,.cut").forEach((n)=>n.remove());
-    [25,50,75].forEach((x)=>{ const v=document.createElement("div"); v.className="v"; v.style.left=x+"%"; guides.appendChild(v); });
-    const h=document.createElement("div"); h.className="h"; h.style.top="50%"; guides.appendChild(h);
-    guides.appendChild(Object.assign(document.createElement("div"),{className:"cut"})); }
-  function fit(){ scaler.style.transform="scale(1)"; const avail=document.querySelector(".stage").clientWidth-32;
-    const w=sheet.getBoundingClientRect().width||1; const s=Math.min(1,avail/w);
-    scaler.style.transform="scale("+s+")"; scaler.style.height=(sheet.getBoundingClientRect().height*s)+"px"; }
-  window.addEventListener("resize", fit);
-
-  // ---------- tabs ----------
-  function showTab(name){ ["content","design","colour","guide"].forEach((n)=>{ $("t-"+n).setAttribute("aria-selected",String(n===name));
-    const p=$("p-"+n); p.classList.toggle("active",n===name); p.hidden=(n!==name); }); }
-  ["content","design","colour","guide"].forEach((n)=>$("t-"+n).addEventListener("click", ()=>showTab(n)));
-
-  // ---------- palette ----------
-  let paletteSrc = "";
-  async function buildPalette(file) {
-    acceptFile(file, async (data) => {
-      paletteSrc = data; $("paletteThumb").src = data;
-      const { palette } = await sampleDataUrl(data);
-      const strip = $("swatches"); strip.innerHTML = "";
-      palette.forEach((c)=>{ const s=document.createElement("button"); s.type="button"; s.className="swatch";
-        s.style.background=c; s.title=c; s.setAttribute("aria-label","Apply "+c); s.addEventListener("click",()=>applyPicked(c)); strip.appendChild(s); });
-      $("paletteWrap").hidden = false;
-    });
-  }
-  function applyPicked(c) {
-    const t=$("applyTarget").value, ink=readableInk(c);
-    if (t==="page"){ state.pageBg=c; $("pageBg").value=c; if(state.autoInk){ state.pageInk=ink; $("pageInk").value=ink; } applyPage(); }
-    else if (t==="page-ink"){ state.pageInk=c; $("pageInk").value=c; applyPage(); }
-    else if (t==="all-panels"){ for(let p=1;p<=8;p++){ state.panels[p].bg=c; if(state.autoInk) state.panels[p].ink=ink; } renderAll(); selectPage(state.selected); }
-    else { const st=state.panels[state.selected]; st.bg=c; if(state.autoInk) st.ink=ink; renderPanel(state.selected); selectPage(state.selected); }
+  function buildPublishDoc(){
+    const css=el("appcss").textContent, js=el("appjs").textContent, shell=el("app-shell").outerHTML;
+    const stateJson=JSON.stringify(state).replace(/</g,"\\u003c");
+    return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zine Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+<style id="appcss">${css}</style></head>
+<body><div id="root"></div>
+${shell}
+<script id="zine-state" type="application/json">${stateJson}<\/script>
+<script id="appjs">${js}<\/script>
+</body></html>`;
   }
 
-  // ---------- persistence ----------
-  const KEY = "riso-zine-studio-v1";
-  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); flash($("saveBtn"),"Saved ✓"); }catch(_){ flash($("saveBtn"),"Too big to save"); } }
-  function load(){ try{ const r=localStorage.getItem(KEY); if(r) Object.assign(state,JSON.parse(r)); }catch(_){} }
-  function flash(b,m){ const t=b.textContent; b.textContent=m; setTimeout(()=>b.textContent=t,1300); }
+  // ---------- image intake ----------
+  function intakeFile(file){
+    if(!file || !/^image\//.test(file.type)){ toast("That wasn't an image — try a JPG or PNG."); return; }
+    const r=new FileReader();
+    r.onerror=()=>toast("Couldn't read that file.");
+    r.onload=()=>{ const img=new Image(); img.onload=()=>{ const {url,w,h}=downscale(img,1100); addImageLayer(url,w,h); }; img.onerror=()=>toast("That image couldn't load."); img.src=r.result; };
+    r.readAsDataURL(file);
+  }
+  function downscale(img,max){
+    let w=img.naturalWidth||img.width, h=img.naturalHeight||img.height;
+    if(w>max||h>max){ const s=max/Math.max(w,h); w=Math.round(w*s); h=Math.round(h*s); }
+    const c=document.createElement("canvas"); c.width=w; c.height=h; c.getContext("2d").drawImage(img,0,0,w,h);
+    let url; try{ url=c.toDataURL("image/jpeg",0.78); }catch(_){ url=c.toDataURL(); }
+    return { url, w, h };
+  }
 
-  // ---------- wire: upload (the reliable pattern) ----------
-  const drop = $("drop"), fileInput = $("fileInput");
-  const openPicker = () => fileInput.click();
-  drop.addEventListener("click", openPicker);
-  drop.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openPicker(); } });
-  $("pickBtn").addEventListener("click", openPicker);
-  fileInput.addEventListener("change", (e)=>{ if(e.target.files[0]) setPanelPhoto(e.target.files[0]); e.target.value=""; });
-  ["dragenter","dragover"].forEach((ev)=>drop.addEventListener(ev,(e)=>{ e.preventDefault(); drop.classList.add("over"); }));
-  ["dragleave","drop"].forEach((ev)=>drop.addEventListener(ev,(e)=>{ e.preventDefault(); drop.classList.remove("over"); }));
-  drop.addEventListener("drop",(e)=>{ const f=e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) setPanelPhoto(f); });
-  window.addEventListener("paste",(e)=>{ const items=(e.clipboardData||{}).items||[]; for(const it of items){ if(it.type&&it.type.indexOf("image")===0){ const f=it.getAsFile(); if(f){ setPanelPhoto(f); break; } } } });
-  $("pImgClear").addEventListener("click", ()=>{ state.panels[state.selected].img=""; renderPanel(state.selected); renderDrop(""); });
-
-  // wire: content
-  $("prevPage").addEventListener("click", ()=>selectPage(state.selected===1?8:state.selected-1));
-  $("nextPage").addEventListener("click", ()=>selectPage(state.selected===8?1:state.selected+1));
-  $("pTitle").addEventListener("input",(e)=>{ state.panels[state.selected].title=e.target.value; renderPanel(state.selected); });
-  $("pBody").addEventListener("input",(e)=>{ state.panels[state.selected].body=e.target.value; renderPanel(state.selected); });
-  $("pBg").addEventListener("input",(e)=>{ state.panels[state.selected].bg=e.target.value; renderPanel(state.selected); });
-  $("pInk").addEventListener("input",(e)=>{ state.panels[state.selected].ink=e.target.value; renderPanel(state.selected); });
-  $("pFromPhoto").addEventListener("click", async ()=>{ const st=state.panels[state.selected]; if(!st.img){ alert("Add a photo to this page first."); return; }
-    const {average}=await sampleDataUrl(st.img); st.bg=average; if(state.autoInk) st.ink=readableInk(average);
-    $("pBg").value=average; $("pInk").value=st.ink||$("pInk").value; renderPanel(state.selected); });
-  $("pClearColour").addEventListener("click", ()=>{ const st=state.panels[state.selected]; st.bg=""; st.ink=""; $("pBg").value="#ffffff"; $("pInk").value="#111111"; renderPanel(state.selected); });
-
-  // wire: design
-  $("paper").addEventListener("change",(e)=>{ state.paper=e.target.value; applyPaper(); });
-  $("margin").addEventListener("input",(e)=>{ state.margin=parseFloat(e.target.value); applyMargin(); fit(); });
-  $("theme").addEventListener("change",(e)=>{ state.theme=e.target.value; const t=THEMES[state.theme];
-    state.pageBg=t.pageBg; state.pageInk=t.pageInk; $("pageBg").value=t.pageBg; $("pageInk").value=t.pageInk; applyTheme(); applyPage(); });
-  $("pageBg").addEventListener("input",(e)=>{ state.pageBg=e.target.value; applyPage(); });
-  $("pageInk").addEventListener("input",(e)=>{ state.pageInk=e.target.value; applyPage(); });
-  $("saveBtn").addEventListener("click", save);
-  $("resetBtn").addEventListener("click", ()=>{ if(confirm("Clear everything and start over?")){ try{localStorage.removeItem(KEY);}catch(_){} location.reload(); } });
-
-  // wire: colour
-  $("paletteBtn").addEventListener("click", ()=>$("paletteInput").click());
-  $("paletteInput").addEventListener("change",(e)=>{ if(e.target.files[0]) buildPalette(e.target.files[0]); e.target.value=""; });
-  $("avgBtn").addEventListener("click", async ()=>{ if(paletteSrc) applyPicked((await sampleDataUrl(paletteSrc)).average); });
-  $("applyTarget").addEventListener("change",(e)=>{ state.applyTarget=e.target.value; });
-  $("autoInk").addEventListener("change",(e)=>{ state.autoInk=e.target.checked; });
-
-  // wire: guide + print
-  $("foldMode").addEventListener("change",(e)=>{ state.fold=e.target.checked; applyFlags(); });
-  $("showGuides").addEventListener("change",(e)=>{ state.showGuides=e.target.checked; applyFlags(); });
-  $("printLabels").addEventListener("change",(e)=>{ state.printLabels=e.target.checked; applyFlags(); });
-  $("printBtn").addEventListener("click", ()=>window.print());
+  // ---------- ui helpers ----------
+  const escapeHtml=(s)=>String(s).replace(/[&<>]/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])).replace(/\n/g,"<br>");
+  let toastT=null;
+  function toast(msg){ const t=el("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2600); }
+  function openModal(title,body,link){ el("modalTitle").textContent=title; el("modalBody").textContent=body;
+    const lk=el("modalLink"), cp=el("modalCopy");
+    if(link){ lk.textContent=link; lk.hidden=false; cp.hidden=false; cp.onclick=async()=>{ try{ await navigator.clipboard.writeText(link); cp.textContent="Copied ✓"; }catch(_){ cp.textContent="Copy failed"; } }; }
+    else { lk.hidden=true; cp.hidden=true; }
+    el("modal").classList.add("show"); }
 
   // ---------- boot ----------
-  function syncControls(){ $("paper").value=state.paper; $("theme").value=state.theme;
-    $("pageBg").value=state.pageBg; $("pageInk").value=state.pageInk;
-    $("foldMode").checked=state.fold; $("showGuides").checked=state.showGuides;
-    $("printLabels").checked=state.printLabels; $("autoInk").checked=state.autoInk; $("applyTarget").value=state.applyTarget; }
-  load(); buildPanels(); syncControls();
-  applyPaper(); applyTheme(); applyPage(); applyFlags(); drawGuides();
-  selectPage(state.selected||1); fit();
+  function boot(){
+    el("root").innerHTML = el("app-shell").innerHTML;
+
+    // wire top bar
+    el("mEdit").onclick=()=>setMode("edit");
+    el("mRead").onclick=()=>setMode("read");
+    el("shareBtn").onclick=share;
+    el("printBtn").onclick=()=>{ buildPrint(); setTimeout(()=>window.print(),60); };
+
+    // add bar
+    el("addPhoto").onclick=()=>el("fileInput").click();
+    el("addText").onclick=addTextLayer;
+    el("fileInput").onchange=(e)=>{ const f=e.target.files[0]; if(f) intakeFile(f); e.target.value=""; };
+    el("pageBg").oninput=(e)=>{ state.pages[cur].bg=e.target.value; changed(); };
+
+    // layer bar
+    el("lEdit").onclick=()=>{ if(sel) startTextEdit(sel); };
+    el("lColor").oninput=(e)=>{ const L=findLayer(sel); if(L){ L.color=e.target.value; changed(); } };
+    el("lFont").onclick=()=>{ const L=findLayer(sel); if(!L)return; const i=FONTS.findIndex((f)=>f[1]===L.font); L.font=FONTS[(i+1)%FONTS.length][1]; changed(); };
+    el("lDup").onclick=()=>{ if(sel) dupLayer(sel); };
+    el("lFront").onclick=()=>{ if(sel) bringFront(sel); };
+    el("lDel").onclick=()=>{ if(sel) deleteLayer(sel); };
+
+    // canvas pointer + drag/drop/paste
+    const cv=el("canvas");
+    cv.addEventListener("pointerdown", onPointerDown);
+    cv.addEventListener("pointermove", onPointerMove);
+    cv.addEventListener("pointerup", onPointerUp);
+    cv.addEventListener("pointercancel", onPointerUp);
+    cv.addEventListener("dblclick",(e)=>{ const l=e.target.closest(".layer"); if(l){ const L=findLayer(l.dataset.id); if(L&&L.type==="text") startTextEdit(L.id); } });
+    ["dragover","dragenter"].forEach((ev)=>cv.addEventListener(ev,(e)=>{ e.preventDefault(); }));
+    cv.addEventListener("drop",(e)=>{ e.preventDefault(); const f=e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) intakeFile(f); });
+    window.addEventListener("paste",(e)=>{ if(mode!=="edit")return; const items=(e.clipboardData||{}).items||[]; for(const it of items){ if(it.type&&it.type.indexOf("image")===0){ const f=it.getAsFile(); if(f){ intakeFile(f); break; } } } });
+
+    // reader nav + swipe
+    el("rPrev").onclick=()=>readerGo(-1);
+    el("rNext").onclick=()=>readerGo(1);
+    let sw=null; const rs=el("readerStage");
+    rs.addEventListener("pointerdown",(e)=>{ sw={x:e.clientX,y:e.clientY}; });
+    rs.addEventListener("pointerup",(e)=>{ if(!sw)return; const dx=e.clientX-sw.x, dy=e.clientY-sw.y; if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)) readerGo(dx<0?1:-1); sw=null; });
+
+    el("modalClose").onclick=()=>el("modal").classList.remove("show");
+    el("modal").addEventListener("click",(e)=>{ if(e.target===el("modal")) el("modal").classList.remove("show"); });
+
+    // @page style for print
+    const ps=document.createElement("style"); ps.id="page-style-print"; ps.textContent="@page{size:11in 8.5in;margin:0;}"; document.head.appendChild(ps);
+
+    window.addEventListener("resize",()=>{ if(mode==="edit") renderEditor(); else renderReader(); });
+
+    // initial state: embedded (shared) > local draft
+    const shared = loadEmbedded();
+    if(!shared) loadLocal();
+    // shared viewers land in Read mode; fresh makers in Edit
+    if(shared){ setMode("read"); } else { setMode("edit"); }
+
+    // connect claude (for Save & Share) — never blocks first paint
+    if (window.claude && window.claude.use){ claudeApi = window.claude; }
+  }
+
+  if (document.readyState==="loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
 })();
 </script>
 </body>
