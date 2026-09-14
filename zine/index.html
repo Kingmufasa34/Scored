@@ -282,6 +282,12 @@
     container.style.setProperty("--page-bg", page.bg);
     container.style.setProperty("--page-ink", page.ink||"#111");
     container.style.setProperty("--aspect", pageAspect(state.paper));
+    // Paint the page colour on an inner fill element. StPageFlip wipes the
+    // page element's own inline style, but preserves its children — so the
+    // colour must live on a child to survive in the reader.
+    let fill = container.querySelector(".pagebg");
+    if(!fill){ fill=document.createElement("div"); fill.className="pagebg"; container.insertBefore(fill, container.firstChild); }
+    fill.style.cssText = "position:absolute;inset:0;z-index:0;pointer-events:none;background:"+(page.bg||"#fff");
     // keep non-layer children (nums), rebuild layers
     [...container.querySelectorAll(".layer")].forEach((n)=>{ if(n.parentNode) n.parentNode.removeChild(n); });
     let num = container.querySelector(".cnum"); if(!num){ num=document.createElement("div"); num.className="cnum"; container.appendChild(num); }
