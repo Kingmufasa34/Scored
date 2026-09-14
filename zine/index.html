@@ -104,7 +104,8 @@
   /* ---- reader ---- */
   .reader { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; gap:14px; background:var(--paper-2); z-index:15; }
   .reader.show { display:flex; }
-  .reader .stagep { position:relative; touch-action:pan-y; }
+  .reader .stagep { position:relative; touch-action:pan-y; perspective:1500px; }
+  .reader #readerCanvas { transform-style:preserve-3d; will-change:transform,opacity; backface-visibility:hidden; }
   .reader .rnav { position:absolute; top:50%; transform:translateY(-50%); width:44px; height:64px; border:0; background:rgba(26,23,18,.72); color:#fff; font-size:26px; cursor:pointer; z-index:3; }
   .reader .rnav.prev { left:-8px; } .reader .rnav.next { right:-8px; }
   .reader .rcount { font:700 12px/1 var(--mono); letter-spacing:.1em; color:var(--ink); text-transform:uppercase; }
@@ -396,14 +397,40 @@
   }
 
   // ---------- reader ----------
-  function renderReader(){
+  function renderReaderContent(){
     const rc=el("readerCanvas"); rc.style.height="min(74dvh,560px)"; rc.style.maxWidth="calc(100vw - 40px)";
     renderPage(rc, readerPage, false);
+  }
+  function updateReaderMeta(){
     el("rCount").textContent = "Page " + (readerPage+1) + " / 8";
     const dots=el("rDots"); dots.innerHTML="";
-    for(let i=0;i<8;i++){ const b=document.createElement("button"); b.className="dot"; if(i===readerPage)b.setAttribute("aria-current","true"); b.setAttribute("aria-label","Go to page "+(i+1)); b.onclick=()=>{readerPage=i;renderReader();}; dots.appendChild(b); }
+    for(let i=0;i<8;i++){ const b=document.createElement("button"); b.className="dot"; if(i===readerPage)b.setAttribute("aria-current","true"); b.setAttribute("aria-label","Go to page "+(i+1)); b.onclick=()=>readerGoTo(i); dots.appendChild(b); }
   }
-  function readerGo(d){ readerPage=clamp(readerPage+d,0,7); renderReader(); }
+  function renderReader(){ renderReaderContent(); updateReaderMeta(); }
+
+  let flipping=false;
+  function readerGoTo(target){
+    target=clamp(target,0,7);
+    if(target===readerPage || flipping) return;
+    const dir = target>readerPage ? 1 : -1;
+    const rc=el("readerCanvas");
+    const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(reduce){ readerPage=target; renderReader(); return; }
+    flipping=true;
+    const outDeg = dir>0 ? -90 : 90;
+    rc.style.transition="transform .19s ease-in, opacity .19s ease-in";
+    rc.style.transform="rotateY("+outDeg+"deg)"; rc.style.opacity="0.35";
+    setTimeout(()=>{
+      readerPage=target; renderReaderContent(); updateReaderMeta();
+      rc.style.transition="none";
+      rc.style.transform="rotateY("+(-outDeg)+"deg)"; rc.style.opacity="0.35";
+      void rc.offsetWidth;                       // reflow so the reverse angle takes hold
+      rc.style.transition="transform .26s cubic-bezier(.2,.7,.3,1), opacity .26s";
+      rc.style.transform="rotateY(0deg)"; rc.style.opacity="1";
+      setTimeout(()=>{ flipping=false; rc.style.transition=""; rc.style.transform=""; }, 290);
+    }, 190);
+  }
+  function readerGo(d){ readerGoTo(readerPage + d); }
 
   // ---------- modes ----------
   function setMode(m){
