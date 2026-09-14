@@ -15,6 +15,8 @@ import { toClaimDTO } from './web/dto.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // public/ sits next to src/ in dev and next to dist/ after build.
 const PUBLIC_DIR = path.resolve(__dirname, '..', 'public');
+// zine/ is a standalone print-ready mini-zine builder, served at /zine/.
+const ZINE_DIR = path.resolve(__dirname, '..', 'zine');
 
 const cfg = loadConfig();
 const app = express();
@@ -136,6 +138,7 @@ async function persist(claim: Claim): Promise<void> {
 
 // ── Static front end ─────────────────────────────────────────────────────────
 
+app.use('/zine', express.static(ZINE_DIR));
 app.use(express.static(PUBLIC_DIR));
 app.get('*', (_req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
