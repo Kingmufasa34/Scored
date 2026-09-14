@@ -167,6 +167,7 @@
           <button id="mEdit" aria-pressed="true">Edit</button>
           <button id="mRead" aria-pressed="false">Read</button>
         </div>
+        <button class="icon-btn" id="soundBtn" title="Flip sound" aria-pressed="true">🔊</button>
         <button class="icon-btn" id="printBtn" title="Print fold sheet">🖨</button>
         <button class="icon-btn pink" id="shareBtn">Share</button>
       </div>
@@ -411,8 +412,30 @@
     if(isText){ el("lColor").value = L.color||"#111"; el("lFont").textContent = "Font: " + (FONTS.find((f)=>f[1]===L.font)||FONTS[0])[0]; }
   }
 
+  // ---------- flip sound (synthesised paper "fwip", no external asset) ----------
+  let actx=null, muted=false;
+  try{ muted = localStorage.getItem("zine-muted")==="1"; }catch(_){}
+  function audio(){ if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(_){ actx=null; } } return actx; }
+  function unlockAudio(){ const c=audio(); if(c && c.state==="suspended") c.resume().catch(()=>{}); }
+  function playFlip(){
+    if(muted) return; const ctx=audio(); if(!ctx) return; if(ctx.state==="suspended") ctx.resume().catch(()=>{});
+    const now=ctx.currentTime, dur=0.24, rate=ctx.sampleRate, n=Math.max(1,Math.floor(rate*dur));
+    const buf=ctx.createBuffer(1,n,rate), d=buf.getChannelData(0);
+    for(let i=0;i<n;i++){ const t=i/n; d[i]=(Math.random()*2-1)*Math.pow(1-t,2.2); } // decaying noise = paper rustle
+    const src=ctx.createBufferSource(); src.buffer=buf;
+    const hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=380;
+    const bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.Q.value=0.7;
+    bp.frequency.setValueAtTime(2000,now); bp.frequency.exponentialRampToValueAtTime(650,now+dur);
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(0.0001,now); g.gain.exponentialRampToValueAtTime(0.42,now+0.012); g.gain.exponentialRampToValueAtTime(0.0001,now+dur);
+    src.connect(hp); hp.connect(bp); bp.connect(g); g.connect(ctx.destination);
+    src.start(now); src.stop(now+dur+0.02);
+  }
+  function setMuted(m){ muted=m; try{ localStorage.setItem("zine-muted", m?"1":"0"); }catch(_){}
+    const b=el("soundBtn"); if(b){ b.textContent=m?"🔇":"🔊"; b.setAttribute("aria-pressed", String(!m)); } if(!m) unlockAudio(); }
+
   // ---------- reader: realistic book flip via StPageFlip ----------
-  let book=null, bookW=0, bookH=0, stfBusy=false, buildToken=0;
+  let book=null, bookW=0, bookH=0, stfBusy=false, stfState="read", buildToken=0;
   function bookDims(){
     const h = Math.min(Math.round((window.innerHeight||700)*0.72), 620);
     const w = Math.round(h * pageAspect(state.paper));
@@ -450,7 +473,7 @@
     book.loadFromHTML(host.querySelectorAll(".page"));
     try{ book.turnToPage(clamp(readerPage,0,7)); }catch(_){}
     book.on("flip",(e)=>{ readerPage=e.data; updateReaderMeta(); });
-    book.on("changeState",(e)=>{ stfBusy = (e.data!=="read"); });
+    book.on("changeState",(e)=>{ if(e.data==="flipping" && stfState!=="flipping") playFlip(); stfState=e.data; stfBusy=(e.data!=="read"); });
     updateReaderMeta();
   }
   function showFallbackPage(){
@@ -465,11 +488,13 @@
   function readerGoTo(target){
     target=clamp(target,0,7);
     if(book){ if(stfBusy) return; try{ book.turnToPage(target); }catch(_){ readerPage=target; } return; }
+    if(target!==readerPage) playFlip();
     readerPage=target; showFallbackPage(); updateReaderMeta();
   }
   function readerGo(d){
     if(book){ if(stfBusy) return; try{ d>0?book.flipNext("top"):book.flipPrev("top"); }catch(_){} return; }
-    readerPage=clamp(readerPage+d,0,7); showFallbackPage(); updateReaderMeta();
+    const t=clamp(readerPage+d,0,7); if(t!==readerPage) playFlip();
+    readerPage=t; showFallbackPage(); updateReaderMeta();
   }
 
   // ---------- modes ----------
@@ -577,7 +602,7 @@ ${shell}
 
     // wire top bar
     el("mEdit").onclick=()=>setMode("edit");
-    el("mRead").onclick=()=>setMode("read");
+    el("mRead").onclick=()=>{ unlockAudio(); setMode("read"); };
     el("shareBtn").onclick=share;
     el("printBtn").onclick=()=>{ buildPrint(); setTimeout(()=>window.print(),60); };
 
@@ -606,9 +631,13 @@ ${shell}
     cv.addEventListener("drop",(e)=>{ e.preventDefault(); const f=e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) intakeFile(f); });
     window.addEventListener("paste",(e)=>{ if(mode!=="edit")return; const items=(e.clipboardData||{}).items||[]; for(const it of items){ if(it.type&&it.type.indexOf("image")===0){ const f=it.getAsFile(); if(f){ intakeFile(f); break; } } } });
 
+    // sound toggle
+    setMuted(muted);
+    el("soundBtn").onclick=()=>setMuted(!muted);
+
     // reader nav (StPageFlip provides drag-to-turn itself)
-    el("rPrev").onclick=()=>readerGo(-1);
-    el("rNext").onclick=()=>readerGo(1);
+    el("rPrev").onclick=()=>{ unlockAudio(); readerGo(-1); };
+    el("rNext").onclick=()=>{ unlockAudio(); readerGo(1); };
 
     el("modalClose").onclick=()=>el("modal").classList.remove("show");
     el("modal").addEventListener("click",(e)=>{ if(e.target===el("modal")) el("modal").classList.remove("show"); });
