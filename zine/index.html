@@ -417,19 +417,40 @@
   try{ muted = localStorage.getItem("zine-muted")==="1"; }catch(_){}
   function audio(){ if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(_){ actx=null; } } return actx; }
   function unlockAudio(){ const c=audio(); if(c && c.state==="suspended") c.resume().catch(()=>{}); }
+  // A book page: a low "whoosh" of air + a higher paper crinkle, with a
+  // gentle flutter and a tiny leading "tick" as the sheet releases. Noise is
+  // shaped in the buffer; two parallel filters colour body vs. crinkle.
+  function flipBuffer(ctx, dur){
+    const n=Math.max(1,Math.floor(ctx.sampleRate*dur)), buf=ctx.createBuffer(1,n,ctx.sampleRate), d=buf.getChannelData(0);
+    const flutterHz = 30 + Math.random()*16;
+    for(let i=0;i<n;i++){
+      const t=i/n;
+      const env = t<0.05 ? (t/0.05) : Math.pow(1-(t-0.05)/0.95, 1.7);   // fast attack, natural decay
+      const flutter = 0.65 + 0.35*Math.sin(2*Math.PI*flutterHz*t*dur*10); // page ripple
+      let v=(Math.random()*2-1)*env*flutter;
+      if(t<0.012) v += (Math.random()*2-1)*0.6*(1-t/0.012);              // leading edge tick
+      d[i]=v;
+    }
+    return buf;
+  }
   function playFlip(){
     if(muted) return; const ctx=audio(); if(!ctx) return; if(ctx.state==="suspended") ctx.resume().catch(()=>{});
-    const now=ctx.currentTime, dur=0.24, rate=ctx.sampleRate, n=Math.max(1,Math.floor(rate*dur));
-    const buf=ctx.createBuffer(1,n,rate), d=buf.getChannelData(0);
-    for(let i=0;i<n;i++){ const t=i/n; d[i]=(Math.random()*2-1)*Math.pow(1-t,2.2); } // decaying noise = paper rustle
-    const src=ctx.createBufferSource(); src.buffer=buf;
-    const hp=ctx.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=380;
-    const bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.Q.value=0.7;
-    bp.frequency.setValueAtTime(2000,now); bp.frequency.exponentialRampToValueAtTime(650,now+dur);
-    const g=ctx.createGain();
-    g.gain.setValueAtTime(0.0001,now); g.gain.exponentialRampToValueAtTime(0.42,now+0.012); g.gain.exponentialRampToValueAtTime(0.0001,now+dur);
-    src.connect(hp); hp.connect(bp); bp.connect(g); g.connect(ctx.destination);
-    src.start(now); src.stop(now+dur+0.02);
+    const now=ctx.currentTime, dur=0.30 + Math.random()*0.07;
+    const src=ctx.createBufferSource(); src.buffer=flipBuffer(ctx,dur);
+    const lp=ctx.createBiquadFilter(); lp.type="lowpass"; lp.Q.value=0.4;   // airy whoosh body
+    lp.frequency.setValueAtTime(3000+Math.random()*900,now); lp.frequency.exponentialRampToValueAtTime(680,now+dur);
+    const bp=ctx.createBiquadFilter(); bp.type="bandpass"; bp.Q.value=0.9;  // paper crinkle
+    bp.frequency.setValueAtTime(2500,now); bp.frequency.exponentialRampToValueAtTime(1100,now+dur);
+    const gBody=ctx.createGain(); gBody.gain.value=0.55;
+    const gCr=ctx.createGain(); gCr.gain.value=0.16;
+    const master=ctx.createGain();
+    master.gain.setValueAtTime(0.0001,now);
+    master.gain.exponentialRampToValueAtTime(0.55,now+0.02);
+    master.gain.exponentialRampToValueAtTime(0.0001,now+dur);
+    src.connect(lp); lp.connect(gBody); gBody.connect(master);
+    src.connect(bp); bp.connect(gCr); gCr.connect(master);
+    master.connect(ctx.destination);
+    src.start(now); src.stop(now+dur+0.03);
   }
   function setMuted(m){ muted=m; try{ localStorage.setItem("zine-muted", m?"1":"0"); }catch(_){}
     const b=el("soundBtn"); if(b){ b.textContent=m?"🔇":"🔊"; b.setAttribute("aria-pressed", String(!m)); } if(!m) unlockAudio(); }
