@@ -89,7 +89,7 @@
   .canvas .crole { position:absolute; bottom:10px; right:12px; z-index:1; font:9px/1 var(--mono); text-transform:uppercase; color:var(--page-ink,#111); opacity:.35; pointer-events:none; }
 
   .layer { position:absolute; user-select:none; }
-  .layer img { display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; border-radius:4px; }
+  .layer img { display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; border-radius:8px; box-shadow:0 10px 34px rgba(0,0,0,.28), 0 2px 8px rgba(0,0,0,.18); }
   .layer .txt { width:100%; font-family:var(--lf,var(--disp)); font-weight:800; line-height:1.04; color:var(--lc,#111); text-align:var(--la,left); word-break:break-word; white-space:pre-wrap; outline:none; }
   .canvas.edit .layer { cursor:grab; }
   .canvas.edit .layer.sel { outline:2px solid var(--spark); outline-offset:3px; }
@@ -128,9 +128,11 @@
   /* ---- reader ---- */
   .reader { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:rgba(5,4,10,.94); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); z-index:60; }
   .reader.show { display:flex; }
-  .reader .stagep { position:relative; }
+  .reader .stagep { position:relative; filter:drop-shadow(0 34px 55px rgba(0,0,0,.6)); }
   .book { touch-action:pan-y; }
-  .book .page { position:relative; container-type:size; overflow:hidden; background:#fff; border-radius:8px; }
+  /* page block thickness — reads as a real book, not a card */
+  .book .page { position:relative; container-type:size; overflow:hidden; background:#fff; border-radius:6px; box-shadow:0 0 0 1px rgba(0,0,0,.06); }
+  .book .page::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 60px rgba(0,0,0,.05); }
   .book .page .layer { position:absolute; }
   .book .page .layer, .book .page img, .book .pagebg { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
   .book .page img { image-rendering:auto; }
@@ -222,6 +224,7 @@
         <button class="icon-btn" id="lEdit">✎ Edit text</button>
         <label class="icon-btn swatch" id="lColorWrap">Colour<input type="color" id="lColor" value="#111111"></label>
         <button class="icon-btn" id="lFont">Font: Display</button>
+        <button class="icon-btn" id="lPick" title="Pick a colour from this photo for the page background">💧 Page BG</button>
         <button class="icon-btn" id="lDup">⧉ Copy</button>
         <button class="icon-btn" id="lFront">⤒ Front</button>
         <button class="icon-btn" id="lDel">🗑 Delete</button>
@@ -383,6 +386,7 @@
   let drag = null;
   function onPointerDown(e){
     if (mode!=="edit" || editingText) return;
+    if (pickArmed){ handlePick(e); e.preventDefault(); return; }   // eyedropper fallback tap
     const layerEl = e.target.closest(".layer"); const isHandle = e.target.dataset && e.target.dataset.resize;
     if (!layerEl){ if(!e.target.closest(".empty")){ sel=null; renderEditor(); } return; }
     const id = layerEl.dataset.id; sel=id; const L=findLayer(id); if(!L) return;
@@ -433,7 +437,41 @@
     el("lEdit").style.display = isText?"":"none";
     el("lColorWrap").style.display = isText?"":"none";
     el("lFont").style.display = isText?"":"none";
+    el("lPick").style.display = isText?"none":"";   // eyedropper only for photos
     if(isText){ el("lColor").value = L.color||"#111"; el("lFont").textContent = "Font: " + (FONTS.find((f)=>f[1]===L.font)||FONTS[0])[0]; }
+  }
+
+  // ---------- eyedropper: pick an exact pixel colour -> page background ----------
+  const hex2=(r,g,b)=>"#"+[r,g,b].map((v)=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,"0")).join("");
+  function setPageBg(h){ state.pages[cur].bg=h; el("pageBg").value=h; changed(); toast("Page background → "+h.toUpperCase()); }
+  let pickArmed=null;
+  async function pickColour(){
+    const L=sel?findLayer(sel):null; if(!L||L.type!=="image"){ toast("Select a photo first."); return; }
+    if(window.EyeDropper){                       // Chrome/Edge/Android: pick any pixel on screen
+      try{ const res=await new window.EyeDropper().open(); if(res&&res.sRGBHex) setPageBg(res.sRGBHex); }
+      catch(_){ /* user cancelled */ }
+      return;
+    }
+    pickArmed=L; canvas().style.cursor="crosshair"; toast("Tap the photo to sample its colour");
+  }
+  function handlePick(e){
+    const L=pickArmed; pickArmed=null; canvas().style.cursor="";
+    const node=canvas().querySelector('.layer[data-id="'+L.id+'"] img'); if(!node){ return; }
+    const r=node.getBoundingClientRect();
+    const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height;   // 0..1 within displayed box
+    if(fx<0||fx>1||fy<0||fy>1){ toast("Tap inside the photo."); return; }
+    const img=new Image();
+    img.onload=()=>{
+      const iw=img.naturalWidth, ih=img.naturalHeight, boxAR=r.width/r.height, imgAR=iw/ih;
+      let sw,sh,sx,sy;                                   // source rect actually shown (object-fit:cover)
+      if(imgAR>boxAR){ sh=ih; sw=ih*boxAR; sx=(iw-sw)/2; sy=0; } else { sw=iw; sh=iw/boxAR; sx=0; sy=(ih-sh)/2; }
+      const px=clamp(Math.floor(sx+fx*sw),0,iw-1), py=clamp(Math.floor(sy+fy*sh),0,ih-1);
+      const c=document.createElement("canvas"); c.width=iw; c.height=ih;
+      const ctx=c.getContext("2d"); ctx.drawImage(img,0,0);
+      const d=ctx.getImageData(px,py,1,1).data; setPageBg(hex2(d[0],d[1],d[2]));
+    };
+    img.onerror=()=>toast("Couldn't read that photo.");
+    img.src=L.src;
   }
 
   // ---------- reader: realistic book flip via StPageFlip ----------
@@ -458,7 +496,10 @@
     stfBusy=false;
     host.innerHTML="";
     const {w,h}=bookDims(); bookW=w; bookH=h;
-    host.style.width=w+"px"; host.style.height=h+"px";
+    // Two-page spread (a real open book with a spine) when there's room; a
+    // single page on phones. StPageFlip draws the centre-fold shadow itself.
+    const spread = (window.innerWidth||0) > (w*2 + 90);
+    host.style.width=(spread ? w*2 : w)+"px"; host.style.height=h+"px";
     for(let i=0;i<8;i++){ const pg=document.createElement("div"); pg.className="page"; pg.setAttribute("data-density", i===0||i===7?"hard":"soft"); renderPage(pg,i,false); host.appendChild(pg); }
     const Lib = window.St && window.St.PageFlip;
     if(!Lib){ host.dataset.fallback="1"; showFallbackPage(); updateReaderMeta(); return; }
@@ -467,8 +508,8 @@
     if(my!==buildToken) return;         // a newer build superseded this one
     book = new Lib(host, {
       width:w, height:h, size:"fixed",
-      flippingTime:620, usePortrait:true, showCover:true,
-      drawShadow:true, maxShadowOpacity:0.4, showPageCorners:true,
+      flippingTime:640, usePortrait:!spread, showCover:true,
+      drawShadow:true, maxShadowOpacity:0.5, showPageCorners:true,
       autoSize:false, mobileScrollSupport:false, clickEventForward:false,
       useMouseEvents:true, swipeDistance:16, disableFlipByClick:false,
     });
@@ -616,6 +657,7 @@ ${shell}
     el("lEdit").onclick=()=>{ if(sel) startTextEdit(sel); };
     el("lColor").oninput=(e)=>{ const L=findLayer(sel); if(L){ L.color=e.target.value; changed(); } };
     el("lFont").onclick=()=>{ const L=findLayer(sel); if(!L)return; const i=FONTS.findIndex((f)=>f[1]===L.font); L.font=FONTS[(i+1)%FONTS.length][1]; changed(); };
+    el("lPick").onclick=pickColour;
     el("lDup").onclick=()=>{ if(sel) dupLayer(sel); };
     el("lFront").onclick=()=>{ if(sel) bringFront(sel); };
     el("lDel").onclick=()=>{ if(sel) deleteLayer(sel); };
