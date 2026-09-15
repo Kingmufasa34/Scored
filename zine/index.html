@@ -228,8 +228,10 @@
       <div class="add-bar" id="addBar2">
         <button class="icon-btn pink" id="addPhoto">＋ Photo</button>
         <button class="icon-btn" id="addText">＋ Text</button>
+        <button class="icon-btn" id="addPdf">＋ PDF</button>
         <label class="icon-btn" title="Page colour">Page <input type="color" id="pageBg" value="#f4efe4" style="width:26px;height:26px;border:0;padding:0;margin-left:6px;background:none"></label>
         <input type="file" id="fileInput" accept="image/*" hidden>
+        <input type="file" id="pdfInput" accept="application/pdf,.pdf" hidden>
       </div>
 
       <!-- selected-layer action bar -->
@@ -646,6 +648,52 @@ ${shell}
     return { url, w, h };
   }
 
+  // ---------- PDF import: render each page to a full zine page ----------
+  const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+  let pdfLibP=null;
+  function loadPdfLib(){
+    if(pdfLibP) return pdfLibP;
+    pdfLibP = new Promise((res,rej)=>{
+      const done=()=>{ try{ window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS+"pdf.worker.min.js"; }catch(_){}
+        res(window.pdfjsLib); };
+      if(window.pdfjsLib){ done(); return; }
+      const s=document.createElement("script"); s.src=PDFJS+"pdf.min.js";
+      s.onload=done; s.onerror=()=>rej(new Error("pdf lib failed")); document.head.appendChild(s);
+    });
+    return pdfLibP;
+  }
+  function addFullPageImage(pageIdx, src, ar){
+    const w=W(), availW=w*0.98, availH=H*0.98;
+    let lw=availW, lh=lw/ar; if(lh>availH){ lh=availH; lw=lh*ar; }
+    state.pages[pageIdx].layers.push({ id:nid(), type:"image", src, x:(w-lw)/2, y:(H-lh)/2, w:lw, h:lh, aspect:ar });
+  }
+  async function importPdf(file){
+    if(!file || !/pdf$/i.test(file.type||"") && !/\.pdf$/i.test(file.name||"")){ toast("Choose a PDF file."); return; }
+    const btn=el("addPdf"); const old=btn.textContent; btn.textContent="Reading…"; btn.disabled=true;
+    let lib;
+    try { lib = await loadPdfLib(); } catch(_){ toast("Couldn't load the PDF reader."); btn.textContent=old; btn.disabled=false; return; }
+    try {
+      const buf = await file.arrayBuffer();
+      const pdf = await lib.getDocument({ data:new Uint8Array(buf) }).promise;
+      const room = 8 - cur, cnt = Math.min(pdf.numPages, room);
+      if(cnt<=0){ toast("No room — go to an earlier page first."); return; }
+      for(let i=1;i<=cnt;i++){
+        const page = await pdf.getPage(i);
+        const vp0 = page.getViewport({scale:1});
+        const vp = page.getViewport({ scale: Math.min(2, 1100/vp0.width) });
+        const c = document.createElement("canvas"); c.width=Math.round(vp.width); c.height=Math.round(vp.height);
+        await page.render({ canvasContext:c.getContext("2d"), viewport:vp }).promise;
+        let url; try{ url=c.toDataURL("image/jpeg",0.8); }catch(_){ url=c.toDataURL(); }
+        const idx = cur + i - 1;
+        state.pages[idx].bg = "#ffffff";
+        addFullPageImage(idx, url, vp.width/vp.height);
+      }
+      sel=null; changed();
+      toast(pdf.numPages>cnt ? ("Added "+cnt+" of "+pdf.numPages+" pages (8-page book)") : ("Added "+cnt+" page"+(cnt>1?"s":"")+" from page "+(cur+1)));
+    } catch(err){ toast("Couldn't read that PDF."); }
+    finally { btn.textContent=old; btn.disabled=false; }
+  }
+
   // ---------- ui helpers ----------
   const escapeHtml=(s)=>String(s).replace(/[&<>]/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])).replace(/\n/g,"<br>");
   let toastT=null;
@@ -669,7 +717,9 @@ ${shell}
     // add bar
     el("addPhoto").onclick=()=>el("fileInput").click();
     el("addText").onclick=addTextLayer;
+    el("addPdf").onclick=()=>el("pdfInput").click();
     el("fileInput").onchange=(e)=>{ const f=e.target.files[0]; if(f) intakeFile(f); e.target.value=""; };
+    el("pdfInput").onchange=(e)=>{ const f=e.target.files[0]; if(f) importPdf(f); e.target.value=""; };
     el("pageBg").oninput=(e)=>{ state.pages[cur].bg=e.target.value; changed(); };
 
     // layer bar
