@@ -129,6 +129,21 @@
   .reader { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:rgba(5,4,10,.94); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); z-index:60; }
   .reader.show { display:flex; }
   .reader .stagep { position:relative; }
+  /* hardcover book board that binds the pages so it reads as a book */
+  .bookboard {
+    position:relative; padding:16px; border-radius:10px;
+    background:linear-gradient(150deg,#262a38,#14161f 70%);
+    box-shadow:0 40px 80px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.06), inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  /* page-block thickness on the outer edges */
+  .bookboard::before, .bookboard::after { content:""; position:absolute; top:18px; bottom:18px; width:7px; border-radius:2px; z-index:0;
+    background:repeating-linear-gradient(90deg, rgba(0,0,0,.12) 0 1px, rgba(255,255,255,.55) 1px 3px); }
+  .bookboard::before { left:9px; } .bookboard::after { right:9px; }
+  .bookboard.single::before { display:none; }              /* one page: only the outer (right) edge */
+  .bookboard .book { position:relative; z-index:1; }
+  /* centre spine, only in a two-page spread */
+  .bookboard.spread .book::after { content:""; position:absolute; top:0; bottom:0; left:50%; width:26px; transform:translateX(-50%);
+    background:linear-gradient(90deg, rgba(0,0,0,.22), rgba(0,0,0,0) 42%, rgba(0,0,0,0) 58%, rgba(0,0,0,.22)); pointer-events:none; z-index:6; }
   .book { touch-action:pan-y; }
   .book .page { position:relative; container-type:size; overflow:hidden; background:#fff; }
   .book .page .layer { position:absolute; }
@@ -232,7 +247,7 @@
       <div class="reader" id="reader">
         <div class="stagep" id="readerStage">
           <button class="rnav prev" id="rPrev" aria-label="Previous page">‹</button>
-          <div class="book" id="book"></div>
+          <div class="bookboard" id="bookboard"><div class="book" id="book"></div></div>
           <button class="rnav next" id="rNext" aria-label="Next page">›</button>
         </div>
         <div class="rcount" id="rCount">Page 1 / 8 · drag a corner to turn</div>
@@ -502,6 +517,7 @@
     const {w,h,spread}=bookLayout(); bookW=w; bookH=h;
     // Two-page spread (a real open book with a spine) when there's room; a
     // single page on phones. StPageFlip draws the centre-fold shadow itself.
+    const bb=el("bookboard"); if(bb){ bb.classList.toggle("spread",spread); bb.classList.toggle("single",!spread); }
     host.style.width=(spread ? w*2 : w)+"px"; host.style.height=h+"px";
     for(let i=0;i<8;i++){ const pg=document.createElement("div"); pg.className="page"; pg.setAttribute("data-density", i===0||i===7?"hard":"soft"); renderPage(pg,i,false); host.appendChild(pg); }
     const Lib = window.St && window.St.PageFlip;
