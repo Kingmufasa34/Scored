@@ -89,7 +89,7 @@
   .canvas .crole { position:absolute; bottom:10px; right:12px; z-index:1; font:9px/1 var(--mono); text-transform:uppercase; color:var(--page-ink,#111); opacity:.35; pointer-events:none; }
 
   .layer { position:absolute; user-select:none; }
-  .layer img { display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; border-radius:8px; box-shadow:0 10px 34px rgba(0,0,0,.28), 0 2px 8px rgba(0,0,0,.18); }
+  .layer img { display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; border-radius:6px; }
   .layer .txt { width:100%; font-family:var(--lf,var(--disp)); font-weight:800; line-height:1.04; color:var(--lc,#111); text-align:var(--la,left); word-break:break-word; white-space:pre-wrap; outline:none; }
   .canvas.edit .layer { cursor:grab; }
   .canvas.edit .layer.sel { outline:2px solid var(--spark); outline-offset:3px; }
@@ -128,11 +128,9 @@
   /* ---- reader ---- */
   .reader { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:rgba(5,4,10,.94); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); z-index:60; }
   .reader.show { display:flex; }
-  .reader .stagep { position:relative; filter:drop-shadow(0 34px 55px rgba(0,0,0,.6)); }
+  .reader .stagep { position:relative; }
   .book { touch-action:pan-y; }
-  /* page block thickness — reads as a real book, not a card */
-  .book .page { position:relative; container-type:size; overflow:hidden; background:#fff; border-radius:6px; box-shadow:0 0 0 1px rgba(0,0,0,.06); }
-  .book .page::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 60px rgba(0,0,0,.05); }
+  .book .page { position:relative; container-type:size; overflow:hidden; background:#fff; }
   .book .page .layer { position:absolute; }
   .book .page .layer, .book .page img, .book .pagebg { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
   .book .page img { image-rendering:auto; }
@@ -476,10 +474,16 @@
 
   // ---------- reader: realistic book flip via StPageFlip ----------
   let book=null, bookW=0, bookH=0, stfBusy=false, stfState="read", buildToken=0;
-  function bookDims(){
-    const h = Math.min(Math.round((window.innerHeight||700)*0.72), 620);
-    const w = Math.round(h * pageAspect(state.paper));
-    return { w, h };
+  // Decide single page vs open two-page spread, and size pages so the chosen
+  // layout always fits the viewport (scales down rather than overflow).
+  function bookLayout(){
+    const vw=window.innerWidth||800, vh=window.innerHeight||700;
+    const spread = vw >= 680;
+    let h = Math.min(Math.round(vh*0.70), 600);
+    let w = Math.round(h * pageAspect(state.paper));
+    const availW = vw - 40, needW = spread ? w*2 : w;
+    if(needW > availW){ const s = availW/needW; w=Math.round(w*s); h=Math.round(h*s); }
+    return { w, h, spread };
   }
   // Decode every photo before the book animates, so the fold never stutters
   // waiting on an image to paint.
@@ -495,10 +499,9 @@
     try{ if(book){ book.destroy(); book=null; } }catch(_){ book=null; }
     stfBusy=false;
     host.innerHTML="";
-    const {w,h}=bookDims(); bookW=w; bookH=h;
+    const {w,h,spread}=bookLayout(); bookW=w; bookH=h;
     // Two-page spread (a real open book with a spine) when there's room; a
     // single page on phones. StPageFlip draws the centre-fold shadow itself.
-    const spread = (window.innerWidth||0) > (w*2 + 90);
     host.style.width=(spread ? w*2 : w)+"px"; host.style.height=h+"px";
     for(let i=0;i<8;i++){ const pg=document.createElement("div"); pg.className="page"; pg.setAttribute("data-density", i===0||i===7?"hard":"soft"); renderPage(pg,i,false); host.appendChild(pg); }
     const Lib = window.St && window.St.PageFlip;
