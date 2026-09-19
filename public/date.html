@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffe3ec" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="A little question" />
+    <title>Will you go on a date with me?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@500;600;700;800&display=swap"
+    />
+    <style>
+      :root {
+        --blush: #ffe3ec;
+        --blush-2: #ffd0e0;
+        --rose: #ff5c8a;
+        --rose-deep: #e8447a;
+        --plum: #6b2e4e;
+        --cream: #fff7fb;
+        --lavender: #f7e6ff;
+        --gold: #ffcaa8;
+        --ink: #5a2a44;
+        --shadow: 0 18px 40px rgba(255, 92, 138, 0.28);
+        --shadow-soft: 0 8px 22px rgba(255, 92, 138, 0.18);
+        --body: "Fredoka", system-ui, -apple-system, sans-serif;
+        --display: "Baloo 2", "Fredoka", system-ui, sans-serif;
+      }
+
+      * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        min-height: 100svh;
+        font-family: var(--body);
+        color: var(--ink);
+        background:
+          radial-gradient(120% 90% at 15% 0%, var(--lavender), transparent 60%),
+          radial-gradient(120% 90% at 90% 100%, var(--gold), transparent 55%),
+          linear-gradient(160deg, var(--blush) 0%, var(--blush-2) 100%);
+        background-attachment: fixed;
+        overflow-x: hidden;
+      }
+
+      /* Floating hearts drift up behind everything */
+      .hearts { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+      .hearts span {
+        position: absolute; bottom: -40px; font-size: 22px; opacity: 0;
+        animation: rise linear infinite;
+      }
+      @keyframes rise {
+        0%   { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+        12%  { opacity: 0.55; }
+        88%  { opacity: 0.55; }
+        100% { transform: translateY(-115svh) scale(1) rotate(28deg); opacity: 0; }
+      }
+
+      .screen {
+        position: relative; z-index: 1;
+        max-width: 480px; margin: 0 auto;
+        min-height: 100svh;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center;
+        padding: max(28px, env(safe-area-inset-top)) 22px max(28px, env(safe-area-inset-bottom));
+      }
+
+      .bear {
+        font-size: 84px; line-height: 1;
+        filter: drop-shadow(0 10px 16px rgba(255, 92, 138, 0.35));
+        animation: bob 3.2s ease-in-out infinite;
+      }
+      @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
+
+      .kicker {
+        margin: 18px 0 0; font-family: var(--body); font-weight: 600;
+        font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--rose-deep);
+      }
+
+      h1 {
+        font-family: var(--display); font-weight: 800;
+        font-size: clamp(30px, 9vw, 42px); line-height: 1.08;
+        margin: 10px 0 0; color: var(--plum);
+        text-wrap: balance;
+      }
+      h1 .em { color: var(--rose); }
+
+      .sub {
+        margin: 14px 0 0; font-size: 16px; line-height: 1.55; color: var(--ink);
+        max-width: 30ch; opacity: 0.9;
+      }
+
+      .buttons {
+        position: relative;
+        margin-top: 34px; width: 100%;
+        display: flex; flex-direction: column; align-items: center; gap: 14px;
+        min-height: 132px;
+      }
+
+      .btn {
+        font-family: var(--display); font-weight: 700; cursor: pointer;
+        border: none; border-radius: 999px; letter-spacing: 0.01em;
+        transition: transform 0.18s cubic-bezier(.2,.9,.3,1.2), box-shadow 0.18s ease, background 0.18s ease;
+      }
+      .btn:active { transform: scale(0.96); }
+
+      .btn-yes {
+        background: linear-gradient(180deg, var(--rose) 0%, var(--rose-deep) 100%);
+        color: #fff; box-shadow: var(--shadow);
+        font-size: 20px; padding: 17px 40px; width: 100%; max-width: 320px;
+      }
+      .btn-yes:hover { box-shadow: 0 22px 48px rgba(255, 92, 138, 0.38); }
+
+      .btn-no {
+        background: var(--cream); color: var(--rose-deep);
+        box-shadow: var(--shadow-soft);
+        font-size: 16px; padding: 13px 30px;
+      }
+      /* When it starts running, it floats freely */
+      .btn-no.loose { position: absolute; z-index: 3; }
+
+      /* Celebration screen */
+      .yay { display: none; }
+      .yay.show { display: block; animation: pop 0.5s cubic-bezier(.2,.9,.3,1.4); }
+      @keyframes pop { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+      .yay .bear { font-size: 96px; }
+      .replay {
+        margin-top: 26px; background: none; border: none; cursor: pointer;
+        font-family: var(--body); font-size: 14px; color: var(--rose-deep);
+        text-decoration: underline; text-underline-offset: 3px;
+      }
+
+      /* Confetti burst */
+      .confetti { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+      .confetti i {
+        position: absolute; top: -12px; width: 10px; height: 14px; border-radius: 2px;
+        animation: fall linear forwards;
+      }
+      @keyframes fall {
+        0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(110svh) rotate(720deg); opacity: 0.9; }
+      }
+
+      .foot { margin-top: 30px; font-size: 12.5px; color: var(--rose-deep); opacity: 0.75; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .bear, .hearts span, .btn { animation: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+    <main class="screen">
+      <!-- The question -->
+      <section id="ask">
+        <div class="bear">🧸</div>
+        <p class="kicker">A little question</p>
+        <h1>Will you go on a <span class="em">date</span> with me? 💕</h1>
+        <p class="sub">No pressure… okay, maybe a tiny bit of pressure. There's snacks involved.</p>
+
+        <div class="buttons" id="buttons">
+          <button class="btn btn-yes" id="yesBtn">Yes! 🥰</button>
+          <button class="btn btn-no" id="noBtn">No</button>
+        </div>
+
+        <p class="foot">made with 🩷 · just for you</p>
+      </section>
+
+      <!-- The celebration -->
+      <section class="yay" id="yay" aria-live="polite">
+        <div class="bear">🐻‍❄️💗</div>
+        <h1>Yay!! It's a <span class="em">date</span> 🎉</h1>
+        <p class="sub">I knew you had great taste. I'll bring the snacks — you bring that smile.</p>
+        <button class="replay" id="replay">wait, ask me again ↺</button>
+      </section>
+    </main>
+
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+    <script>
+      (function () {
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        /* ---- Ambient floating hearts ---- */
+        var heartChars = ["💕", "💖", "🩷", "💘", "💗", "🌸"];
+        var heartLayer = document.getElementById("hearts");
+        if (!reduce) {
+          for (var i = 0; i < 14; i++) {
+            var h = document.createElement("span");
+            h.textContent = heartChars[i % heartChars.length];
+            h.style.left = Math.random() * 100 + "%";
+            h.style.fontSize = 16 + Math.random() * 22 + "px";
+            h.style.animationDuration = 7 + Math.random() * 7 + "s";
+            h.style.animationDelay = -Math.random() * 12 + "s";
+            heartLayer.appendChild(h);
+          }
+        }
+
+        /* ---- The playful "No" button ---- */
+        var noBtn = document.getElementById("noBtn");
+        var yesBtn = document.getElementById("yesBtn");
+        var buttons = document.getElementById("buttons");
+        var dodges = 0;
+        var teases = [
+          "No", "Are you sure? 🥺", "Really? 😳", "Think again! 💭",
+          "Pretty please? 🌷", "Don't be shy 😌", "You can't catch me!",
+          "Last chance… 👀", "My heart 💔", "Okay now you're just teasing"
+        ];
+
+        function moveNo() {
+          dodges++;
+          // Grow the Yes button so it becomes irresistible
+          var scale = Math.min(1 + dodges * 0.12, 2.1);
+          yesBtn.style.transform = "scale(" + scale + ")";
+          noBtn.textContent = teases[Math.min(dodges, teases.length - 1)];
+
+          if (reduce) return; // keep it accessible: no jumping around
+
+          noBtn.classList.add("loose");
+          var pad = 12;
+          var bw = noBtn.offsetWidth || 90;
+          var bh = noBtn.offsetHeight || 44;
+          var maxX = Math.max(0, window.innerWidth - bw - pad * 2);
+          var maxY = Math.max(0, window.innerHeight - bh - pad * 2);
+          var x = pad + Math.random() * maxX;
+          var y = pad + Math.random() * maxY;
+          noBtn.style.left = x + "px";
+          noBtn.style.top = y + "px";
+        }
+
+        // Dodge on any attempt to reach it — including touch/hover
+        noBtn.addEventListener("mouseenter", moveNo);
+        noBtn.addEventListener("touchstart", function (e) { e.preventDefault(); moveNo(); }, { passive: false });
+        noBtn.addEventListener("click", function (e) { e.preventDefault(); moveNo(); });
+
+        /* ---- Confetti on YES ---- */
+        var colors = ["#ff5c8a", "#ffcaa8", "#f7e6ff", "#ff9ec0", "#fff7fb", "#ffd0e0"];
+        function celebrate() {
+          if (reduce) return;
+          var wrap = document.getElementById("confetti");
+          for (var i = 0; i < 90; i++) {
+            var c = document.createElement("i");
+            c.style.left = Math.random() * 100 + "%";
+            c.style.background = colors[i % colors.length];
+            c.style.animationDuration = 2.2 + Math.random() * 1.8 + "s";
+            c.style.animationDelay = Math.random() * 0.5 + "s";
+            c.style.transform = "scale(" + (0.6 + Math.random()) + ")";
+            wrap.appendChild(c);
+          }
+          setTimeout(function () { wrap.innerHTML = ""; }, 4600);
+        }
+
+        function sayYes() {
+          document.getElementById("ask").style.display = "none";
+          var yay = document.getElementById("yay");
+          yay.classList.add("show");
+          celebrate();
+        }
+
+        yesBtn.addEventListener("click", sayYes);
+
+        document.getElementById("replay").addEventListener("click", function () {
+          document.getElementById("yay").classList.remove("show");
+          document.getElementById("ask").style.display = "";
+          // reset the game
+          dodges = 0;
+          yesBtn.style.transform = "";
+          noBtn.textContent = "No";
+          noBtn.classList.remove("loose");
+          noBtn.style.left = noBtn.style.top = "";
+        });
+      })();
+    </script>
+  </body>
+</html>
