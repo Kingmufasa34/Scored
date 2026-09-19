@@ -3,156 +3,205 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#fbf9f1" />
-    <title>Will you go on a date with me?</title>
+    <meta name="theme-color" content="#08090b" />
+    <title>Departures</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" />
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Overpass:wght@600;700;800&display=swap" />
     <style>
       :root {
-        --paper: #fbf9f1;
-        --line: #cdd9e6;     /* faint blue rule */
-        --margin: #d8a2a2;   /* muted red margin rule */
-        --ink: #23324d;      /* ballpoint blue-black */
-        --mute: #6f7686;
-        --hole: #ddd3bd;
-        --type: "Courier Prime", "Courier New", monospace;
-        --row: 34px;
+        --void: #08090b;
+        --board: #101216;
+        --cell: #17191f;
+        --cell-seam: #0a0b0e;
+        --rule: #23262e;
+        --amber: #ffb000;
+        --amber-dim: #7a5a12;
+        --ink: #efe9db;
+        --muted: #7c776b;
+        --green: #40d47e;
+        --mono: "IBM Plex Mono", ui-monospace, monospace;
+        --sign: "Overpass", system-ui, sans-serif;
       }
       * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
       html, body { margin: 0; padding: 0; }
       body {
-        min-height: 100svh; font-family: var(--type); color: var(--ink);
-        background: #ddd3bd; display: flex; justify-content: center;
-        overflow-x: hidden;
+        min-height: 100svh; background: var(--void); color: var(--ink);
+        font-family: var(--sign);
+        display: flex; justify-content: center;
+        background-image: radial-gradient(120% 80% at 50% -10%, rgba(255,176,0,0.06), transparent 60%);
       }
+      .screen { width: 100%; max-width: 480px;
+        padding: max(22px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom)); }
 
-      .sheet {
-        position: relative; width: 100%; max-width: 460px; min-height: 100svh;
-        padding: max(30px, env(safe-area-inset-top)) 28px max(30px, env(safe-area-inset-bottom)) 60px;
-        background-color: var(--paper);
-        background-image: linear-gradient(var(--margin), var(--margin));
-        background-repeat: no-repeat; background-size: 1.5px 100%; background-position: 46px 0;
-        box-shadow: 0 0 34px rgba(0,0,0,0.16);
+      /* ── Board header ── */
+      .bar { display: flex; align-items: center; justify-content: space-between;
+        padding: 6px 4px 12px; border-bottom: 1px solid var(--rule); }
+      .bar .t { font-weight: 800; font-size: 15px; letter-spacing: 0.28em; text-transform: uppercase; }
+      .bar .clock { font-family: var(--mono); font-size: 13px; color: var(--amber);
+        font-variant-numeric: tabular-nums; text-shadow: 0 0 12px rgba(255,176,0,0.4); }
+
+      .colhead { display: grid; grid-template-columns: 52px 1fr 62px; gap: 10px;
+        padding: 12px 4px 8px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--muted); }
+      .colhead .r { text-align: right; }
+
+      /* ── Split-flap ── */
+      .flaprow { display: grid; grid-template-columns: 52px 1fr 62px; gap: 10px;
+        align-items: center; padding: 12px 4px; border-bottom: 1px solid var(--rule); }
+      .when { font-family: var(--mono); font-size: 15px; color: var(--ink); font-variant-numeric: tabular-nums; }
+      .stat { text-align: right; }
+
+      .flaps { display: flex; flex-wrap: wrap; gap: 3px; }
+      .flap {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 1.05em; height: 1.5em; font-family: var(--mono); font-weight: 600;
+        font-size: 20px; line-height: 1; color: var(--amber);
+        background: linear-gradient(180deg, var(--cell) 0 49%, var(--cell-seam) 49% 51%, var(--cell) 51% 100%);
+        border-radius: 3px; text-shadow: 0 0 10px rgba(255,176,0,0.35);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 1px 2px rgba(0,0,0,0.5);
       }
-      .sheet::before {
-        content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-        background-image: repeating-linear-gradient(
-          to bottom, transparent 0, transparent calc(var(--row) - 1px),
-          var(--line) calc(var(--row) - 1px), var(--line) var(--row));
-        background-position: 0 46px;
-      }
-      .holes { position: absolute; left: 18px; top: 0; bottom: 0; z-index: 1;
-        display: flex; flex-direction: column; justify-content: space-around;
-        padding: 64px 0; pointer-events: none; }
-      .holes i { width: 14px; height: 14px; border-radius: 50%; background: var(--hole);
-        box-shadow: inset 0 1px 2px rgba(0,0,0,0.25); }
+      .flap.sp { background: none; box-shadow: none; width: 0.5em; }
+      .flap.flip { animation: flip 0.06s linear; }
+      @keyframes flip { 0% { transform: rotateX(0); } 50% { transform: rotateX(-82deg); } 100% { transform: rotateX(0); } }
+      .flaps.sm .flap { font-size: 13px; height: 1.55em; color: var(--ink); text-shadow: none; }
+      .flaps.sm .flap.sp { width: 0.45em; }
 
-      .content { position: relative; z-index: 2; text-align: center; }
+      .pill { display: inline-block; font-family: var(--mono); font-weight: 600; font-size: 11px;
+        letter-spacing: 0.06em; padding: 4px 8px; border-radius: 5px; }
+      .pill.ontime { color: var(--green); border: 1px solid rgba(64,212,126,0.4); }
 
-      h1 { font-weight: 700; font-size: clamp(22px, 6vw, 28px);
-        line-height: var(--row); margin: var(--row) 0 0; letter-spacing: 0.3px; }
-      .note { font-size: 15px; line-height: var(--row); color: var(--mute); margin: 0; }
+      .calling { font-family: var(--mono); font-size: 12px; color: var(--muted);
+        line-height: 1.7; padding: 14px 4px 2px; }
+      .calling b { color: var(--amber-dim); font-weight: 500; }
 
-      .buttons { position: relative; margin-top: var(--row); min-height: 130px;
-        display: flex; flex-direction: column; align-items: center; gap: 16px; }
-      .btn { font-family: var(--type); font-weight: 700; font-size: 16px;
-        padding: 11px 30px; cursor: pointer; background: var(--paper);
-        border: 2px solid var(--ink); border-radius: 2px; color: var(--ink);
-        transition: transform 0.15s ease; }
-      .btn:active { transform: scale(0.97); }
-      .btn-yes { background: var(--ink); color: var(--paper);
-        transition: transform 0.18s cubic-bezier(.2,.9,.3,1.2); transform-origin: center; }
-      .btn-no.loose { position: fixed; z-index: 30; margin: 0;
-        transition: left 0.4s ease, top 0.4s ease; }
-      .tally { font-size: 13px; line-height: var(--row); color: var(--mute);
-        margin: 0; min-height: var(--row); }
+      /* ── Actions ── */
+      .actions { margin-top: 26px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+      .board-btn {
+        width: 100%; font-family: var(--sign); font-weight: 800; font-size: 14px;
+        letter-spacing: 0.08em; text-transform: uppercase; padding: 15px; border-radius: 11px;
+        cursor: pointer; border: none; background: var(--amber); color: #201700;
+        box-shadow: 0 10px 28px rgba(255,176,0,0.25); transition: transform 0.15s ease; }
+      .board-btn:active { transform: scale(0.98); }
+      .delay-btn { background: none; border: none; cursor: pointer; font-family: var(--mono);
+        font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
 
-      .yay { display: none; }
-      .yay.show { display: block; }
-      .replay { margin-top: 28px; background: none; border: none; cursor: pointer;
-        font-family: var(--type); font-size: 14px; color: var(--mute);
-        text-decoration: underline; text-underline-offset: 3px; }
+      .foot { text-align: center; font-family: var(--mono); font-size: 10px; color: #45423b;
+        letter-spacing: 0.15em; margin-top: 22px; text-transform: uppercase; }
+
+      @media (prefers-reduced-motion: reduce) { .flap.flip { animation: none; } }
     </style>
   </head>
   <body>
-    <div class="sheet">
-      <div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="content">
-        <section id="ask">
-          <h1>Will you go on a<br />date with me?</h1>
-          <p class="note">No pressure. There's snacks.</p>
-          <div class="buttons" id="buttons">
-            <button class="btn btn-yes" id="yesBtn">Yes</button>
-            <button class="btn btn-no" id="noBtn">No</button>
-            <p class="tally" id="tally"></p>
-          </div>
-        </section>
-        <section class="yay" id="yay" aria-live="polite">
-          <h1>It's a date.</h1>
-          <p class="note">See you soon.</p>
-          <button class="replay" id="replay">ask me again</button>
-        </section>
+    <div class="screen">
+      <div class="bar">
+        <span class="t">Departures</span>
+        <span class="clock" id="clock">--:--</span>
       </div>
+
+      <div class="colhead"><span>Time</span><span>Destination</span><span class="r">Expected</span></div>
+
+      <div class="flaprow">
+        <span class="when" id="when">19:58</span>
+        <span class="flaps" id="dest"></span>
+        <span class="stat"><span class="pill ontime" id="pill">ON TIME</span></span>
+      </div>
+
+      <p class="calling" id="calling"></p>
+
+      <div class="actions">
+        <button class="board-btn" id="yes">Board this train ♥</button>
+        <button class="delay-btn" id="delay">request a 5-min delay</button>
+      </div>
+
+      <p class="foot" id="foot">platform ♥ · service operated by me</p>
     </div>
 
     <script>
       (function () {
         var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        var noBtn = document.getElementById("noBtn");
-        var yesBtn = document.getElementById("yesBtn");
-        var tally = document.getElementById("tally");
-        var timer = null;
-        var tries = 0;
-        var lines = [
-          "No", "Are you sure?", "Think about it.", "The other button's right there.",
-          "You're overthinking this.", "Snacks, though.", "Suit yourself. It moves now.",
-          "Told you.", "Still no?", "Fine, I can do this all day."
+        var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?♥ ";
+
+        // Build a split-flap line inside `host` and animate it to `text`.
+        function flapLine(host, text, opts) {
+          opts = opts || {};
+          host.innerHTML = "";
+          var cells = [];
+          text.split("").forEach(function (ch) {
+            var el = document.createElement("span");
+            el.className = "flap" + (ch === " " ? " sp" : "");
+            if (ch !== " ") el.textContent = "";
+            host.appendChild(el);
+            cells.push({ el: el, target: ch });
+          });
+          if (reduce) { cells.forEach(function (c) { c.el.textContent = c.target === " " ? "" : c.target; }); return; }
+
+          cells.forEach(function (c, i) {
+            if (c.target === " ") return;
+            var spins = 6 + i * 2 + Math.floor(Math.random() * 4); // stagger left→right
+            var n = 0;
+            var step = function () {
+              if (n < spins) {
+                c.el.textContent = CHARS[Math.floor(Math.random() * (CHARS.length - 1))];
+                c.el.classList.remove("flip"); void c.el.offsetWidth; c.el.classList.add("flip");
+                n++;
+                setTimeout(step, 45);
+              } else {
+                c.el.textContent = c.target;
+                c.el.classList.remove("flip"); void c.el.offsetWidth; c.el.classList.add("flip");
+              }
+            };
+            setTimeout(step, (opts.delay || 0) + i * 55);
+          });
+        }
+
+        var dest = document.getElementById("dest");
+        var calling = document.getElementById("calling");
+
+        // Live clock
+        function tick() {
+          var d = new Date();
+          document.getElementById("clock").textContent =
+            String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+        }
+        tick(); setInterval(tick, 1000);
+
+        // Reveal the question on the board
+        flapLine(dest, "A DATE WITH ME", { delay: 400 });
+        setTimeout(function () {
+          calling.innerHTML = "calling at &nbsp;<b>dinner</b> &nbsp;·&nbsp; <b>a slow walk</b> &nbsp;·&nbsp; <b>somewhere with good coffee</b><br>this train does not run every day.";
+        }, 1600);
+
+        // Cheeky "no": a delay, not a rejection
+        var delays = 0;
+        var delayLines = [
+          "delay repay: the train waits.",
+          "still holding the platform for you.",
+          "signal check complete. still worth it.",
+          "the 19:58 is now the whenever-you're-ready."
         ];
-
-        function escalate() {
-          tries++;
-          noBtn.textContent = lines[Math.min(tries, lines.length - 1)];
-          yesBtn.style.transform = "scale(" + Math.min(1 + tries * 0.15, 2.4) + ")";
-          tally.textContent = tries > 2 ? "(no attempts: " + tries + ")" : "";
-        }
-
-        function placeRandom() {
-          var pad = 14, bw = noBtn.offsetWidth || 100, bh = noBtn.offsetHeight || 46;
-          noBtn.style.left = pad + Math.random() * Math.max(0, window.innerWidth - bw - pad * 2) + "px";
-          noBtn.style.top = pad + Math.random() * Math.max(0, window.innerHeight - bh - pad * 2) + "px";
-        }
-        function goLoose() {
-          if (noBtn.classList.contains("loose")) return;
-          var r = noBtn.getBoundingClientRect();
-          noBtn.classList.add("loose");
-          noBtn.style.left = r.left + "px"; noBtn.style.top = r.top + "px";
-        }
-        function wander() {
-          if (reduce || timer) return;
-          goLoose(); placeRandom();
-          var tick = function () { placeRandom(); timer = setTimeout(tick, 900 + Math.random() * 1100); };
-          timer = setTimeout(tick, 700);
-        }
-        function stop() { clearTimeout(timer); timer = null; }
-        setTimeout(wander, 1400);
-
-        function flee(e) { if (e) e.preventDefault(); escalate(); if (reduce) return; goLoose(); placeRandom(); }
-        noBtn.addEventListener("mouseenter", flee);
-        noBtn.addEventListener("touchstart", flee, { passive: false });
-        noBtn.addEventListener("click", flee);
-
-        yesBtn.addEventListener("click", function () {
-          stop();
-          document.getElementById("ask").style.display = "none";
-          document.getElementById("yay").classList.add("show");
+        document.getElementById("delay").addEventListener("click", function () {
+          delays++;
+          var mins = 5 * delays;
+          document.getElementById("when").textContent = "19:58";
+          flapLine(dest, "A DATE WITH ME", {});
+          document.getElementById("pill").textContent = "+" + mins + " MIN";
+          document.getElementById("pill").style.color = "var(--amber)";
+          document.getElementById("pill").style.borderColor = "rgba(255,176,0,0.4)";
+          document.getElementById("foot").textContent = delayLines[Math.min(delays - 1, delayLines.length - 1)];
         });
-        document.getElementById("replay").addEventListener("click", function () {
-          document.getElementById("yay").classList.remove("show");
-          document.getElementById("ask").style.display = "";
-          noBtn.classList.remove("loose"); noBtn.style.left = noBtn.style.top = "";
-          tries = 0; noBtn.textContent = "No"; yesBtn.style.transform = ""; tally.textContent = "";
-          setTimeout(wander, 1200);
+
+        // Yes → board departs
+        document.getElementById("yes").addEventListener("click", function () {
+          document.getElementById("pill").textContent = "DEPARTED";
+          document.getElementById("pill").className = "pill ontime";
+          document.querySelector(".colhead").innerHTML =
+            "<span>Time</span><span>Now boarding</span><span class='r'>Status</span>";
+          flapLine(dest, "SEE YOU THERE ♥", {});
+          calling.innerHTML = "doors closing. thanks for choosing this service.<br>next stop: <b>us</b>.";
+          document.querySelector(".actions").style.display = "none";
+          document.getElementById("foot").textContent = "platform ♥ · on time, for once";
         });
       })();
     </script>
