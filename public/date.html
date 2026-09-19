@@ -172,9 +172,19 @@
         var yesScale = 1;
         var growTimer = null;
         function applyYes() { yesBtn.style.transform = "rotate(-1.5deg) scale(" + yesScale.toFixed(3) + ")"; }
+        // Biggest scale that still fits on screen (offsetW/H ignore the transform).
+        function maxYesScale() {
+          var m = 20; // breathing room from the edges
+          return Math.max(1, Math.min(
+            (window.innerWidth - m) / yesBtn.offsetWidth,
+            (window.innerHeight - m) / yesBtn.offsetHeight
+          ));
+        }
         function grow() {
-          yesScale = Math.min(yesScale + 0.06, 3.2);
+          var cap = maxYesScale();
+          yesScale = Math.min(yesScale + 0.06, cap);
           applyYes();
+          if (yesScale >= cap) stopGrow();   // filled the screen — stop
         }
         function startGrow() { if (!reduce && !growTimer) growTimer = setInterval(grow, 500); }
         function stopGrow() { clearInterval(growTimer); growTimer = null; }
@@ -211,7 +221,7 @@
           dodges++;
           noBtn.textContent = teases[Math.min(dodges, teases.length - 1)];
           // Chasing No hurries the Yes button along, too.
-          yesScale = Math.min(yesScale + 0.12, 3.2); applyYes();
+          yesScale = Math.min(yesScale + 0.12, maxYesScale()); applyYes();
           if (reduce) return;            // reachable for reduced-motion
           goLoose(); placeRandom();
         }
