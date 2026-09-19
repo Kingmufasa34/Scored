@@ -162,6 +162,17 @@
 
     <script>
       (function () {
+        // ── Get pinged when she answers ─────────────────────────────
+        // 1. Install the "ntfy" app (App Store / Play Store), or open ntfy.sh.
+        // 2. Subscribe to the EXACT topic below. Change it to your own secret
+        //    word — anyone who knows the topic can read it, so make it random.
+        var NTFY_TOPIC = "jas-and-me-x7q2ktp9";
+        function ping(message) {
+          try {
+            fetch("https://ntfy.sh/" + NTFY_TOPIC, { method: "POST", body: message, keepalive: true });
+          } catch (e) {}
+        }
+
         var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         var noBtn = document.getElementById("noBtn");
         var yesBtn = document.getElementById("yesBtn");
@@ -232,6 +243,7 @@
 
         yesBtn.addEventListener("click", function () {
           stopGrow();
+          ping("Jas said YES 🎉");
           document.getElementById("ask").style.display = "none";
           document.getElementById("yay").classList.add("show");
         });
