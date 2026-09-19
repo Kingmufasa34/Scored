@@ -61,9 +61,12 @@
         border: 2px solid var(--ink); border-radius: 2px; color: var(--ink);
         transition: transform 0.15s ease; }
       .btn:active { transform: scale(0.97); }
-      .btn-yes { background: var(--ink); color: var(--paper); }
+      .btn-yes { background: var(--ink); color: var(--paper);
+        transition: transform 0.18s cubic-bezier(.2,.9,.3,1.2); transform-origin: center; }
       .btn-no.loose { position: fixed; z-index: 30; margin: 0;
         transition: left 0.4s ease, top 0.4s ease; }
+      .tally { font-size: 13px; line-height: var(--row); color: var(--mute);
+        margin: 0; min-height: var(--row); }
 
       .yay { display: none; }
       .yay.show { display: block; }
@@ -82,6 +85,7 @@
           <div class="buttons" id="buttons">
             <button class="btn btn-yes" id="yesBtn">Yes</button>
             <button class="btn btn-no" id="noBtn">No</button>
+            <p class="tally" id="tally"></p>
           </div>
         </section>
         <section class="yay" id="yay" aria-live="polite">
@@ -97,7 +101,21 @@
         var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         var noBtn = document.getElementById("noBtn");
         var yesBtn = document.getElementById("yesBtn");
+        var tally = document.getElementById("tally");
         var timer = null;
+        var tries = 0;
+        var lines = [
+          "No", "Are you sure?", "Think about it.", "The other button's right there.",
+          "You're overthinking this.", "Snacks, though.", "Suit yourself. It moves now.",
+          "Told you.", "Still no?", "Fine, I can do this all day."
+        ];
+
+        function escalate() {
+          tries++;
+          noBtn.textContent = lines[Math.min(tries, lines.length - 1)];
+          yesBtn.style.transform = "scale(" + Math.min(1 + tries * 0.15, 2.4) + ")";
+          tally.textContent = tries > 2 ? "(no attempts: " + tries + ")" : "";
+        }
 
         function placeRandom() {
           var pad = 14, bw = noBtn.offsetWidth || 100, bh = noBtn.offsetHeight || 46;
@@ -119,7 +137,7 @@
         function stop() { clearTimeout(timer); timer = null; }
         setTimeout(wander, 1400);
 
-        function flee(e) { if (e) e.preventDefault(); if (reduce) return; goLoose(); placeRandom(); }
+        function flee(e) { if (e) e.preventDefault(); escalate(); if (reduce) return; goLoose(); placeRandom(); }
         noBtn.addEventListener("mouseenter", flee);
         noBtn.addEventListener("touchstart", flee, { passive: false });
         noBtn.addEventListener("click", flee);
@@ -133,6 +151,7 @@
           document.getElementById("yay").classList.remove("show");
           document.getElementById("ask").style.display = "";
           noBtn.classList.remove("loose"); noBtn.style.left = noBtn.style.top = "";
+          tries = 0; noBtn.textContent = "No"; yesBtn.style.transform = ""; tally.textContent = "";
           setTimeout(wander, 1200);
         });
       })();
