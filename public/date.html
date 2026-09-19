@@ -3,296 +3,133 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#fcfaf2" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="A little note" />
+    <meta name="theme-color" content="#f4f1ea" />
     <title>Will you go on a date with me?</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Patrick+Hand&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" />
     <style>
       :root {
-        --paper: #fcfaf2;
-        --paper-2: #f6f2e4;
-        --line: #bcd2e8;      /* ruled blue lines */
-        --margin: #f2a6b3;    /* red/pink margin rule */
-        --ink: #29416b;       /* ballpoint blue */
-        --ink-soft: #4a6699;
-        --red-ink: #d64b6a;
-        --pencil: #7d7a70;
-        --hand: "Caveat", "Patrick Hand", cursive;
-        --hand-2: "Patrick Hand", "Caveat", cursive;
-        --row: 34px;          /* line spacing */
+        --paper: #f4f1ea;
+        --ink: #1c1a17;
+        --mute: #6b665c;
+        --type: "Courier Prime", "Courier New", monospace;
       }
-
       * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
       html, body { margin: 0; padding: 0; }
       body {
         min-height: 100svh;
-        font-family: var(--hand-2);
+        font-family: var(--type);
         color: var(--ink);
-        /* desk backdrop behind the sheet */
-        background: #d9cdb4;
-        display: flex; align-items: stretch; justify-content: center;
+        background: var(--paper);
+        display: flex; align-items: center; justify-content: center;
         overflow-x: hidden;
       }
 
-      /* ── The sheet of lined paper ── */
-      .sheet {
-        position: relative;
-        width: 100%; max-width: 480px;
-        min-height: 100svh;
-        padding: max(30px, env(safe-area-inset-top)) 26px max(30px, env(safe-area-inset-bottom)) 58px;
-        background-color: var(--paper);
-        /* horizontal ruled lines + red margin line */
-        background-image:
-          linear-gradient(var(--margin), var(--margin));
-        background-repeat: no-repeat;
-        background-size: 2px 100%;
-        background-position: 44px 0;
-        box-shadow: 0 0 40px rgba(0,0,0,0.18);
-      }
-      /* ruled lines as their own layer so text sits on them */
-      .sheet::before {
-        content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-        background-image: repeating-linear-gradient(
-          to bottom,
-          transparent 0,
-          transparent calc(var(--row) - 1px),
-          var(--line) calc(var(--row) - 1px),
-          var(--line) var(--row)
-        );
-        background-position: 0 44px;
-        opacity: 0.8;
-      }
-      /* punch holes down the left margin */
-      .holes { position: absolute; left: 16px; top: 0; bottom: 0; z-index: 1;
-        display: flex; flex-direction: column; justify-content: space-around; padding: 60px 0; pointer-events: none; }
-      .holes i { width: 15px; height: 15px; border-radius: 50%;
-        background: #d9cdb4; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); }
-
-      .content { position: relative; z-index: 2; text-align: center; }
-
-      .doodle-bear { font-size: 60px; line-height: var(--row); }
-
-      .kicker {
-        font-family: var(--hand-2); font-size: 19px; color: var(--red-ink);
-        transform: rotate(-2deg); margin: 0;
-        line-height: var(--row);
+      .wrap {
+        width: 100%; max-width: 440px;
+        padding: max(28px, env(safe-area-inset-top)) 28px max(28px, env(safe-area-inset-bottom));
+        text-align: center;
       }
 
       h1 {
-        font-family: var(--hand); font-weight: 700;
-        font-size: clamp(38px, 12vw, 54px);
-        line-height: var(--row); margin: 8px 0 0; color: var(--ink);
-        letter-spacing: 0.5px;
-      }
-      h1 .em { color: var(--red-ink); text-decoration: underline wavy var(--red-ink); text-underline-offset: 6px; }
-
-      .note {
-        font-family: var(--hand-2); font-size: 19px; color: var(--ink-soft);
-        line-height: var(--row); margin: var(--row) auto 0; max-width: 28ch;
-      }
-      .note .strike { text-decoration: line-through; text-decoration-color: var(--red-ink); opacity: 0.75; }
-
-      .ps {
-        font-family: var(--hand-2); font-size: 16px; color: var(--pencil);
-        line-height: 26px; margin: 22px auto 0; max-width: 30ch; transform: rotate(-1deg);
+        font-weight: 700; font-size: clamp(22px, 6.5vw, 30px);
+        line-height: 1.4; margin: 0; letter-spacing: 0.5px;
       }
 
-      /* ── Buttons ── */
-      .buttons { position: relative; margin-top: var(--row); min-height: 150px;
-        display: flex; flex-direction: column; align-items: center; gap: 16px; }
+      .note { margin: 22px 0 0; font-size: 15px; line-height: 1.6; color: var(--mute); }
+
+      .buttons {
+        position: relative; margin-top: 40px; min-height: 120px;
+        display: flex; flex-direction: column; align-items: center; gap: 16px;
+      }
 
       .btn {
-        font-family: var(--hand); font-weight: 700; cursor: pointer;
-        transition: transform 0.18s cubic-bezier(.2,.9,.3,1.3), box-shadow 0.18s ease;
+        font-family: var(--type); font-weight: 700; font-size: 16px;
+        padding: 12px 30px; cursor: pointer; background: var(--paper);
+        border: 2px solid var(--ink); border-radius: 2px; color: var(--ink);
+        transition: transform 0.15s ease;
       }
-      .btn:active { transform: scale(0.95); }
-
-      .btn-yes {
-        font-size: 30px; color: #fff; padding: 8px 42px;
-        background: var(--red-ink);
-        border: none; border-radius: 4px 14px 6px 16px / 16px 6px 14px 6px; /* hand-drawn wobble */
-        box-shadow: 3px 3px 0 rgba(41,65,107,0.35);
-        transform: rotate(-1.5deg);
+      .btn:active { transform: scale(0.97); }
+      .btn-yes { background: var(--ink); color: var(--paper); }
+      .btn-no.loose {
+        position: fixed; z-index: 30; margin: 0;
+        transition: left 0.4s ease, top 0.4s ease;
       }
-      .btn-yes:hover { box-shadow: 5px 5px 0 rgba(41,65,107,0.4); }
 
-      .btn-no {
-        font-size: 24px; color: var(--ink);
-        background: var(--paper-2);
-        border: 2.5px solid var(--ink);
-        border-radius: 14px 5px 16px 6px / 6px 15px 5px 14px;
-        padding: 5px 30px; transform: rotate(1deg);
-        box-shadow: 2px 2px 0 rgba(41,65,107,0.25);
-      }
-      .btn-no.loose { position: fixed; z-index: 30; margin: 0;
-        transition: left 0.42s cubic-bezier(.34,1.4,.5,1), top 0.42s cubic-bezier(.34,1.4,.5,1), transform 0.2s ease; }
-
-      /* ── Celebration ── */
       .yay { display: none; }
-      .yay.show { display: block; animation: pop 0.5s cubic-bezier(.2,.9,.3,1.4); }
-      @keyframes pop { 0% { transform: scale(.7) rotate(-3deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
-      .replay { margin-top: 26px; background: none; border: none; cursor: pointer;
-        font-family: var(--hand-2); font-size: 18px; color: var(--ink-soft);
-        text-decoration: underline; text-underline-offset: 3px; }
-
-      /* ── Confetti (little hand-drawn hearts) ── */
-      .confetti { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
-      .confetti i { position: absolute; top: -24px; font-size: 22px; animation: fall linear forwards; }
-      @keyframes fall {
-        0% { transform: translateY(0) rotate(0); opacity: 1; }
-        100% { transform: translateY(112svh) rotate(540deg); opacity: 0.85; }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .btn { animation: none !important; }
+      .yay.show { display: block; }
+      .replay {
+        margin-top: 28px; background: none; border: none; cursor: pointer;
+        font-family: var(--type); font-size: 14px; color: var(--mute);
+        text-decoration: underline; text-underline-offset: 3px;
       }
     </style>
   </head>
   <body>
-    <div class="sheet">
-      <div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="wrap">
+      <section id="ask">
+        <h1>Will you go on a<br />date with me?</h1>
+        <p class="note">No pressure. There's snacks.</p>
+        <div class="buttons" id="buttons">
+          <button class="btn btn-yes" id="yesBtn">Yes</button>
+          <button class="btn btn-no" id="noBtn">No</button>
+        </div>
+      </section>
 
-      <main class="content">
-        <!-- The question -->
-        <section id="ask">
-          <div class="doodle-bear">✎ 🧸</div>
-          <p class="kicker">a little note for you…</p>
-          <h1>Will you go on<br />a <span class="em">date</span> with me?</h1>
-
-          <p class="note">
-            I'll update all your <b>Jira tickets</b>,
-            help you <b>debug ur code</b>,
-            and bring snacks. <span class="strike">No pressure.</span> 💘
-          </p>
-
-          <div class="buttons" id="buttons">
-            <button class="btn btn-yes" id="yesBtn">Yes! ♡</button>
-            <button class="btn btn-no" id="noBtn">No</button>
-          </div>
-
-          <p class="ps">p.s. — home is where the heart is,<br />and I always find my way home ↺</p>
-        </section>
-
-        <!-- The celebration -->
-        <section class="yay" id="yay" aria-live="polite">
-          <div class="doodle-bear">🐻‍❄️ ♡</div>
-          <h1>Yay!! It's a <span class="em">date</span> 🎉</h1>
-          <p class="note">Dear Lord gave you strength — and great taste. See you soon. 💌</p>
-          <button class="replay" id="replay">wait, ask me again ↺</button>
-        </section>
-      </main>
+      <section class="yay" id="yay" aria-live="polite">
+        <h1>It's a date.</h1>
+        <p class="note">See you soon.</p>
+        <button class="replay" id="replay">ask me again</button>
+      </section>
     </div>
-
-    <div class="confetti" id="confetti" aria-hidden="true"></div>
 
     <script>
       (function () {
         var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
         var noBtn = document.getElementById("noBtn");
         var yesBtn = document.getElementById("yesBtn");
-        var wanderTimer = null;
-        var dodges = 0;
-        var teases = [
-          "No", "you sure? 🥺", "really?? 😳", "think again!", "pretty please? 🌷",
-          "can't catch me!", "nice try 😌", "nope nope nope", "my heart 💔", "just say yes!"
-        ];
+        var timer = null;
 
-        function placeRandom(bouncy) {
+        function placeRandom() {
           var pad = 14;
-          var bw = noBtn.offsetWidth || 110;
-          var bh = noBtn.offsetHeight || 48;
-          var x = pad + Math.random() * Math.max(0, window.innerWidth - bw - pad * 2);
-          var y = pad + Math.random() * Math.max(0, window.innerHeight - bh - pad * 2);
-          noBtn.style.left = x + "px";
-          noBtn.style.top = y + "px";
-          noBtn.style.transform = "rotate(" + (Math.random() * 20 - 10).toFixed(1) + "deg)";
+          var bw = noBtn.offsetWidth || 100, bh = noBtn.offsetHeight || 46;
+          noBtn.style.left = pad + Math.random() * Math.max(0, window.innerWidth - bw - pad * 2) + "px";
+          noBtn.style.top = pad + Math.random() * Math.max(0, window.innerHeight - bh - pad * 2) + "px";
         }
-
         function goLoose() {
           if (noBtn.classList.contains("loose")) return;
-          // freeze its current spot, then detach so it can roam freely
           var r = noBtn.getBoundingClientRect();
           noBtn.classList.add("loose");
           noBtn.style.left = r.left + "px";
           noBtn.style.top = r.top + "px";
         }
-
-        function tease() {
-          dodges++;
-          noBtn.textContent = teases[Math.min(dodges, teases.length - 1)];
-          // Yes grows more tempting each time
-          var scale = Math.min(1 + dodges * 0.14, 2.3);
-          yesBtn.style.transform = "rotate(-1.5deg) scale(" + scale + ")";
+        function wander() {
+          if (reduce || timer) return;
+          goLoose(); placeRandom();
+          var tick = function () { placeRandom(); timer = setTimeout(tick, 900 + Math.random() * 1100); };
+          timer = setTimeout(tick, 700);
         }
+        function stop() { clearTimeout(timer); timer = null; }
 
-        function flee() {
-          if (reduce) { tease(); return; }   // stay reachable for reduced-motion
-          goLoose();
-          tease();
-          placeRandom();
-        }
+        setTimeout(wander, 1400);
 
-        // Sporadic wandering on its own — even if you don't touch it
-        function startWandering() {
-          if (reduce || wanderTimer) return;
-          goLoose();
-          placeRandom();
-          var tick = function () {
-            placeRandom();
-            wanderTimer = setTimeout(tick, 900 + Math.random() * 1100);
-          };
-          wanderTimer = setTimeout(tick, 700);
-        }
-        function stopWandering() { clearTimeout(wanderTimer); wanderTimer = null; }
-
-        // Kick off the roaming shortly after the note is read
-        setTimeout(startWandering, 1400);
-
-        // And dodge instantly if you try to reach it
+        function flee(e) { if (e) e.preventDefault(); if (reduce) return; goLoose(); placeRandom(); }
         noBtn.addEventListener("mouseenter", flee);
-        noBtn.addEventListener("touchstart", function (e) { e.preventDefault(); flee(); }, { passive: false });
-        noBtn.addEventListener("click", function (e) { e.preventDefault(); flee(); });
-
-        /* ── YES → confetti hearts ── */
-        var pieces = ["♡", "💖", "🩷", "💕", "🎉", "💌", "✨"];
-        function celebrate() {
-          if (reduce) return;
-          var wrap = document.getElementById("confetti");
-          for (var i = 0; i < 80; i++) {
-            var c = document.createElement("i");
-            c.textContent = pieces[i % pieces.length];
-            c.style.left = Math.random() * 100 + "%";
-            c.style.fontSize = 16 + Math.random() * 18 + "px";
-            c.style.animationDuration = 2.4 + Math.random() * 1.8 + "s";
-            c.style.animationDelay = Math.random() * 0.6 + "s";
-            wrap.appendChild(c);
-          }
-          setTimeout(function () { wrap.innerHTML = ""; }, 4800);
-        }
+        noBtn.addEventListener("touchstart", flee, { passive: false });
+        noBtn.addEventListener("click", flee);
 
         yesBtn.addEventListener("click", function () {
-          stopWandering();
+          stop();
           document.getElementById("ask").style.display = "none";
           document.getElementById("yay").classList.add("show");
-          celebrate();
         });
-
         document.getElementById("replay").addEventListener("click", function () {
           document.getElementById("yay").classList.remove("show");
           document.getElementById("ask").style.display = "";
-          dodges = 0;
-          yesBtn.style.transform = "";
-          noBtn.textContent = "No";
           noBtn.classList.remove("loose");
-          noBtn.style.left = noBtn.style.top = noBtn.style.transform = "";
-          setTimeout(startWandering, 1200);
+          noBtn.style.left = noBtn.style.top = "";
+          setTimeout(wander, 1200);
         });
       })();
     </script>
