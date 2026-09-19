@@ -177,7 +177,7 @@
           yesScale = Math.min(yesScale + 0.06, 3.2);
           applyYes();
         }
-        function startGrow() { if (!reduce && !growTimer) growTimer = setInterval(grow, 300); }
+        function startGrow() { if (!reduce && !growTimer) growTimer = setInterval(grow, 500); }
         function stopGrow() { clearInterval(growTimer); growTimer = null; }
         startGrow();
 
