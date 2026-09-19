@@ -3,85 +3,93 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f4f1ea" />
+    <meta name="theme-color" content="#fbf9f1" />
     <title>Will you go on a date with me?</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" />
     <style>
       :root {
-        --paper: #f4f1ea;
-        --ink: #1c1a17;
-        --mute: #6b665c;
+        --paper: #fbf9f1;
+        --line: #cdd9e6;     /* faint blue rule */
+        --margin: #d8a2a2;   /* muted red margin rule */
+        --ink: #23324d;      /* ballpoint blue-black */
+        --mute: #6f7686;
+        --hole: #ddd3bd;
         --type: "Courier Prime", "Courier New", monospace;
+        --row: 34px;
       }
       * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
       html, body { margin: 0; padding: 0; }
       body {
-        min-height: 100svh;
-        font-family: var(--type);
-        color: var(--ink);
-        background: var(--paper);
-        display: flex; align-items: center; justify-content: center;
+        min-height: 100svh; font-family: var(--type); color: var(--ink);
+        background: #ddd3bd; display: flex; justify-content: center;
         overflow-x: hidden;
       }
 
-      .wrap {
-        width: 100%; max-width: 440px;
-        padding: max(28px, env(safe-area-inset-top)) 28px max(28px, env(safe-area-inset-bottom));
-        text-align: center;
+      .sheet {
+        position: relative; width: 100%; max-width: 460px; min-height: 100svh;
+        padding: max(30px, env(safe-area-inset-top)) 28px max(30px, env(safe-area-inset-bottom)) 60px;
+        background-color: var(--paper);
+        background-image: linear-gradient(var(--margin), var(--margin));
+        background-repeat: no-repeat; background-size: 1.5px 100%; background-position: 46px 0;
+        box-shadow: 0 0 34px rgba(0,0,0,0.16);
       }
-
-      h1 {
-        font-weight: 700; font-size: clamp(22px, 6.5vw, 30px);
-        line-height: 1.4; margin: 0; letter-spacing: 0.5px;
+      .sheet::before {
+        content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+        background-image: repeating-linear-gradient(
+          to bottom, transparent 0, transparent calc(var(--row) - 1px),
+          var(--line) calc(var(--row) - 1px), var(--line) var(--row));
+        background-position: 0 46px;
       }
+      .holes { position: absolute; left: 18px; top: 0; bottom: 0; z-index: 1;
+        display: flex; flex-direction: column; justify-content: space-around;
+        padding: 64px 0; pointer-events: none; }
+      .holes i { width: 14px; height: 14px; border-radius: 50%; background: var(--hole);
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.25); }
 
-      .note { margin: 22px 0 0; font-size: 15px; line-height: 1.6; color: var(--mute); }
+      .content { position: relative; z-index: 2; text-align: center; }
 
-      .buttons {
-        position: relative; margin-top: 40px; min-height: 120px;
-        display: flex; flex-direction: column; align-items: center; gap: 16px;
-      }
+      h1 { font-weight: 700; font-size: clamp(22px, 6vw, 28px);
+        line-height: var(--row); margin: var(--row) 0 0; letter-spacing: 0.3px; }
+      .note { font-size: 15px; line-height: var(--row); color: var(--mute); margin: 0; }
 
-      .btn {
-        font-family: var(--type); font-weight: 700; font-size: 16px;
-        padding: 12px 30px; cursor: pointer; background: var(--paper);
+      .buttons { position: relative; margin-top: var(--row); min-height: 130px;
+        display: flex; flex-direction: column; align-items: center; gap: 16px; }
+      .btn { font-family: var(--type); font-weight: 700; font-size: 16px;
+        padding: 11px 30px; cursor: pointer; background: var(--paper);
         border: 2px solid var(--ink); border-radius: 2px; color: var(--ink);
-        transition: transform 0.15s ease;
-      }
+        transition: transform 0.15s ease; }
       .btn:active { transform: scale(0.97); }
       .btn-yes { background: var(--ink); color: var(--paper); }
-      .btn-no.loose {
-        position: fixed; z-index: 30; margin: 0;
-        transition: left 0.4s ease, top 0.4s ease;
-      }
+      .btn-no.loose { position: fixed; z-index: 30; margin: 0;
+        transition: left 0.4s ease, top 0.4s ease; }
 
       .yay { display: none; }
       .yay.show { display: block; }
-      .replay {
-        margin-top: 28px; background: none; border: none; cursor: pointer;
+      .replay { margin-top: 28px; background: none; border: none; cursor: pointer;
         font-family: var(--type); font-size: 14px; color: var(--mute);
-        text-decoration: underline; text-underline-offset: 3px;
-      }
+        text-decoration: underline; text-underline-offset: 3px; }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <section id="ask">
-        <h1>Will you go on a<br />date with me?</h1>
-        <p class="note">No pressure. There's snacks.</p>
-        <div class="buttons" id="buttons">
-          <button class="btn btn-yes" id="yesBtn">Yes</button>
-          <button class="btn btn-no" id="noBtn">No</button>
-        </div>
-      </section>
-
-      <section class="yay" id="yay" aria-live="polite">
-        <h1>It's a date.</h1>
-        <p class="note">See you soon.</p>
-        <button class="replay" id="replay">ask me again</button>
-      </section>
+    <div class="sheet">
+      <div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="content">
+        <section id="ask">
+          <h1>Will you go on a<br />date with me?</h1>
+          <p class="note">No pressure. There's snacks.</p>
+          <div class="buttons" id="buttons">
+            <button class="btn btn-yes" id="yesBtn">Yes</button>
+            <button class="btn btn-no" id="noBtn">No</button>
+          </div>
+        </section>
+        <section class="yay" id="yay" aria-live="polite">
+          <h1>It's a date.</h1>
+          <p class="note">See you soon.</p>
+          <button class="replay" id="replay">ask me again</button>
+        </section>
+      </div>
     </div>
 
     <script>
@@ -92,8 +100,7 @@
         var timer = null;
 
         function placeRandom() {
-          var pad = 14;
-          var bw = noBtn.offsetWidth || 100, bh = noBtn.offsetHeight || 46;
+          var pad = 14, bw = noBtn.offsetWidth || 100, bh = noBtn.offsetHeight || 46;
           noBtn.style.left = pad + Math.random() * Math.max(0, window.innerWidth - bw - pad * 2) + "px";
           noBtn.style.top = pad + Math.random() * Math.max(0, window.innerHeight - bh - pad * 2) + "px";
         }
@@ -101,8 +108,7 @@
           if (noBtn.classList.contains("loose")) return;
           var r = noBtn.getBoundingClientRect();
           noBtn.classList.add("loose");
-          noBtn.style.left = r.left + "px";
-          noBtn.style.top = r.top + "px";
+          noBtn.style.left = r.left + "px"; noBtn.style.top = r.top + "px";
         }
         function wander() {
           if (reduce || timer) return;
@@ -111,7 +117,6 @@
           timer = setTimeout(tick, 700);
         }
         function stop() { clearTimeout(timer); timer = null; }
-
         setTimeout(wander, 1400);
 
         function flee(e) { if (e) e.preventDefault(); if (reduce) return; goLoose(); placeRandom(); }
@@ -127,8 +132,7 @@
         document.getElementById("replay").addEventListener("click", function () {
           document.getElementById("yay").classList.remove("show");
           document.getElementById("ask").style.display = "";
-          noBtn.classList.remove("loose");
-          noBtn.style.left = noBtn.style.top = "";
+          noBtn.classList.remove("loose"); noBtn.style.left = noBtn.style.top = "";
           setTimeout(wander, 1200);
         });
       })();
