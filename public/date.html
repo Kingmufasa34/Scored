@@ -34,6 +34,17 @@
         overflow-x: hidden;
       }
 
+      /* ── Floating hearts ── */
+      .hearts { position: fixed; inset: 0; z-index: 20; pointer-events: none; overflow: hidden; }
+      .hearts i { position: absolute; bottom: -30px; color: var(--accent); opacity: 0;
+        animation: floatUp linear forwards; }
+      @keyframes floatUp {
+        0% { transform: translateY(0) rotate(0); opacity: 0; }
+        12% { opacity: 0.6; }
+        85% { opacity: 0.6; }
+        100% { transform: translateY(-118svh) rotate(24deg); opacity: 0; }
+      }
+
       /* ── The sheet of lined paper ── */
       .sheet {
         position: relative; width: 100%; max-width: 480px; min-height: 100svh;
@@ -118,13 +129,14 @@
     </style>
   </head>
   <body>
+    <div class="hearts" id="hearts" aria-hidden="true"></div>
     <div class="sheet">
       <div class="holes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
       <main class="content">
         <section id="ask">
           <div class="mark writein" style="animation-delay:0s">✎</div>
-          <p class="kicker writein" style="animation-delay:.1s">so… about that date</p>
+          <p class="kicker writein" style="animation-delay:.1s">Jas,</p>
           <h1 class="writein" style="animation-delay:.2s">I think we<br />should go on a <span class="em">date.</span></h1>
 
           <p class="note writein" style="animation-delay:.45s">
@@ -138,8 +150,6 @@
             <button class="btn btn-yes" id="yesBtn">Yeah, let’s do it</button>
             <button class="btn btn-no" id="noBtn">No</button>
           </div>
-
-          <p class="ps writein" style="animation-delay:.9s">p.s. — you did say home is where the heart is.</p>
         </section>
 
         <section class="yay" id="yay" aria-live="polite">
@@ -159,6 +169,32 @@
         var dodges = 0;
         var teases = ["No", "you sure?", "really?", "think again.", "you sure?"];
 
+        /* ── Yes button swells every 0.3s ── */
+        var yesScale = 1;
+        var growTimer = null;
+        function applyYes() { yesBtn.style.transform = "rotate(-1.5deg) scale(" + yesScale.toFixed(3) + ")"; }
+        function grow() {
+          yesScale = Math.min(yesScale + 0.06, 3.2);
+          applyYes();
+        }
+        function startGrow() { if (!reduce && !growTimer) growTimer = setInterval(grow, 300); }
+        function stopGrow() { clearInterval(growTimer); growTimer = null; }
+        startGrow();
+
+        /* ── Hearts floating up ── */
+        var GLYPHS = ["♥", "❤", "♡"];
+        function spawnHeart() {
+          var el = document.createElement("i");
+          el.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+          el.style.left = Math.random() * 100 + "%";
+          el.style.fontSize = (14 + Math.random() * 20) + "px";
+          el.style.animationDuration = (6 + Math.random() * 6) + "s";
+          var host = document.getElementById("hearts");
+          host.appendChild(el);
+          setTimeout(function () { el.remove(); }, 12000);
+        }
+        if (!reduce) { for (var k = 0; k < 6; k++) setTimeout(spawnHeart, k * 500); setInterval(spawnHeart, 900); }
+
         function placeRandom() {
           var pad = 14, w = noBtn.offsetWidth || 110, h = noBtn.offsetHeight || 48;
           noBtn.style.left = pad + Math.random() * Math.max(0, innerWidth - w - pad * 2) + "px";
@@ -175,8 +211,8 @@
           if (e) e.preventDefault();
           dodges++;
           noBtn.textContent = teases[Math.min(dodges, teases.length - 1)];
-          // Yes leans in, just slightly.
-          yesBtn.style.transform = "rotate(-1.5deg) scale(" + Math.min(1 + dodges * 0.06, 1.35) + ")";
+          // Chasing No hurries the Yes button along, too.
+          yesScale = Math.min(yesScale + 0.12, 3.2); applyYes();
           if (reduce) return;            // reachable for reduced-motion
           goLoose(); placeRandom();
         }
@@ -186,6 +222,7 @@
         noBtn.addEventListener("click", flee);
 
         yesBtn.addEventListener("click", function () {
+          stopGrow();
           document.getElementById("ask").style.display = "none";
           document.getElementById("yay").classList.add("show");
         });
@@ -193,10 +230,11 @@
           document.getElementById("yay").classList.remove("show");
           document.getElementById("ask").style.display = "";
           dodges = 0;
-          yesBtn.style.transform = "";
+          yesScale = 1; applyYes();
           noBtn.textContent = "No";
           noBtn.classList.remove("loose");
           noBtn.style.left = noBtn.style.top = noBtn.style.transform = "";
+          startGrow();
         });
       })();
     </script>
