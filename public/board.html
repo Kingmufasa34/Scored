@@ -97,12 +97,8 @@
       .flag .fs { font-size: 12.5px; color: var(--sub); margin-top: 4px; line-height: 1.5; }
       .flag .tick { width: 18px; height: 18px; border-radius: 50%; background: var(--green); color: #fff;
         display: inline-flex; align-items: center; justify-content: center; font-size: 11px; flex: none; }
-      .notify { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px;
-        background: var(--blue); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600;
-        padding: 9px 14px; border-radius: 6px; }
-      .notify:active { background: var(--blue-2); }
 
-      .confetti { position: fixed; inset: 0; z-index: 55; pointer-events: none; overflow: hidden; }
+      .confetti { position: fixed; inset: 0; z-index: 95; pointer-events: none; overflow: hidden; }
       .confetti i { position: absolute; top: -14px; width: 8px; height: 13px; border-radius: 2px; animation: fall linear forwards; }
       @keyframes fall { to { transform: translateY(110svh) rotate(560deg); opacity: 0.9; } }
 
@@ -133,6 +129,10 @@
         background: var(--blue); color: #fff; font-family: var(--font); font-size: 14px; font-weight: 600;
         padding: 12px; }
       .m-accept:active { background: var(--blue-2); }
+      .m-go { display: block; text-align: center; text-decoration: none; font-size: 16px; padding: 14px; }
+      .m-tick { width: 18px; height: 18px; border-radius: 50%; background: var(--green); color: #fff;
+        display: inline-flex; align-items: center; justify-content: center; font-size: 11px; flex: none; }
+      .m-count { font-size: 12.5px; color: var(--sub); text-align: center; margin: 10px 0 0; }
       .m-accept:focus-visible, .card:focus-visible { outline: 2px solid #4c9aff; outline-offset: 2px; }
 
       @media (prefers-reduced-motion: reduce) { .card.dragging { transform: none; } .modal { animation: none; } }
@@ -184,7 +184,6 @@
     <div class="flag" id="flag">
       <div class="ft"><span class="tick">✓</span> LOVE-1 moved to Yes</div>
       <div class="fs">Status: <b>Done</b> · Resolution: it’s a date. I’ll sort the details.</div>
-      <a class="notify" id="notify" target="_blank" rel="noopener">Notify reporter (Tendai) →</a>
     </div>
 
     <div class="confetti" id="confetti" aria-hidden="true"></div>
@@ -205,6 +204,18 @@
           </dl>
           <p class="m-note">You've been assigned a new ticket. Accept it to open the board.</p>
           <button class="m-accept" id="accept">Accept ticket</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-bg" id="doneModal" role="dialog" aria-modal="true" aria-labelledby="dTitle" style="display:none">
+      <div class="modal">
+        <div class="m-bar"><span class="m-tick">✓</span> LOVE-1 resolved</div>
+        <div class="m-body">
+          <p class="m-title" id="dTitle">It's a date.</p>
+          <p class="m-note">Status: Done. Now tell Tendai you said yes.</p>
+          <a class="m-accept m-go" id="goWhatsApp" href="#">Let's do it</a>
+          <p class="m-count" id="countdown" aria-live="polite">Opening WhatsApp in 4…</p>
         </div>
       </div>
     </div>
@@ -299,16 +310,36 @@
           document.getElementById("cardTitle").innerHTML = "<s>Go on a date with me?</s>";
           card.style.cursor = "default";
           hint.classList.add("hide");
-          var flag = document.getElementById("flag");
-          flag.classList.add("show");
-          var notify = document.getElementById("notify");
-          if (REPORTER_WHATSAPP) {
-            notify.href = "https://wa.me/" + REPORTER_WHATSAPP + "?text=" + encodeURIComponent(NOTIFY_TEXT);
-          } else {
-            notify.style.display = "none";
-          }
           ping("Jas moved LOVE-1 to Yes ✓. It's a date 🎉");
           celebrate();
+          if (REPORTER_WHATSAPP) openWhatsAppPopup();
+          else document.getElementById("flag").classList.add("show");
+        }
+
+        // Resolved popup: "Let's do it" opens WhatsApp to Tendai with the
+        // message ready. If she doesn't tap, it opens by itself after 4s.
+        function openWhatsAppPopup() {
+          var link = "https://wa.me/" + REPORTER_WHATSAPP + "?text=" + encodeURIComponent(NOTIFY_TEXT);
+          var popup = document.getElementById("doneModal");
+          var go = document.getElementById("goWhatsApp");
+          var countdown = document.getElementById("countdown");
+          var left = 4, opened = false, timer;
+          function openIt() {
+            if (opened) return;
+            opened = true;
+            clearInterval(timer);
+            countdown.textContent = "Opening WhatsApp…";
+            window.location.href = link;
+          }
+          go.href = link;
+          go.addEventListener("click", function (e) { e.preventDefault(); openIt(); });
+          popup.style.display = "flex";
+          go.focus({ preventScroll: true });
+          timer = setInterval(function () {
+            left--;
+            if (left <= 0) openIt();
+            else countdown.textContent = "Opening WhatsApp in " + left + "…";
+          }, 1000);
         }
 
         function celebrate() {
