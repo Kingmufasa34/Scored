@@ -134,6 +134,16 @@ async function persist(claim: Claim): Promise<void> {
   await deps.store.save();
 }
 
+// Notify settings for the date/board pages, from env so no secrets sit in git.
+// Mirrors the Vercel function at api/notify-config.js.
+app.get('/api/notify-config', (_req, res) => {
+  const whatsapp = String(process.env.REPORTER_WHATSAPP ?? '').replace(/[^0-9]/g, '');
+  const ntfy = String(process.env.NTFY_TOPIC ?? '');
+  res.type('application/javascript');
+  res.setHeader('Cache-Control', 'no-store');
+  res.send(`window.__NOTIFY=${JSON.stringify({ whatsapp, ntfy })};`);
+});
+
 // ── Static front end ─────────────────────────────────────────────────────────
 
 app.use(express.static(PUBLIC_DIR));

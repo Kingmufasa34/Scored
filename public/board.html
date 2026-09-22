@@ -160,20 +160,24 @@
 
     <div class="confetti" id="confetti" aria-hidden="true"></div>
 
+    <!-- notify settings injected from server env (empty when opened as a bare file) -->
+    <script src="/api/notify-config"></script>
     <script>
       (function () {
         var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         // ── How you find out she said yes ───────────────────────────
-        // (A) Silent push: install the "ntfy" app and subscribe to this topic
-        //     (change it to your own secret word).
-        var NTFY_TOPIC = "jas-and-me-x7q2ktp9";
-        function ping(msg) { try { fetch("https://ntfy.sh/" + NTFY_TOPIC, { method: "POST", body: msg, keepalive: true }); } catch (e) {} }
-        // (B) One-tap message back to you: put your number here in full
-        //     international form, digits only (e.g. 447700900123). Leave "" to
-        //     hide the button and rely on the push only.
-        var REPORTER_WHATSAPP = "";
+        // Settings come from /api/notify-config at runtime (served from Vercel
+        // env vars), so your number and topic never live in git. When the page
+        // is opened without that endpoint, both are empty and the button hides.
+        var CFG = window.__NOTIFY || {};
+        var NTFY_TOPIC = CFG.ntfy || "";               // (A) silent push topic
+        var REPORTER_WHATSAPP = CFG.whatsapp || "";    // (B) your number, digits only
         var NOTIFY_TEXT = "Yes 🙂 I moved LOVE-1 to Done ✅ — it's a date.";
+        function ping(msg) {
+          if (!NTFY_TOPIC) return;
+          try { fetch("https://ntfy.sh/" + NTFY_TOPIC, { method: "POST", body: msg, keepalive: true }); } catch (e) {}
+        }
 
         var card = document.getElementById("card");
         var board = document.getElementById("board");

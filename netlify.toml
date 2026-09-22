@@ -1,0 +1,19 @@
+# Netlify config for the date pages (public/board.html, public/date.html).
+# The site serves the static public/ folder; /api/notify-config is rewritten to
+# a function that reads REPORTER_WHATSAPP and NTFY_TOPIC from Netlify env vars,
+# so no secrets live in git.
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+# Runtime notify settings, from env (set in the Netlify dashboard).
+[[redirects]]
+  from = "/api/notify-config"
+  to = "/.netlify/functions/notify-config"
+  status = 200
+
+# Open the board at the site root.
+[[redirects]]
+  from = "/"
+  to = "/board.html"
+  status = 200
