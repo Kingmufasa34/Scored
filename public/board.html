@@ -324,15 +324,26 @@
           var go = document.getElementById("goWhatsApp");
           var countdown = document.getElementById("countdown");
           var left = 4, opened = false, timer;
-          function openIt() {
+          function openIt(fromTap) {
             if (opened) return;
             opened = true;
             clearInterval(timer);
             countdown.textContent = "Opening WhatsApp…";
-            window.location.href = link;
+            if (fromTap) return; // the link's own tap navigation opens it
+            // Countdown: redirect the whole window, not just a frame (previews
+            // and in-app browsers embed pages, and WhatsApp won't load in one).
+            try { window.top.location.href = link; }
+            catch (e) { window.location.href = link; }
+            setTimeout(function () {
+              countdown.textContent = "Didn't open? Tap “Let's do it”.";
+              opened = false;
+            }, 1800);
           }
+          // A real link opened by her tap is the most reliable way to reach the app.
           go.href = link;
-          go.addEventListener("click", function (e) { e.preventDefault(); openIt(); });
+          go.target = "_blank";
+          go.rel = "noopener";
+          go.addEventListener("click", function () { openIt(true); });
           popup.style.display = "flex";
           go.focus({ preventScroll: true });
           timer = setInterval(function () {
