@@ -262,7 +262,7 @@
           var cap = maxYesScale();
           yesScale = Math.min(yesScale + 0.06, cap);
           applyYes();
-          if (yesScale >= cap) stopGrow();   // filled the screen — stop
+          if (yesScale >= cap) stopGrow();   // filled the screen, so stop
         }
         function startGrow() { if (!reduce && !growTimer) growTimer = setInterval(grow, 500); }
         function stopGrow() { clearInterval(growTimer); growTimer = null; }
@@ -328,7 +328,7 @@
           if (reduce) return;            // reachable for reduced-motion
           goLoose(); placeRandom();
         }
-        // Only reacts to you — it doesn't wander off on its own.
+        // Only reacts to you; it doesn't wander off on its own.
         noBtn.addEventListener("mouseenter", flee);
         noBtn.addEventListener("touchstart", flee, { passive: false });
         noBtn.addEventListener("click", flee);

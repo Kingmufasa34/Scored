@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f4f5f7" />
-    <title>US board</title>
+    <title>Jas &amp; Tendai board</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet"
@@ -106,13 +106,42 @@
       .confetti i { position: absolute; top: -14px; width: 8px; height: 13px; border-radius: 2px; animation: fall linear forwards; }
       @keyframes fall { to { transform: translateY(110svh) rotate(560deg); opacity: 0.9; } }
 
-      @media (prefers-reduced-motion: reduce) { .card.dragging { transform: none; } }
+      /* new-ticket popup: blocks the board until accepted */
+      .modal-bg { position: fixed; inset: 0; z-index: 90; background: rgba(9,30,66,0.54);
+        display: flex; align-items: center; justify-content: center; padding: 20px;
+        transition: opacity 0.25s ease; }
+      .modal-bg.gone { opacity: 0; pointer-events: none; }
+      .modal { width: 100%; max-width: 380px; background: #fff; border-radius: 8px;
+        box-shadow: 0 20px 48px rgba(9,30,66,0.35); overflow: hidden;
+        animation: rise 0.35s cubic-bezier(.2,.9,.3,1.2); }
+      @keyframes rise { from { transform: translateY(14px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
+      .m-bar { display: flex; align-items: center; gap: 8px; padding: 14px 18px;
+        border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 700; color: var(--sub); }
+      .m-bar svg { width: 16px; height: 16px; flex: none; }
+      .m-body { padding: 16px 18px 18px; }
+      .m-key { font-size: 12px; font-weight: 600; color: var(--sub); }
+      .m-title { font-size: 18px; font-weight: 700; margin: 4px 0 14px; line-height: 1.3; }
+      .m-fields { display: grid; grid-template-columns: 84px 1fr; row-gap: 10px; margin: 0; font-size: 13px; }
+      .m-fields dt { color: var(--sub); font-weight: 500; }
+      .m-fields dd { margin: 0; display: flex; align-items: center; gap: 7px; font-weight: 500; }
+      .mini { width: 20px; height: 20px; border-radius: 50%; color: #fff; font-size: 10px; font-weight: 700;
+        display: inline-flex; align-items: center; justify-content: center; background: var(--purple); }
+      .mini.t { background: var(--blue); }
+      .m-pri { color: #ff5630; font-weight: 800; }
+      .m-note { font-size: 13px; color: var(--sub); line-height: 1.5; margin: 16px 0 0; }
+      .m-accept { width: 100%; margin-top: 16px; border: none; border-radius: 6px; cursor: pointer;
+        background: var(--blue); color: #fff; font-family: var(--font); font-size: 14px; font-weight: 600;
+        padding: 12px; }
+      .m-accept:active { background: var(--blue-2); }
+      .m-accept:focus-visible, .card:focus-visible { outline: 2px solid #4c9aff; outline-offset: 2px; }
+
+      @media (prefers-reduced-motion: reduce) { .card.dragging { transform: none; } .modal { animation: none; } }
     </style>
   </head>
   <body>
     <div class="top">
       <div class="crumb"><b>Projects</b> / Jas &amp; Tendai / Board</div>
-      <p class="h1">Jas &amp; Tendai — Sprint 1</p>
+      <p class="h1">Jas &amp; Tendai: Sprint 1</p>
       <div class="meta">
         <span class="avas"><span class="ava">J</span><span class="ava t">T</span></span>
         <span class="chip">1 issue</span>
@@ -150,7 +179,7 @@
       </div>
     </div>
 
-    <div class="hint" id="hint">Drag <b>LOVE-1</b> into “Yes ✓” →</div>
+    <div class="hint hide" id="hint">Drag <b>LOVE-1</b> into “Yes ✓” →</div>
 
     <div class="flag" id="flag">
       <div class="ft"><span class="tick">✓</span> LOVE-1 moved to Yes</div>
@@ -159,6 +188,26 @@
     </div>
 
     <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+    <div class="modal-bg" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+      <div class="modal">
+        <div class="m-bar">
+          <svg viewBox="0 0 16 16" fill="none"><rect x="1.5" y="1.5" width="13" height="13" rx="3" fill="#0052cc"/><path d="M5 8.2l2 2 4-4.4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          New Jira ticket
+        </div>
+        <div class="m-body">
+          <div class="m-key">LOVE-1</div>
+          <p class="m-title" id="mTitle">Go on a date with me?</p>
+          <dl class="m-fields">
+            <dt>Reporter</dt><dd><span class="mini t">T</span> Tendai</dd>
+            <dt>Assignee</dt><dd><span class="mini">J</span> Jas</dd>
+            <dt>Priority</dt><dd><span class="m-pri">↑</span> Highest</dd>
+          </dl>
+          <p class="m-note">You've been assigned a new ticket. Accept it to open the board.</p>
+          <button class="m-accept" id="accept">Accept ticket</button>
+        </div>
+      </div>
+    </div>
 
     <!-- notify settings injected from server env (empty when opened as a bare file) -->
     <script src="/api/notify-config"></script>
@@ -173,7 +222,7 @@
         var CFG = window.__NOTIFY || {};
         var NTFY_TOPIC = CFG.ntfy || "";               // (A) silent push topic
         var REPORTER_WHATSAPP = CFG.whatsapp || "";    // (B) your number, digits only
-        var NOTIFY_TEXT = "Yes 🙂 I moved LOVE-1 to Done ✅ — it's a date.";
+        var NOTIFY_TEXT = "Yes 🙂 I moved LOVE-1 to Done ✅. It's a date.";
         function ping(msg) {
           if (!NTFY_TOPIC) return;
           try { fetch("https://ntfy.sh/" + NTFY_TOPIC, { method: "POST", body: msg, keepalive: true }); } catch (e) {}
@@ -240,7 +289,7 @@
           cols.forEach(function (c) { c.classList.remove("over"); });
           recount();
           if (key === "yes") resolve();
-          else if (key === "doing") { hint.innerHTML = "Almost — drop it in <b>Yes ✓</b> →"; }
+          else if (key === "doing") { hint.innerHTML = "Almost. Drop it in <b>Yes ✓</b> →"; }
         }
 
         function resolve() {
@@ -258,18 +307,18 @@
           } else {
             notify.style.display = "none";
           }
-          ping("Jas moved LOVE-1 to Yes ✓ — it's a date 🎉");
+          ping("Jas moved LOVE-1 to Yes ✓. It's a date 🎉");
           celebrate();
         }
 
         function celebrate() {
           if (reduce) return;
           var wrap = document.getElementById("confetti");
-          var colors = ["#36b37e", "#0052cc", "#8777d9", "#ff5630", "#ffab00"];
+          var colours = ["#36b37e", "#0052cc", "#8777d9", "#ff5630", "#ffab00"];
           for (var i = 0; i < 90; i++) {
             var c = document.createElement("i");
             c.style.left = Math.random() * 100 + "%";
-            c.style.background = colors[i % colors.length];
+            c.style.background = colours[i % colours.length];
             c.style.animationDuration = 2.2 + Math.random() * 1.7 + "s";
             c.style.animationDelay = Math.random() * 0.4 + "s";
             wrap.appendChild(c);
@@ -285,7 +334,15 @@
           if (!resolved && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); lists.yes.appendChild(card); recount(); resolve(); }
         });
 
-        setTimeout(function () { if (!resolved) hint.classList.remove("hide"); }, 300);
+        // New-ticket popup: the board stays locked until she accepts.
+        var modal = document.getElementById("modal");
+        var acceptBtn = document.getElementById("accept");
+        acceptBtn.addEventListener("click", function () {
+          modal.classList.add("gone");
+          setTimeout(function () { modal.style.display = "none"; }, 250);
+          if (!resolved) hint.classList.remove("hide");
+        });
+        acceptBtn.focus();
         recount();
       })();
     </script>
