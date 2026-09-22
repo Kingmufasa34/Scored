@@ -44,9 +44,9 @@
         border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; }
 
       /* ── Columns ── */
-      .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-        padding: 12px 16px 24px; align-items: start; }
-      .col { background: var(--col); border-radius: 8px; padding: 8px 7px 12px; min-height: 78svh;
+      .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;
+        padding: 12px 12px 24px; align-items: start; }
+      .col { background: var(--col); border-radius: 8px; padding: 8px 6px 12px; min-height: 78svh;
         transition: background 0.15s ease, box-shadow 0.15s ease; }
       .col-head { display: flex; align-items: center; gap: 6px; padding: 4px 6px 10px;
         font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--sub); text-transform: uppercase; }
@@ -55,6 +55,13 @@
       .col.yes { background: var(--green-bg); }
       .col.yes .col-head { color: #216e4e; }
       .col.over { background: #d6f0e2; box-shadow: inset 0 0 0 2px var(--green); }
+      .col.no { background: #ffebe6; }
+      .col.no .col-head { color: #bf2600; }
+      .flag.err { border-left-color: #de350b; }
+      .flag .x { width: 18px; height: 18px; border-radius: 50%; background: #de350b; color: #fff;
+        display: inline-flex; align-items: center; justify-content: center; font-size: 11px; flex: none; }
+      .card.shake { animation: shake 0.45s ease; }
+      @keyframes shake { 0%, 100% { transform: none; } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
       .list { display: flex; flex-direction: column; gap: 8px; min-height: 40px; }
 
       /* ── Card ── */
@@ -65,15 +72,15 @@
       .card.dragging { box-shadow: 0 12px 26px rgba(9,30,66,0.32); transform: rotate(2deg); opacity: 0.97; }
       .card-title { font-size: 13.5px; font-weight: 500; line-height: 1.35; color: var(--ink); }
       .labels { margin-top: 8px; display: flex; gap: 4px; flex-wrap: wrap; }
-      .label { font-size: 10px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
+      .label { white-space: nowrap; font-size: 10px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
         border-radius: 3px; padding: 2px 6px; }
       .label.purple { background: #eae6ff; color: #5e4db2; }
       .label.blue { background: #deebff; color: #0747a6; }
-      .card-foot { display: flex; align-items: center; gap: 7px; margin-top: 10px; }
-      .key { display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--sub); }
+      .card-foot { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+      .key { white-space: nowrap; display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--sub); }
       .key svg { width: 14px; height: 14px; }
       .pri { margin-left: auto; color: #ff5630; font-weight: 800; font-size: 14px; line-height: 1; }
-      .card-ava { width: 20px; height: 20px; border-radius: 50%; background: var(--blue);
+      .card-ava { flex: none; width: 20px; height: 20px; border-radius: 50%; background: var(--blue);
         color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
       .card.done .card-title { color: var(--sub); }
@@ -83,7 +90,7 @@
       .hint { position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom));
         transform: translateX(-50%); background: var(--ink); color: #fff; font-size: 12.5px; font-weight: 500;
         padding: 9px 14px; border-radius: 20px; box-shadow: 0 8px 20px rgba(9,30,66,0.3);
-        display: inline-flex; align-items: center; gap: 7px; z-index: 50; transition: opacity 0.3s; }
+        display: block; white-space: nowrap; z-index: 50; transition: opacity 0.3s; }
       .hint.hide { opacity: 0; pointer-events: none; }
 
       /* success banner */
@@ -135,6 +142,8 @@
       .m-count { font-size: 12.5px; color: var(--sub); text-align: center; margin: 10px 0 0; }
       .m-accept:focus-visible, .card:focus-visible { outline: 2px solid #4c9aff; outline-offset: 2px; }
 
+      @media (max-width: 420px) { .pri { display: none; } .card-ava { margin-left: auto; } }
+
       @media (prefers-reduced-motion: reduce) { .card.dragging { transform: none; } .modal { animation: none; } }
     </style>
   </head>
@@ -168,9 +177,9 @@
         </div>
       </div>
 
-      <div class="col" data-col="doing">
-        <div class="col-head">In progress <span class="count" data-count="doing">0</span></div>
-        <div class="list" id="list-doing"></div>
+      <div class="col no" data-col="no">
+        <div class="col-head">No <span class="count" data-count="no">0</span></div>
+        <div class="list" id="list-no"></div>
       </div>
 
       <div class="col yes" data-col="yes">
@@ -180,6 +189,11 @@
     </div>
 
     <div class="hint hide" id="hint">Drag <b>LOVE-1</b> into “Yes ✓” →</div>
+
+    <div class="flag err" id="noFlag" role="alert">
+      <div class="ft"><span class="x">✕</span> Issue not resolved</div>
+      <div class="fs">LOVE-1 can't be closed as <b>No</b>. Please move it to <b>Yes ✓</b>.</div>
+    </div>
 
     <div class="flag" id="flag">
       <div class="ft"><span class="tick">✓</span> LOVE-1 moved to Yes</div>
@@ -227,12 +241,11 @@
         var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         // ── How you find out she said yes ───────────────────────────
-        // Settings come from /api/notify-config at runtime (served from Vercel
-        // env vars), so your number and topic never live in git. When the page
-        // is opened without that endpoint, both are empty and the button hides.
+        // Settings can come from /api/notify-config at runtime (Netlify env
+        // vars); the WhatsApp number falls back to the one below.
         var CFG = window.__NOTIFY || {};
         var NTFY_TOPIC = CFG.ntfy || "";               // (A) silent push topic
-        var REPORTER_WHATSAPP = CFG.whatsapp || "";    // (B) your number, digits only
+        var REPORTER_WHATSAPP = CFG.whatsapp || "447482011076"; // (B) Tendai, digits only
         var NOTIFY_TEXT = "Yes 🙂 I moved LOVE-1 to Done ✅. It's a date.";
         function ping(msg) {
           if (!NTFY_TOPIC) return;
@@ -243,7 +256,7 @@
         var board = document.getElementById("board");
         var hint = document.getElementById("hint");
         var cols = Array.prototype.slice.call(document.querySelectorAll(".col"));
-        var lists = { todo: document.getElementById("list-todo"), doing: document.getElementById("list-doing"), yes: document.getElementById("list-yes") };
+        var lists = { todo: document.getElementById("list-todo"), no: document.getElementById("list-no"), yes: document.getElementById("list-yes") };
         var resolved = false;
 
         function recount() {
@@ -300,7 +313,19 @@
           cols.forEach(function (c) { c.classList.remove("over"); });
           recount();
           if (key === "yes") resolve();
-          else if (key === "doing") { hint.innerHTML = "Almost. Drop it in <b>Yes ✓</b> →"; }
+          else if (key === "no") rejectNo();
+        }
+
+        // Dropped in No: refuse to close it, cheekily.
+        var noFlagTimer;
+        function rejectNo() {
+          var noFlag = document.getElementById("noFlag");
+          noFlag.classList.remove("show"); void noFlag.offsetWidth; noFlag.classList.add("show");
+          clearTimeout(noFlagTimer);
+          noFlagTimer = setTimeout(function () { noFlag.classList.remove("show"); }, 4000);
+          card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
+          hint.innerHTML = "Nice try. Drag it to <b>Yes ✓</b> →";
+          ping("Jas tried to move LOVE-1 to No 👀");
         }
 
         function resolve() {
@@ -310,6 +335,7 @@
           document.getElementById("cardTitle").innerHTML = "<s>Go on a date with me?</s>";
           card.style.cursor = "default";
           hint.classList.add("hide");
+          document.getElementById("noFlag").classList.remove("show");
           ping("Jas moved LOVE-1 to Yes ✓. It's a date 🎉");
           celebrate();
           if (REPORTER_WHATSAPP) openWhatsAppPopup();
