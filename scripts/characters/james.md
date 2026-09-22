@@ -1,4 +1,4 @@
-# JAMES — Character Profile
+# JAMES: Character Profile
 
 _Companion note for **THE WEIGHT OF QUIET**. Keep James consistent across drafts. This is a private writer's document; nothing here is meant to appear on the page._
 
