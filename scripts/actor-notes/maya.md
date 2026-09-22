@@ -14,7 +14,7 @@ She will not say "I'm lonely" or "I'm frightened." Saying it plainly is the one 
 
 ## The obstacle
 
-He is not fully here, and she does not know why. Important: **you do not know what he is fixated on. You cannot see it.** Do not play a woman who knows there is a rival. Play a woman standing in front of a locked door with no idea what is behind it, only that she is not allowed in. The not-knowing is the wound.
+You know his sister died. You have lived through the aftermath with him. You are not confused about the grief. What you cannot grasp is **what the grief has become**: that he now turns toward it, listens to it, is soothed by it, as if it were a person in the room. You cannot see the thing he turns toward. Play a woman who has watched her husband disappear into his grief for months and can no longer follow him in. The not-understanding is the wound, not the not-knowing.
 
 ## Tactics, in order (what you are DOING)
 
@@ -31,7 +31,7 @@ He is not fully here, and she does not know why. Important: **you do not know wh
 
 ## What NOT to play
 
-- Do not play the subtext. You do not know the secret. Do not glance knowingly at the empty space. When he looks at nothing, **you look at HIM**, baffled and hurt, never at the thing.
+- Do not play the subtext. You know he is grieving his sister; you do not grasp that the grief has become a place he goes to, and you cannot see what he turns toward. Do not glance knowingly at the empty space. When he looks at nothing, **you look at HIM**, baffled and hurt, never at the thing.
 - Do not play "strong woman." Play a competent woman losing her competence in real time and hating it.
 - Do not cry to be sympathetic. If it comes, fight it, the way she fights everything.
 

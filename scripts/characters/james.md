@@ -8,7 +8,7 @@ James is a man holding a bouquet of balloons he will not release. The therapist'
 
 ## Wound & Flaw
 
-**Wound:** James lost someone whose absence he has never permitted to become an absence. The loss did not break him loudly. It moved in quietly and started keeping house.
+**Wound:** James's sister died. He has never permitted her absence to become an absence. The loss did not break him loudly. It moved in quietly and started keeping house.
 
 **Flaw:** he keeps a place set. Literally, and in every other way. He preserves the conditions of a life that still includes the person who is gone, because to stop would be to admit they are gone, and to admit they are gone would mean finding out what is left of him. So his absent-mindedness is not a quirk. It is load-bearing. His mind is always elsewhere, tending something, and the tending reads as drift.
 
@@ -44,6 +44,8 @@ _Illustrative micro-dialogue:_
 
 **Arc (within this oner):** James begins the night certain he can keep both, one foot in each life. Maya's balloons line strips that lie away. By the end he is forced to see the clenched hand for what it is, and he still cannot open it. He chooses the balloons. The "FUCK OFF" is not aimed at what he loves; it is aimed at himself, for not being able to let it go. He does not complete the arc. That is the tragedy: the film asks the question and lets him fail to answer it.
 
-## Note on the withheld loss
+## Canon (private) and what stays off the page
 
-Who James lost is intentionally never named on the page: not a name, not "sister," not "her," not a timeframe. The piece depends on the audience inferring only that *something is there*, from the camera and from his behavior. For your own steadiness you may privately fix the identity, but keep it out of all dialogue and action. If you want to lock it here privately (a sibling, per the first impulse; a lost partner, per the cottage draft), say so and I'll record it in this note only.
+James is grieving the death of his **sister**. That is fixed. Maya knows the sister died and has lived through the aftermath with him. So the thing kept off the page is not the death itself, it is **what the grief has become**: a felt presence James turns toward, occupying the camera's position, deliberately ambiguous as to whether it is supernatural, psychological, or dissociative. James experiences it as real.
+
+Rules for the page: never explain the death in dialogue or action; never confirm the presence is literally there; never let Maya name what his grief has turned into; never have James explain it. The audience should feel it before they understand it. See `writers-notes.md` for the full brief, and note its **Camera Notes** take precedence.
