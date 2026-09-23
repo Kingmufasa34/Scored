@@ -4,7 +4,7 @@ _For the actor playing James in **THE WEIGHT OF QUIET**. Playable notes, not bac
 
 ## One line
 
-A man who is quietly, secretly soothed by something no one else can see, and who would rather lose his marriage than lose that.
+A man who is quietly, secretly soothed by something no one else can see, and who would rather lose her than lose that.
 
 ## What he wants (scene objective)
 
@@ -35,7 +35,7 @@ Never explain any of this. Never address the audience. The whole progression sta
 3. **Soothe her.** "Tell me what you want and I'll do it." You genuinely want to solve it so it will stop.
 4. **Dodge into the body.** When words corner you, reach for her. The collision is a change of subject, not a reconciliation.
 5. **Protect it.** The moment your eyes find the space and stay there, you are choosing. Play a man shielding something precious, not a man seeing a monster.
-6. **Send it away, then break.** "Not tonight. Go." You are trying to make it leave so you can keep your marriage, and you can't, and that is when it comes apart.
+6. **Send it away, then break.** "Not tonight. Go." You are trying to make it leave so you can keep her, and you can't, and that is when it comes apart.
 
 ## The reach (most important physical beat)
 

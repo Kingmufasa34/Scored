@@ -1,6 +1,30 @@
 # THE WEIGHT OF QUIET: Writer's Notes
 
-_Guidance for any writer or AI agent working on this piece. It focuses on intent, subtext, what to preserve, and what not to over-explain. Where anything conflicts, the **Camera Notes** section below takes precedence over the general Writer's Notes._
+_Guidance for any writer or AI agent working on this piece. It focuses on intent, subtext, what to preserve, and what not to over-explain. Where anything conflicts, the **Relationship Correction** takes precedence over everything, then the **Camera Notes**, then the general Writer's Notes._
+
+---
+
+## RELATIONSHIP CORRECTION (highest precedence: overrides everything below)
+
+James and Maya are **not married**. Do not call them husband and wife, and do not replace that with any other explicit label.
+
+Their relationship is ambiguous and contemporary: a long-running, intimate, undefined relationship that has gone far beyond casual without ever being given the security or language of a conventional partnership. They love each other. They know they love each other. They have history. They behave like partners. They have never necessarily said what they are.
+
+Why: marriage makes Maya's position too legible. Without a label she has no clean claim. She came away with James because there is clearly something between them and she expected this trip to mean something. Then the grief enters the room and she is competing for emotional space with someone who isn't alive. Her position is closer to: you brought me here, you want me here, you love me, so why am I still losing to someone who isn't even here. Do not state that directly unless the dialogue earns it.
+
+The key dynamic is: what am I to you if she gets all of you? James cannot answer that cleanly. Maya may be the person he loves in the present while his sister's presence occupies an entirely different part of him. There is no clean romantic solution. That is the tragedy.
+
+No exposition about how long they've been together, what they are, where this is going, or why they aren't married. Let behaviour carry it: how naturally she moves around his things, how comfortable she is touching him, how well she knows his routines, how she can tell when he has disappeared, how he assumes she will stay, how she assumes she matters.
+
+**Contemporary opening:** Maya does not start the film waiting for a serious conversation. She is on the sofa doom-scrolling, coat on, looking up at James and back down, while he finds meaningless things to do in the kitchen. The argument has already been happening underneath the silence. The audience walks into something already underway.
+
+**Tone:** not sad and not solemn. Contemporary, uncomfortable, intimate, exhausted, sometimes funny because furious people get sarcastic, confrontational, jealous, petty, cruel, loving, physically charged, increasingly desperate. They know each other's pressure points. They can hurt each other on purpose and regret it without taking it back.
+
+Do not force slang or make them sound Gen Z. Make it contemporary through behaviour, relationship ambiguity, technology, speech rhythm and emotional expectation.
+
+The relationship is undefined. The love is real. The grief is real. The argument is ugly because neither person has a legitimate clean claim over the other, and both feel they should have one. That tension is the film.
+
+_Where the notes below say "wife," "husband" or "marriage," read them through this correction._
 
 ---
 
@@ -40,7 +64,7 @@ That is why the final image should remain.
 
 James is grieving the death of his sister.
 
-The film should not be explicitly about "a man grieving his dead sister." It is about what grief has done to James internally and how that grief has become an almost physical presence inside his marriage.
+The film should not be explicitly about "a man grieving his dead sister." It is about what grief has done to James internally and how that grief has become an almost physical presence inside his relationship with Maya.
 
 James has developed a felt sense of his sister's presence. Whether this is supernatural, psychological, dissociative, or simply the externalisation of grief should remain deliberately ambiguous.
 
@@ -52,7 +76,7 @@ The audience should gradually realise that James is not simply withdrawing from 
 
 ## Maya Knows
 
-Maya is James's wife. She knows his sister died.
+Maya is James's partner in everything but name (see the Relationship Correction). She knows his sister died.
 
 Do not write the mystery as though Maya doesn't know about the death.
 
@@ -73,7 +97,7 @@ This is why her anger is so intense.
 
 She isn't angry that James misses his sister.
 
-She is angry that she cannot get her husband back.
+She is angry that she cannot get him back.
 
 ## The Central Dramatic Conflict
 
@@ -89,7 +113,7 @@ James experiences it as something happening to him.
 
 This distinction should remain underneath almost every interaction.
 
-The argument should therefore never become simply: "Wife wants husband to communicate."
+The argument should therefore never become simply: "She wants him to communicate."
 
 It should feel more like: one person is desperately trying to reach someone who is physically present but psychologically elsewhere, while the other is desperately trying to remain present despite being pulled somewhere else.
 
@@ -143,7 +167,7 @@ James isn't necessarily choosing to leave. He is being pulled inward. The line s
 
 ## "You Could Put It Down"
 
-This is one of the most important moments. Maya knows about the grief. She isn't telling him to forget his sister. She is saying: you are allowed to stop carrying this for one moment. She wants him to put the grief down and simply be her husband.
+This is one of the most important moments. Maya knows about the grief. She isn't telling him to forget his sister. She is saying: you are allowed to stop carrying this for one moment. She wants him to put the grief down and simply be with her.
 
 James cannot. His response, "It isn't that simple," is important. Maya believes it should be possible. James knows that it isn't. That disagreement is the emotional heart of the film.
 
@@ -194,7 +218,7 @@ The final description, "The way an intruder looks at a house," is important. The
 
 ## Tone
 
-Psychological drama with supernatural ambiguity. The film should feel intimate before it feels strange. Do not make it a horror film too early. The audience should initially believe they are watching a difficult marriage argument. The supernatural / psychological dimension should creep in through behaviour.
+Psychological drama with supernatural ambiguity. The film should feel intimate before it feels strange. Do not make it a horror film too early. The audience should initially believe they are watching a difficult relationship argument. The supernatural / psychological dimension should creep in through behaviour.
 
 The progression should roughly feel like: domestic, then uncomfortable, then emotionally strange, then uncanny, then frightening, then heartbreaking. Not: normal, then ghost story.
 
@@ -225,6 +249,6 @@ The audience should feel the meaning before they understand it.
 
 The film is ultimately about the difference between remembering someone and continuing to live with their absence.
 
-James hasn't simply failed to move on. He has built a relationship with the absence. Maya is trying to compete with something that isn't there. And James is caught between loving his wife and being unable to stop reaching toward the person he lost.
+James hasn't simply failed to move on. He has built a relationship with the absence. Maya is trying to compete with something that isn't there. And James is caught between loving Maya and being unable to stop reaching toward the person he lost.
 
 The tragedy is not that James loves his dead sister. The tragedy is that his grief has become the place where he feels closest to her, and leaving that place feels like losing her again.

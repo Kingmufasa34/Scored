@@ -14,20 +14,24 @@ She will not say "I'm lonely" or "I'm frightened." Saying it plainly is the one 
 
 ## The obstacle
 
-You know his sister died. You have lived through the aftermath with him. You are not confused about the grief. What you cannot grasp is **what the grief has become**: that he now turns toward it, listens to it, is soothed by it, as if it were a person in the room. You cannot see the thing he turns toward. Play a woman who has watched her husband disappear into his grief for months and can no longer follow him in. The not-understanding is the wound, not the not-knowing.
+You know his sister died. You have lived through the aftermath with him. You are not confused about the grief. What you cannot grasp is **what the grief has become**: that he now turns toward it, listens to it, is soothed by it, as if it were a person in the room. You cannot see the thing he turns toward. Play a woman who has watched the man she loves disappear into his grief for months and can no longer follow him in. And you have no official claim on him. You are not his wife. You have never said what you are. He asked you here, and every accusation you make is also a question about whether you have the right to make it. The not-understanding is the wound, not the not-knowing.
 
 ## Tactics, in order (what you are DOING)
 
-1. **Summon** him. "Finish it. Say it." Drag the sentence out of him.
-2. **Corner** him with evidence. The two coffees, the counted drinks, the open window. You are a lawyer laying out exhibits.
-3. **Shame** him. "You show up to run it" cuts because it is aimed at your own competence too.
-4. **Physically force** contact. Take his face. Make him look. This is a woman who has run out of words and reaches for the body.
-5. **Diagnose** him. The balloons line. This is the tactic change that matters: you stop attacking and, quietly, you name the truth. No anger here. Anger is easier for both of you. This is worse.
-6. **Plead**, then **let go**. By the end you are not fighting. You are watching.
+1. **Needle** him. You are on your phone, scrolling, and you have been for an hour. "That's the same mug." Sarcasm is how you stay in the room without begging to be let in.
+2. **Corner** him with evidence. The two coffees, the two sugars, "shove up." You are laying out exhibits because evidence is something you know how to win with.
+3. **Wound** him. The jealousy comes out ugly: "At least if she were alive I could hate her properly." You regret it instantly. You do not take it back.
+4. **Physically force** contact. Take his face. Make him look. A woman who has run out of words reaches for the body.
+5. **Threaten** to go. The train from Oxenholme. You have been looking at it for an hour. You want him to beg you to stay. He says "Then get it."
+6. **Stop fighting, then watch.** By the end you are not fighting. You are watching.
 
-## The turn (the balloons)
+## "Haven't I?"
 
-"You could put it down... you wouldn't know who you were without it." Do not deliver this as a win. You are not scoring a point. You are telling him the thing you have understood and hoped you were wrong about. It should cost you to say it. It is the most loving and most lethal thing in the scene.
+He says you keep a list, "like you've got a right to it." You answer: "Haven't I?" This is your deepest wound. You have no official claim on him. You have never said what you are. When he doesn't answer, play the silence as the worst thing he has done all night.
+
+## "Put it down"
+
+"Put it down for one night. One. And just be here. With me." Do not play it as a calm observation or a diagnosis. You are out of patience and you are accusing him. It should still cost you to say it.
 
 ## What NOT to play
 
@@ -37,7 +41,7 @@ You know his sister died. You have lived through the aftermath with him. You are
 
 ## Voice and body
 
-Fast, precise, complete sentences. She finishes her thoughts; he never finishes his. Use that. Let her sentences land like doors closing. Physically: contained at the start, coat still on because she never got to sit down, arms close. As the armor fails she gets larger, then at the balloons line she goes very still. Stillness is where she is most dangerous and most exposed.
+Fast, sarcastic, precise. She finishes her thoughts until she can't; he never finishes his. Use that. Let her sentences land like doors closing. Physically: curled on the sofa at the start, in his coat, thumb on the phone, never quite committing to the conversation. As the armor fails she gets up and gets larger, then at "Haven't I?" she goes very still. Stillness is where she is most dangerous and most exposed.
 
 ## The last image
 
@@ -45,4 +49,4 @@ You are watching the man you love scream at an empty room. Play pure incomprehen
 
 ## Wardrobe / prop life
 
-The coat is a fact, not a costume: she arrived ready to leave and never took it off. The two mugs are his, not yours. You never touch the cold one.
+The coat is his, and too big in the sleeves: she is wearing him and hasn't taken it off. The phone is her exit and her weapon: the train times are on it the whole time. The two mugs are his, not yours. You never touch the cold one.

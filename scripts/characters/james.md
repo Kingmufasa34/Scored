@@ -16,13 +16,13 @@ James is a man holding a bouquet of balloons he will not release. The therapist'
 
 **Want (conscious, in the scene):** to be left alone in it. To keep the door open an inch, the second cup poured, the room ready. To not be made to choose.
 
-**Need (unconscious):** to open his hand. To let grief be a thing that ends rather than a thing he maintains. To find out that a man standing in a kitchen with his wife is still someone, is in fact enough.
+**Need (unconscious):** to open his hand. To let grief be a thing that ends rather than a thing he maintains. To find out that a man standing in a kitchen with the woman he loves is still someone, is in fact enough.
 
 Want and need sit in direct opposition, which is why the scene can only end in rupture. Maya asks him to be here. Being here requires the exact thing he is most afraid of.
 
 ## Backstory
 
-James was the steady one, the one who kept things running while someone else burned brighter. Good with his hands and with small repairs, less good at being looked at. He and Maya met when his stillness read as depth; she, all forward motion, found it restful before she found it a locked door. They built a life with the efficiency she prizes and he tolerates. Then the loss. He did not collapse. He simply began, without ever deciding to, keeping the world ready for a return that will not come: two of everything, doors left ajar, a place at the table angled for no one. He took a job with fewer eyes on him. He let the friends thin out. Maya booked the cottage because she believed that with nowhere else to be, he would finally be with her. She did not understand that he had learned to be elsewhere anywhere. The cottage only made the elsewhere easier to see.
+James was the steady one, the one who kept things running while someone else burned brighter. Good with his hands and with small repairs, less good at being looked at. He and Maya met when his stillness read as depth; she, all forward motion, found it restful before she found it a locked door. They built something that works like a life without ever naming it, with the efficiency she prizes and he tolerates. Then the loss. He did not collapse. He simply began, without ever deciding to, keeping the world ready for a return that will not come: two of everything, doors left ajar, a place at the table angled for no one. He took a job with fewer eyes on him. He let the friends thin out. He asked her to come to the cottage, and she said yes because she believed that with nowhere else to be, he would finally be with her. She did not understand that he had learned to be elsewhere anywhere. The cottage only made the elsewhere easier to see.
 
 ## Voice Signature
 
