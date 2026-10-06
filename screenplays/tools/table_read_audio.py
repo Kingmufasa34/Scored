@@ -27,6 +27,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 
 import numpy as np
 import soundfile as sf
@@ -138,6 +139,21 @@ class Voice:
         return a
 
 
+def progress(done, total, chars_done, total_chars, began):
+    """A text progress bar with a time-left estimate, readable in GitHub's live log."""
+    frac = chars_done / total_chars
+    width = 24
+    filled = int(round(frac * width))
+    bar = "█" * filled + "░" * (width - filled)
+    elapsed = time.time() - began
+    if frac > 0.02 and elapsed > 5:
+        left = elapsed / frac - elapsed
+        eta = f"~{int(left // 60)}m {int(left % 60):02d}s left"
+    else:
+        eta = "working out time left..."
+    return f"[{bar}] {int(frac * 100):3d}%  line {done}/{total}  {eta}"
+
+
 def trim(a, thresh=0.01):
     idx = np.where(np.abs(a) > thresh)[0]
     if not len(idx):
@@ -172,6 +188,9 @@ def render(els, voice, log=print):
         return start + len(a) / SR
 
     total = sum(1 for e in els if e["t"] == "dlg")
+    total_chars = sum(len(l.get("text", "")) for e in els if e["t"] == "dlg" for l in e["lines"]) or 1
+    chars_done = 0
+    began = time.time()
     done = 0
     for i, e in enumerate(els):
         if e["t"] == "dlg":
@@ -190,8 +209,9 @@ def render(els, voice, log=print):
                 if not text:
                     continue
                 ex, cfg, gain = delivery(role, par)
-                log(f"[{done}/{total}] {e['who']}: {text[:60]}")
                 a = voice.say(e["who"], text, ex, cfg) * gain
+                chars_done += len(ln["text"])
+                log(progress(done, total, chars_done, total_chars, began) + f"  {e['who']}: {text[:50]}")
                 if cut:
                     a = a[: max(int(len(a) * 0.9), len(a) - int(0.18 * SR))]  # clipped before the end
                 a = fade(a, ms_out=25 if cut else 60)
@@ -242,6 +262,11 @@ def main():
     os.remove(wav)
     json.dump({"duration": round(len(track) / SR, 2), "cues": cues}, open(a.out + ".json", "w"), indent=0)
     print(f"wrote {a.out}.mp3 ({len(track) / SR:.1f}s) and {a.out}.json", flush=True)
+    summary = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summary:
+        with open(summary, "a") as f:
+            f.write(f"### Table read ready\n\n`{os.path.basename(a.out)}.mp3`: {len(track) / SR / 60:.1f} minutes, "
+                    f"{sum(1 for c in cues if c['who'])} lines.\n")
 
 
 if __name__ == "__main__":

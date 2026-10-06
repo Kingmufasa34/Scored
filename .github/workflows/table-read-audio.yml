@@ -53,6 +53,13 @@ jobs:
           path: ~/.cache/huggingface
           key: chatterbox-hf-v1
 
+      - name: Reuse lines voiced in earlier runs
+        uses: actions/cache@v4
+        with:
+          path: work/clips
+          key: tableread-clips-${{ github.run_id }}
+          restore-keys: tableread-clips-
+
       - name: Make the cast's reference voices (Kokoro)
         run: |
           mkdir -p work && cd work
