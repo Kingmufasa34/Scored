@@ -40,8 +40,12 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
-          pip install chatterbox-tts kokoro-onnx soundfile librosa
+          pip install chatterbox-tts soundfile librosa
           pip show chatterbox-tts torch | grep -E '^(Name|Version)'
+          # Kokoro gets its own environment so Chatterbox's pins can't downgrade it
+          python -m venv /tmp/kvenv
+          /tmp/kvenv/bin/pip install -q "kokoro-onnx>=0.5" soundfile
+          /tmp/kvenv/bin/pip show kokoro-onnx | grep -E '^(Name|Version)'
 
       - name: Cache model downloads
         uses: actions/cache@v4
@@ -54,7 +58,7 @@ jobs:
           mkdir -p work && cd work
           curl -sSL -o kokoro-v1.0.onnx https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
           curl -sSL -o voices-v1.0.bin https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
-          python ../screenplays/tools/make_voices.py voices
+          /tmp/kvenv/bin/python ../screenplays/tools/make_voices.py voices
 
       - name: Voice the script (Chatterbox)
         run: |
