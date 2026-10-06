@@ -1,0 +1,448 @@
+<title>Table Read</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: a script page down the middle, each character marked in highlighter
+   colour the way actors mark their lines; transport pinned to the bottom for thumbs. */
+:root {
+  --paper: #f3f4f1;
+  --sheet: #fdfdfb;
+  --ink: #1d211f;
+  --ink-soft: #5b625e;
+  --rule: #d9ddd8;
+  --accent: #23524a;
+  --accent-ink: #ffffff;
+  --hl-1: #ffe86b;  /* yellow highlighter */
+  --hl-2: #ffb3cf;  /* pink */
+  --hl-3: #a8eea0;  /* green */
+  --hl-4: #a9d8ff;  /* blue */
+  --hl-5: #ffc98a;  /* orange */
+  --hl-6: #d6c2ff;  /* violet */
+  --hl-n: #e3e6e2;  /* narrator / action */
+  --now: rgba(35, 82, 74, 0.12);
+  --font-script: "Courier Prime", "Courier New", Courier, monospace;
+  --font-ui: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #151917; --sheet: #1d2220; --ink: #e8ebe8; --ink-soft: #a3aba6; --rule: #343b38;
+    --accent: #7fc7b6; --accent-ink: #0f1513;
+    --hl-1: #8a7a1c; --hl-2: #8a3f5c; --hl-3: #3f7a3a; --hl-4: #2f5f86; --hl-5: #8a5a20; --hl-6: #5b4890; --hl-n: #2c3330;
+    --now: rgba(127, 199, 182, 0.14);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #151917; --sheet: #1d2220; --ink: #e8ebe8; --ink-soft: #a3aba6; --rule: #343b38;
+  --accent: #7fc7b6; --accent-ink: #0f1513;
+  --hl-1: #8a7a1c; --hl-2: #8a3f5c; --hl-3: #3f7a3a; --hl-4: #2f5f86; --hl-5: #8a5a20; --hl-6: #5b4890; --hl-n: #2c3330;
+  --now: rgba(127, 199, 182, 0.14);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-ui); font-size: 16px; line-height: 1.45; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 140px; display: grid; gap: 16px; }
+header h1 { font-family: var(--font-script); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.04em; margin: 0; text-transform: uppercase; }
+header p { margin: 4px 0 0; color: var(--ink-soft); max-width: 60ch; }
+.panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+label.small, .lab { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); font-weight: 700; }
+select, input[type=range], button { font: inherit; color: inherit; }
+select { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; max-width: 100%; min-width: 0; }
+button { cursor: pointer; border: 1px solid var(--rule); background: var(--paper); border-radius: 8px; padding: 8px 12px; }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.check { display: inline-flex; gap: 6px; align-items: center; }
+details > summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::after { content: "Show"; font-weight: 400; color: var(--ink-soft); font-size: 0.9rem; }
+details[open] > summary::after { content: "Hide"; }
+.cast { display: grid; gap: 10px; margin-top: 12px; }
+.member { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 10px; border-radius: 8px; border: 1px solid var(--rule); }
+.member .who { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.name { font-family: var(--font-script); font-weight: 700; padding: 1px 8px; border-radius: 4px; }
+.member .ctrls { display: grid; grid-template-columns: 1fr; gap: 8px; }
+@media (min-width: 620px) { .member .ctrls { grid-template-columns: 2fr 1fr 1fr; align-items: end; } }
+.member .ctrls > div { display: grid; gap: 4px; min-width: 0; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; padding: 6px 10px; background: transparent; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.note { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+
+/* the script */
+.script { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 28px 18px; font-family: var(--font-script); font-size: 15px; line-height: 1.35; }
+@media (min-width: 620px) { .script { padding: 40px 56px; font-size: 16px; } }
+.el { padding: 4px 8px; margin: 0 -8px; border-radius: 6px; cursor: pointer; scroll-margin: 30vh; }
+.el:hover { background: var(--now); }
+.el.now { background: var(--now); box-shadow: inset 4px 0 0 var(--accent); }
+.scene { font-weight: 700; margin-top: 22px; text-transform: uppercase; }
+.action { margin-top: 10px; }
+.trans { margin-top: 12px; text-align: right; }
+.center { margin-top: 18px; text-align: center; font-weight: 700; }
+.dlg { margin-top: 12px; }
+.dlg .cue { margin-left: 34%; text-transform: uppercase; }
+.dlg .cue mark { color: inherit; padding: 0 4px; border-radius: 3px; }
+.dlg .par { margin-left: 24%; margin-right: 20%; }
+.dlg .ln { margin-left: 14%; margin-right: 12%; }
+@media (max-width: 480px) { .dlg .cue { margin-left: 22%; } .dlg .par { margin-left: 14%; margin-right: 6%; } .dlg .ln { margin-left: 6%; margin-right: 0; } }
+.yours { display: none; margin-left: 14%; margin-top: 4px; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; color: var(--accent); }
+.el.now.mine .yours { display: block; }
+
+/* transport */
+.transport { position: fixed; left: 0; right: 0; bottom: 0; background: var(--sheet); border-top: 1px solid var(--rule); padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 5; }
+.transport .in { max-width: 760px; margin: 0 auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.transport button { min-width: 48px; min-height: 44px; }
+#play { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; min-width: 96px; }
+#status { flex: 1 1 160px; min-width: 0; font-size: 0.9rem; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.warn { background: var(--hl-5); color: var(--ink); padding: 10px 12px; border-radius: 8px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Table Read</h1>
+    <p>Hear the script out loud. Each character gets their own voice, and you can read any part yourself. Tap a line to start from there.</p>
+  </header>
+
+  <div id="noSpeech" class="warn" hidden>This browser can't speak text aloud. Try Chrome or Safari on your phone, or Chrome or Edge on a computer.</div>
+
+  <section class="panel" aria-label="Script and options">
+    <div class="row">
+      <div style="display:grid;gap:4px;min-width:0;flex:1 1 220px">
+        <label class="small" for="pick">Script</label>
+        <select id="pick"></select>
+      </div>
+      <div style="display:grid;gap:4px">
+        <span class="lab">Or open your own</span>
+        <label class="check"><input id="file" type="file" accept=".fountain,.txt,text/plain"></label>
+      </div>
+    </div>
+    <div class="row">
+      <label class="check"><input type="checkbox" id="readAction"> Read the action lines aloud</label>
+      <label class="check"><input type="checkbox" id="readScenes" checked> Read scene headings</label>
+      <label class="check"><input type="checkbox" id="holdAction" checked> Pause for action when it isn't read</label>
+    </div>
+    <details id="castBox">
+      <summary>Cast</summary>
+      <p class="note" style="margin-top:8px">Pick a voice for each character. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself. Which voices you get depends on your phone or computer.</p>
+      <div class="cast" id="cast"></div>
+    </details>
+  </section>
+
+  <article class="script" id="script" aria-live="off"></article>
+</div>
+
+<div class="transport" role="toolbar" aria-label="Playback">
+  <div class="in">
+    <button id="back" aria-label="Previous line" title="Previous line">&#9198;</button>
+    <button id="play">Play</button>
+    <button id="next" aria-label="Next line" title="Next line">&#9197;</button>
+    <label class="check" for="speed" style="gap:6px"><span class="lab">Speed</span>
+      <select id="speed"><option value="0.85">0.85&times;</option><option value="1" selected>1&times;</option><option value="1.15">1.15&times;</option><option value="1.3">1.3&times;</option></select>
+    </label>
+    <span id="status">Ready</span>
+  </div>
+</div>
+
+<script type="text/plain" id="src-d03">__DRAFT03__</script>
+<script type="text/plain" id="src-d02">__DRAFT02__</script>
+
+<script>
+(function () {
+  "use strict";
+  var synth = window.speechSynthesis;
+  var hasSpeech = !!(synth && window.SpeechSynthesisUtterance);
+  if (!hasSpeech) document.getElementById("noSpeech").hidden = false;
+
+  var SCRIPTS = [
+    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent },
+    { id: "d02", label: "Life After Alice, Ep. 1: draft 02", text: document.getElementById("src-d02").textContent }
+  ];
+  var HL = ["--hl-1", "--hl-2", "--hl-3", "--hl-4", "--hl-5", "--hl-6"];
+  var store = {
+    get: function (k) { try { return JSON.parse(localStorage.getItem("tableread:" + k)); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem("tableread:" + k, JSON.stringify(v)); } catch (e) {} }
+  };
+
+  /* ---------- Fountain parsing ---------- */
+  var SCENE_RE = /^(INT|EXT|INT\.\/EXT|I\/E|EST)[. ]/i;
+  var TRANS_RE = /^(FADE IN:|FADE OUT\.|CUT TO BLACK\.|[A-Z ]+ TO:)$/;
+  function baseName(cue) { return cue.replace(/\^$/, "").replace(/\(.*?\)/g, "").trim(); }
+  function parse(src) {
+    src = src.replace(/\r\n?/g, "\n");
+    var parts = src.split(/\n====\n/);
+    var body = parts.length > 1 ? parts.slice(1).join("\n====\n") : src;
+    var titleM = src.match(/^Title:\s*(.+)$/m);
+    var blocks = body.trim().split(/\n\s*\n/);
+    var out = [];
+    blocks.forEach(function (b) {
+      var lines = b.split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
+      if (!lines.length) return;
+      var first = lines[0];
+      if (/^>.*<$/.test(first)) { out.push({ t: "center", text: first.slice(1, -1).trim() }); return; }
+      if (SCENE_RE.test(first) || first.charAt(0) === ".") { out.push({ t: "scene", text: first.replace(/^\./, "") }); return; }
+      if (TRANS_RE.test(first)) { out.push({ t: "trans", text: first }); return; }
+      var bare = first.replace(/\^$/, "").trim();
+      if (lines.length > 1 && bare === bare.toUpperCase() && /[A-Z]/.test(bare) && !/^INSERT/.test(bare)) {
+        var d = { t: "dlg", cue: bare, who: baseName(first), overlap: /\^$/.test(first), lines: [] };
+        lines.slice(1).forEach(function (l) { d.lines.push(l.charAt(0) === "(" ? { par: l } : { text: l }); });
+        out.push(d); return;
+      }
+      out.push({ t: "action", text: lines.join(" ") });
+    });
+    return { title: titleM ? titleM[1].trim() : "Untitled", els: out };
+  }
+
+  /* ---------- Voices and cast ---------- */
+  var voices = [];
+  function loadVoices() {
+    if (!hasSpeech) return;
+    voices = synth.getVoices().slice().sort(function (a, b) {
+      function rank(v) { return /en-GB/i.test(v.lang) ? 0 : /^en/i.test(v.lang) ? 1 : 2; }
+      return rank(a) - rank(b) || a.name.localeCompare(b.name);
+    });
+    renderCast();
+  }
+  if (hasSpeech) { loadVoices(); synth.onvoiceschanged = loadVoices; }
+
+  var doc = null, cast = {}, castOrder = [];
+  var PITCH = [1.12, 0.85, 1.0, 0.95, 1.2, 0.9];
+  function defaultMember(i) {
+    var en = voices.filter(function (v) { return /^en/i.test(v.lang); });
+    var pool = en.length ? en : voices;
+    var v = pool.length ? pool[(i + 1) % pool.length] : null;
+    return { voice: v ? v.voiceURI : "", pitch: PITCH[i % PITCH.length], rate: 1, mode: "voice" };
+  }
+  function setupCast() {
+    var saved = store.get("cast") || {};
+    castOrder = [];
+    doc.els.forEach(function (e) { if (e.t === "dlg" && castOrder.indexOf(e.who) < 0) castOrder.push(e.who); });
+    cast = {};
+    castOrder.forEach(function (w, i) { cast[w] = saved[w] || defaultMember(i); cast[w].hl = HL[i % HL.length]; });
+    cast.__NARRATOR = saved.__NARRATOR || { voice: voices[0] ? voices[0].voiceURI : "", pitch: 1, rate: 1.05, mode: "voice" };
+    cast.__NARRATOR.hl = "--hl-n";
+    renderCast();
+  }
+  function saveCast() {
+    var s = store.get("cast") || {};
+    Object.keys(cast).forEach(function (k) { s[k] = { voice: cast[k].voice, pitch: cast[k].pitch, rate: cast[k].rate, mode: cast[k].mode }; });
+    store.set("cast", s);
+  }
+  function voiceFor(uri) { for (var i = 0; i < voices.length; i++) if (voices[i].voiceURI === uri) return voices[i]; return null; }
+  function renderCast() {
+    var box = document.getElementById("cast");
+    if (!doc) return;
+    box.textContent = "";
+    castOrder.concat(["__NARRATOR"]).forEach(function (who, i) {
+      var m = cast[who]; if (!m) return;
+      var label = who === "__NARRATOR" ? "Narrator (action & headings)" : who;
+      var row = document.createElement("div"); row.className = "member";
+      var top = document.createElement("div"); top.className = "who";
+      var nm = document.createElement("span"); nm.className = "name"; nm.textContent = label; nm.style.background = "var(" + m.hl + ")";
+      top.appendChild(nm);
+      if (who !== "__NARRATOR") {
+        var seg = document.createElement("div"); seg.className = "seg"; seg.setAttribute("role", "group"); seg.setAttribute("aria-label", "Who reads " + who);
+        ["voice", "me"].forEach(function (mode) {
+          var b = document.createElement("button"); b.type = "button"; b.textContent = mode === "voice" ? "Voice" : "Me";
+          b.setAttribute("aria-pressed", String(m.mode === mode));
+          b.onclick = function () { m.mode = mode; saveCast(); renderCast(); paintScript(); };
+          seg.appendChild(b);
+        });
+        top.appendChild(seg);
+      }
+      row.appendChild(top);
+      var c = document.createElement("div"); c.className = "ctrls";
+      var vWrap = document.createElement("div");
+      var vl = document.createElement("label"); vl.className = "small"; vl.textContent = "Voice"; vl.htmlFor = "v-" + i;
+      var sel = document.createElement("select"); sel.id = "v-" + i;
+      if (!voices.length) { var o0 = document.createElement("option"); o0.textContent = hasSpeech ? "Loading voices..." : "No voices"; sel.appendChild(o0); }
+      voices.forEach(function (v) { var o = document.createElement("option"); o.value = v.voiceURI; o.textContent = v.name + " (" + v.lang + ")"; if (v.voiceURI === m.voice) o.selected = true; sel.appendChild(o); });
+      sel.onchange = function () { m.voice = sel.value; saveCast(); sample(who); };
+      vWrap.appendChild(vl); vWrap.appendChild(sel);
+      c.appendChild(vWrap);
+      [["pitch", "Pitch", 0.6, 1.5], ["rate", "Pace", 0.7, 1.4]].forEach(function (p) {
+        var w = document.createElement("div");
+        var l = document.createElement("label"); l.className = "small"; l.textContent = p[1]; l.htmlFor = p[0] + "-" + i;
+        var r = document.createElement("input"); r.type = "range"; r.id = p[0] + "-" + i; r.min = p[2]; r.max = p[3]; r.step = 0.05; r.value = m[p[0]];
+        r.onchange = function () { m[p[0]] = parseFloat(r.value); saveCast(); sample(who); };
+        w.appendChild(l); w.appendChild(r); c.appendChild(w);
+      });
+      row.appendChild(c);
+      box.appendChild(row);
+    });
+  }
+  function sample(who) {
+    if (!hasSpeech || playing) return;
+    synth.cancel();
+    var line = "This is how I sound.";
+    for (var i = 0; i < doc.els.length; i++) { var e = doc.els[i]; if (e.t === "dlg" && e.who === who) { var t = e.lines.filter(function (l) { return l.text; })[0]; if (t) { line = t.text; break; } } }
+    speakOne(clean(line).text, cast[who], {}, function () {});
+  }
+
+  /* ---------- Rendering ---------- */
+  var scriptEl = document.getElementById("script");
+  var nodes = [];
+  function paintScript() {
+    scriptEl.textContent = "";
+    nodes = [];
+    doc.els.forEach(function (e, i) {
+      var d = document.createElement("div"); d.className = "el " + e.t; d.dataset.i = i;
+      if (e.t === "dlg") {
+        var cue = document.createElement("div"); cue.className = "cue";
+        var mk = document.createElement("mark"); mk.textContent = e.cue; mk.style.background = "var(" + (cast[e.who] ? cast[e.who].hl : "--hl-n") + ")";
+        cue.appendChild(mk);
+        if (e.overlap) cue.appendChild(document.createTextNode("  (overlapping)"));
+        d.appendChild(cue);
+        e.lines.forEach(function (l) { var p = document.createElement("div"); p.className = l.par ? "par" : "ln"; p.textContent = l.par || l.text; d.appendChild(p); });
+        var y = document.createElement("div"); y.className = "yours"; y.textContent = "Your line. Read it, then tap Next."; d.appendChild(y);
+        if (cast[e.who] && cast[e.who].mode === "me") d.classList.add("mine");
+      } else {
+        d.textContent = e.text;
+      }
+      d.onclick = function () { start(i); };
+      scriptEl.appendChild(d); nodes.push(d);
+    });
+  }
+
+  /* ---------- Speech text and timing ---------- */
+  // Turn written imperfection into audible timing: cut-offs latch on, trail-offs hang.
+  function clean(t) {
+    var cutOff = /--\s*$/.test(t), trail = /(\.\.\.|…)\s*$/.test(t);
+    var s = t.replace(/^\s*--\s*/, "").replace(/\s*--\s*$/, "").replace(/\s+--\s+/g, ", ").replace(/--/g, ", ")
+             .replace(/["“”]/g, "").replace(/\s{2,}/g, " ").trim();
+    return { text: s, cutOff: cutOff, trail: trail };
+  }
+  var SILENCE_RE = /\b(nothing\.|a beat|beat\.|long time|doesn't answer|does not answer|silence|waits|can't\.|it's out|it lands|nobody moves)\b/i;
+  function parMods(par) {
+    var p = (par || "").toLowerCase();
+    if (/barely|quiet|whisper|muffled|into her|into his|small/.test(p)) return { volume: 0.6, rate: 0.9 };
+    if (/shout|roar|loud|up,/.test(p)) return { volume: 1, rate: 1.08 };
+    return {};
+  }
+
+  /* ---------- Playback ---------- */
+  var idx = 0, playing = false, token = 0, waitingForMe = false, wakeLock = null;
+  var statusEl = document.getElementById("status"), playBtn = document.getElementById("play");
+  function setStatus(s) { statusEl.textContent = s; }
+  function mark(i) {
+    nodes.forEach(function (n) { n.classList.remove("now"); });
+    if (nodes[i]) { nodes[i].classList.add("now"); nodes[i].scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
+  }
+  function speakOne(text, m, mods, done) {
+    if (!text) { done(); return; }
+    var u = new SpeechSynthesisUtterance(text);
+    var v = voiceFor(m.voice); if (v) { u.voice = v; u.lang = v.lang; }
+    var speed = parseFloat(document.getElementById("speed").value) || 1;
+    u.pitch = m.pitch;
+    u.rate = Math.max(0.5, Math.min(2, m.rate * speed * (mods.rate || 1)));
+    u.volume = mods.volume || 1;
+    var finished = false;
+    function fin() { if (finished) return; finished = true; clearTimeout(guard); done(); }
+    // Some phones never fire onend; move on after a generous estimate.
+    var guard = setTimeout(fin, 2500 + text.length * 120 / u.rate);
+    u.onend = fin; u.onerror = fin;
+    synth.speak(u);
+  }
+  function step(my) {
+    if (my !== token || !playing) return;
+    if (idx >= doc.els.length) { stop("End of script"); return; }
+    var e = doc.els[idx];
+    mark(idx);
+    var nextE = doc.els[idx + 1];
+    var gap = 350;
+    function advance(g) { setTimeout(function () { if (my !== token || !playing) return; idx++; step(my); }, g); }
+
+    if (e.t === "dlg") {
+      var m = cast[e.who];
+      if (m.mode === "me") { waitingForMe = true; setStatus(e.who + ": your line. Tap Next when done."); return; }
+      setStatus(e.who);
+      var parts = [], mods = {};
+      e.lines.forEach(function (l) { if (l.par) mods = parMods(l.par); else parts.push({ c: clean(l.text), mods: mods }); });
+      var k = 0, last = null;
+      (function sayNext() {
+        if (my !== token || !playing) return;
+        if (k >= parts.length) {
+          if (last && last.cutOff) gap = 0;          // cut off: next speaker comes straight in
+          else if (last && last.trail) gap = 900;     // trailing off: let it hang
+          if (nextE && nextE.overlap) gap = 0;        // overlap: no gap at all
+          advance(gap); return;
+        }
+        var p = parts[k++]; last = p.c;
+        speakOne(p.c.text, m, p.mods, function () { setTimeout(sayNext, p.c.cutOff || p.c.trail ? 0 : 150); });
+      })();
+      return;
+    }
+
+    var readIt = (e.t === "action" && document.getElementById("readAction").checked) ||
+                 (e.t === "scene" && document.getElementById("readScenes").checked) ||
+                 (e.t === "center");
+    if (readIt) {
+      setStatus(e.t === "scene" ? "Scene" : "Narrator");
+      var txt = e.t === "scene" ? e.text.replace(/^INT\.?/i, "Interior.").replace(/^EXT\.?/i, "Exterior.").replace(/ - /g, ". ") : e.text;
+      speakOne(clean(txt).text, cast.__NARRATOR, {}, function () { advance(e.t === "scene" ? 600 : gap); });
+      return;
+    }
+    if (e.t === "action" && document.getElementById("holdAction").checked) {
+      // Unread action still takes screen time. Silences in the text get a real silence.
+      var hold = SILENCE_RE.test(e.text) ? 2400 : Math.min(500 + e.text.length * 14, 3000);
+      setStatus("(action)");
+      advance(hold); return;
+    }
+    if (e.t === "trans" && /FLASH|BACK TO/.test(e.text)) { setStatus(e.text); advance(900); return; }
+    advance(e.t === "scene" ? 600 : 120);
+  }
+  function requestWake() { try { if (navigator.wakeLock) navigator.wakeLock.request("screen").then(function (l) { wakeLock = l; }).catch(function () {}); } catch (e) {} }
+  function releaseWake() { try { if (wakeLock) wakeLock.release(); } catch (e) {} wakeLock = null; }
+  function start(i) {
+    if (!hasSpeech) return;
+    token++; synth.cancel();
+    idx = Math.max(0, Math.min(i, doc.els.length - 1));
+    playing = true; waitingForMe = false;
+    playBtn.textContent = "Pause"; requestWake();
+    var my = token; setTimeout(function () { step(my); }, 60);
+  }
+  function stop(msg) {
+    token++; playing = false; waitingForMe = false;
+    if (hasSpeech) synth.cancel();
+    playBtn.textContent = "Play"; releaseWake();
+    setStatus(msg || "Paused");
+  }
+  playBtn.onclick = function () { if (playing) stop(); else start(idx); };
+  document.getElementById("next").onclick = function () {
+    if (waitingForMe) { waitingForMe = false; idx++; step(token); return; }
+    var n = Math.min(idx + 1, doc.els.length - 1);
+    if (playing) start(n); else { idx = n; mark(idx); }
+  };
+  document.getElementById("back").onclick = function () {
+    var n = Math.max(idx - 1, 0);
+    if (playing) start(n); else { idx = n; mark(idx); }
+  };
+
+  /* ---------- Loading scripts ---------- */
+  var pick = document.getElementById("pick");
+  SCRIPTS.forEach(function (s) { var o = document.createElement("option"); o.value = s.id; o.textContent = s.label; pick.appendChild(o); });
+  function load(text) {
+    stop("Ready");
+    doc = parse(text); idx = 0;
+    setupCast(); paintScript();
+  }
+  pick.onchange = function () { var s = SCRIPTS.filter(function (x) { return x.id === pick.value; })[0]; if (s) { store.set("script", s.id); load(s.text); } };
+  document.getElementById("file").onchange = function (ev) {
+    var f = ev.target.files && ev.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      var o = document.createElement("option"); o.value = "file-" + Date.now(); o.textContent = f.name;
+      SCRIPTS.push({ id: o.value, label: f.name, text: String(r.result) });
+      pick.appendChild(o); pick.value = o.value; load(String(r.result));
+    };
+    r.readAsText(f);
+  };
+  ["readAction", "readScenes", "holdAction"].forEach(function (id) {
+    var el = document.getElementById(id); var v = store.get(id); if (typeof v === "boolean") el.checked = v;
+    el.onchange = function () { store.set(id, el.checked); };
+  });
+  var last = store.get("script");
+  if (last && SCRIPTS.some(function (s) { return s.id === last; })) pick.value = last;
+  pick.onchange();
+})();
+</script>

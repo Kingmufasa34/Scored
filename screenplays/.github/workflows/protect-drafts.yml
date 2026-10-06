@@ -1,0 +1,31 @@
+name: Protect drafts
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  drafts-are-append-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fail if any existing draft was changed or deleted
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="origin/${{ github.base_ref }}"
+          else
+            BASE="${{ github.event.before }}"
+          fi
+          if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            echo "No base commit to compare against; nothing to check."; exit 0
+          fi
+          BAD=$(git diff --name-status "$BASE" HEAD \
+            | awk '$1 !~ /^A/ {print $NF " (" $1 ")"; if ($1 ~ /^R/) print $2 " (renamed from)"}' \
+            | grep -E 'drafts/draft-[0-9]+\.(fountain|pdf)' || true)
+          if [ -n "$BAD" ]; then
+            echo "::error::Saved drafts must never change. Add a new numbered draft instead:"
+            echo "$BAD"; exit 1
+          fi
+          echo "All saved drafts untouched."
