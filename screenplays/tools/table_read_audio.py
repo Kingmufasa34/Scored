@@ -25,6 +25,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -245,6 +246,17 @@ def render(els, voice, log=print):
     return track, cues
 
 
+def write_mp3(track, path):
+    """MP3 via ffmpeg when present, otherwise libsndfile's own MP3 encoder."""
+    if shutil.which("ffmpeg"):
+        wav = path[:-4] + ".tmp.wav"
+        sf.write(wav, track, SR)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-ac", "1", "-b:a", "96k", path], check=True)
+        os.remove(wav)
+    else:
+        sf.write(path, track, SR, format="MP3")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("script")
@@ -256,11 +268,8 @@ def main():
     els = parse(open(a.script, encoding="utf-8").read())
     voice = Voice(a.refs, fake=a.fake, cache=a.cache)
     track, cues = render(els, voice, log=lambda m: print(m, flush=True))
-    wav = a.out + ".wav"
-    sf.write(wav, track, SR)
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-ac", "1", "-b:a", "96k", a.out + ".mp3"], check=True)
-    os.remove(wav)
     json.dump({"duration": round(len(track) / SR, 2), "cues": cues}, open(a.out + ".json", "w"), indent=0)
+    write_mp3(track, a.out + ".mp3")
     print(f"wrote {a.out}.mp3 ({len(track) / SR:.1f}s) and {a.out}.json", flush=True)
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:

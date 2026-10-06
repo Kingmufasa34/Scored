@@ -38,6 +38,7 @@ jobs:
 
       - name: Install Chatterbox and Kokoro (CPU)
         run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           pip install --upgrade pip
           pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
           pip install chatterbox-tts soundfile librosa
@@ -54,7 +55,7 @@ jobs:
           key: chatterbox-hf-v1
 
       - name: Reuse lines voiced in earlier runs
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: work/clips
           key: tableread-clips-${{ github.run_id }}
@@ -75,6 +76,13 @@ jobs:
           python screenplays/tools/table_read_audio.py "$SCRIPT" "$OUT_DIR/$NAME" --refs work/voices --cache work/clips
           mkdir -p screenplays/tools/voices && cp work/voices/*.wav screenplays/tools/voices/
           echo "OUT_DIR=$OUT_DIR" >> "$GITHUB_ENV"
+
+      - name: Keep the voiced lines, even if a later step fails
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: work/clips
+          key: tableread-clips-${{ github.run_id }}
 
       - name: Commit the audio
         run: |
