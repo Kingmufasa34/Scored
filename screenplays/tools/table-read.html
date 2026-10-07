@@ -142,6 +142,14 @@ select:disabled { opacity: 0.6; }
       <label class="opt"><input type="checkbox" id="readTrans" checked><div><b>Transitions</b><span>"Flash to", "Back to", "Cut to black" and the title card.</span></div></label>
       <label class="opt"><input type="checkbox" id="holdAction" checked><div><b>Leave time for unread directions</b><span>When directions aren't read, pause for as long as they'd take on screen.</span></div></label>
     </div>
+    <div style="display:grid;gap:4px;margin-top:12px;max-width:360px">
+      <label class="small" for="room">Room: takes the studio shine off the voices</label>
+      <select id="room">
+        <option value="off">Dry (as recorded)</option>
+        <option value="room" selected>Small room</option>
+        <option value="corridor">Hospital corridor</option>
+      </select>
+    </div>
   </section>
 
   <section class="panel step" aria-labelledby="step2">
@@ -149,7 +157,7 @@ select:disabled { opacity: 0.6; }
     <p class="note" id="modeNote">Recorded with Chatterbox, an open-source voice model.</p>
     <p class="warn" id="noRec" hidden>This draft hasn't been recorded yet. It records automatically on GitHub when a draft is added to the screenplays folder. You can still read along.</p>
     <div id="loading" hidden><div class="note" id="loadingText">Loading voices...</div><div class="loadbar"><i id="loadingBar"></i></div></div>
-    <p class="note" id="castNote">Each part has its own recorded voice. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself.</p>
+    <p class="note" id="castNote">Pick a voice for each part. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself.</p>
     <div class="cast" id="cast"></div>
   </section>
 
@@ -786,7 +794,7 @@ CUT TO BLACK.
   "use strict";
 
   var SCRIPTS = [
-    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json" },
+    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json", cast: "audio/draft-03.cast.json" },
     { id: "d02", label: "Life After Alice, Ep. 1: draft 02", text: document.getElementById("src-d02").textContent }
   ];
   var HL = ["--hl-1", "--hl-2", "--hl-3", "--hl-4", "--hl-5", "--hl-6"];
@@ -847,13 +855,13 @@ CUT TO BLACK.
     castOrder = [];
     doc.els.forEach(function (e) { if (e.t === "dlg" && castOrder.indexOf(e.who) < 0) castOrder.push(e.who); });
     cast = {};
-    castOrder.forEach(function (w, i) { cast[w] = { mode: (saved[w] && saved[w].mode) || "voice", hl: HL[i % HL.length] }; });
-    cast[DIRECTOR] = { mode: "voice", hl: "--hl-n" };
+    castOrder.forEach(function (w, i) { cast[w] = { mode: (saved[w] && saved[w].mode) || "voice", pick: saved[w] && saved[w].pick, hl: HL[i % HL.length] }; });
+    cast[DIRECTOR] = { mode: "voice", pick: saved[DIRECTOR] && saved[DIRECTOR].pick, hl: "--hl-n" };
     renderCast(); renderLegend();
   }
   function saveCast() {
     var s = store.get("cast") || {};
-    Object.keys(cast).forEach(function (k) { s[k] = { mode: cast[k].mode }; });
+    Object.keys(cast).forEach(function (k) { s[k] = { mode: cast[k].mode, pick: cast[k].pick }; });
     store.set("cast", s);
   }
   function label(who) { return who === DIRECTOR ? "Director (headings, directions, notes)" : who; }
@@ -878,9 +886,21 @@ CUT TO BLACK.
         top.appendChild(seg);
       }
       row.appendChild(top);
-      var c = document.createElement("div"); c.className = "note";
-      c.textContent = "Voice: " + (who === DIRECTOR ? "Director (recorded)" : (RECORDED[who] || who + " (recorded)"));
-      row.appendChild(c);
+      var opts = castOptions(who);
+      if (opts.length) {
+        var sel = document.createElement("select"); sel.setAttribute("aria-label", "Voice for " + label(who));
+        opts.forEach(function (o) { var op = document.createElement("option"); op.value = o.id; op.textContent = o.label; sel.appendChild(op); });
+        var old = document.createElement("option"); old.value = "original"; old.textContent = "Original voice (first recording)"; sel.appendChild(old);
+        sel.value = chosen(who);
+        sel.onchange = function () { m.pick = sel.value; saveCast(); applyCast(); };
+        row.appendChild(sel);
+        var cr = opts.filter(function (o) { return o.id === sel.value; })[0];
+        if (cr && cr.credit) { var n = document.createElement("div"); n.className = "note"; n.textContent = "Accent reference: " + cr.credit.corpus + ", speaker " + cr.credit.speaker; row.appendChild(n); }
+      } else {
+        var c = document.createElement("div"); c.className = "note";
+        c.textContent = "Voice: " + (who === DIRECTOR ? "Director (recorded)" : (RECORDED[who] || who + " (recorded)"));
+        row.appendChild(c);
+      }
       box.appendChild(row);
     });
   }
@@ -986,21 +1006,109 @@ CUT TO BLACK.
     if (real.ctx) return real.ctx;
     var AC = window.AudioContext || window.webkitAudioContext;
     real.ctx = new AC();
-    real.master = real.ctx.createGain();
-    real.analyser = real.ctx.createAnalyser(); real.analyser.fftSize = 1024;
-    real.master.connect(real.analyser); real.analyser.connect(real.ctx.destination);
-    return real.ctx;
+    var ctx = real.ctx;
+    real.master = ctx.createGain();
+    real.analyser = ctx.createAnalyser(); real.analyser.fftSize = 1024;
+    // Room: soften the top end, add a little reverb and a low air/hum bed, so the
+    // voices sit in a space instead of in a studio.
+    real.tone = ctx.createBiquadFilter(); real.tone.type = "lowpass";
+    real.dry = ctx.createGain(); real.wet = ctx.createGain();
+    real.verb = ctx.createConvolver();
+    real.master.connect(real.tone);
+    real.tone.connect(real.dry); real.dry.connect(real.analyser);
+    real.tone.connect(real.verb); real.verb.connect(real.wet); real.wet.connect(real.analyser);
+    real.analyser.connect(ctx.destination);
+    var n = ctx.sampleRate * 2, nb = ctx.createBuffer(1, n, ctx.sampleRate), d = nb.getChannelData(0), b = 0;
+    for (var k = 0; k < n; k++) { b = 0.97 * b + 0.03 * (Math.random() * 2 - 1); d[k] = b * 3; }
+    real.noise = ctx.createBufferSource(); real.noise.buffer = nb; real.noise.loop = true;
+    real.noiseGain = ctx.createGain(); real.noiseGain.gain.value = 0;
+    real.noise.connect(real.noiseGain); real.noiseGain.connect(ctx.destination); real.noise.start();
+    applyRoom();
+    return ctx;
+  }
+  var ROOMS = {
+    off: { cut: 20000, wet: 0, dry: 1, secs: 0.5, decay: 4, air: 0 },
+    room: { cut: 7000, wet: 0.22, dry: 0.9, secs: 0.6, decay: 3.5, air: 0.012 },
+    corridor: { cut: 5500, wet: 0.4, dry: 0.8, secs: 1.6, decay: 2.5, air: 0.02 }
+  };
+  function impulse(ctx, secs, decay) {
+    var len = Math.floor(ctx.sampleRate * secs), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (var ch = 0; ch < 2; ch++) { var d = ir.getChannelData(ch); for (var k = 0; k < len; k++) d[k] = (Math.random() * 2 - 1) * Math.pow(1 - k / len, decay); }
+    return ir;
+  }
+  function applyRoom() {
+    if (!real.ctx) return;
+    var r = ROOMS[$("room").value] || ROOMS.room;
+    real.tone.frequency.value = r.cut; real.dry.gain.value = r.dry; real.wet.gain.value = r.wet;
+    real.verb.buffer = impulse(real.ctx, r.secs, r.decay); real.air = r.air;
+  }
+  (function () {
+    var saved = store.get("room"); if (saved && ROOMS[saved]) $("room").value = saved;
+    $("room").onchange = function () { store.set("room", $("room").value); applyRoom(); };
+  })();
+
+  /* Cast options: several recorded voices per part (audio/<draft>.cast.json). */
+  function castOptions(who) { return (real.castIdx && real.castIdx.roles[who === DIRECTOR ? "DIRECTOR" : who]) || []; }
+  function chosen(who) {
+    var opts = castOptions(who), p = cast[who] && cast[who].pick;
+    if (p === "original" || opts.some(function (o) { return o.id === p; })) return p;
+    return opts.length ? opts[0].id : "original";
+  }
+  function optionFor(who) { var id = chosen(who); return castOptions(who).filter(function (o) { return o.id === id; })[0] || null; }
+  // The recorded base read, with each part's lines swapped for the chosen voice's takes.
+  function effectiveManifest() {
+    var base = real.baseManifest, dir = optionFor(DIRECTOR);
+    return { elements: base.elements.map(function (m) {
+      var out = {}; Object.keys(m).forEach(function (k) { out[k] = m[k]; });
+      if (m.t === "dlg") {
+        var who = optionFor(m.who), lines = who && who.clips[m.i] ? who.clips[m.i].filter(function (c) { return c.kind === "line"; }) : null;
+        var pars = dir && dir.clips[m.i] ? dir.clips[m.i].filter(function (c) { return c.kind === "par"; }) : null;
+        var li = 0, pi = 0;
+        out.clips = m.clips.map(function (c) {
+          if (c.kind === "par") { var p = pars && pars[pi++]; return p || c; }
+          var l = lines && lines[li++]; return l || c;
+        });
+      } else if (dir && dir.clips[m.i] && m.clips.length) {
+        out.clips = dir.clips[m.i];
+      }
+      return out;
+    }) };
+  }
+  function applyCast() {
+    if (!real.baseManifest) { renderCast(); return; }
+    var was = playing ? idx : -1;
+    realStopAll(); stop("Loading voices...");
+    real.sched = null; useReal = false;
+    real.manifest = effectiveManifest();
+    renderCast();
+    loadRealBuffers().then(function () { realReady(); if (was >= 0) start(was); });
   }
   function decodeAll(onProgress) {
     var ctx = ensureCtx();
-    var files = [];
-    real.manifest.elements.forEach(function (el) { el.clips.forEach(function (c) { if (!real.buffers[c.f]) files.push(c.f); }); });
+    // A clip is either its own file, or a slice (s = sprite file, o = offset) of one
+    // file per voice option, so the page stays a few dozen files instead of hundreds.
+    var files = [], sprites = {};
+    real.manifest.elements.forEach(function (el) { el.clips.forEach(function (c) {
+      if (real.buffers[c.f]) return;
+      if (c.s) { if (!sprites[c.s]) { sprites[c.s] = []; files.push(c.s); } sprites[c.s].push(c); }
+      else if (files.indexOf(c.f) < 0) files.push(c.f);
+    }); });
     var done = 0, total = files.length;
     if (!total) return Promise.resolve();
+    function slice(buf, c) {
+      var sr = buf.sampleRate, from = Math.max(0, Math.round(c.o * sr)), len = Math.min(Math.round(c.dur * sr), buf.length - from);
+      var out = ctx.createBuffer(buf.numberOfChannels, Math.max(1, len), sr);
+      for (var ch = 0; ch < buf.numberOfChannels; ch++) out.getChannelData(ch).set(buf.getChannelData(ch).subarray(from, from + len));
+      return out;
+    }
     function one(f) {
       return fetch(real.base + f).then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
         .then(function (ab) { return new Promise(function (res, rej) { ctx.decodeAudioData(ab, res, rej); }); })
-        .then(function (buf) { real.buffers[f] = buf; done++; onProgress(done, total); });
+        .then(function (buf) {
+          if (sprites[f]) sprites[f].forEach(function (c) { real.buffers[c.f] = slice(buf, c); });
+          else real.buffers[f] = buf;
+          done++; onProgress(done, total);
+        });
     }
     // a few at a time keeps phones responsive
     var queue = files.slice(), workers = [];
@@ -1110,15 +1218,20 @@ CUT TO BLACK.
       .catch(function () { $("loading").hidden = true; $("modeNote").textContent = "Couldn't load the recording. Check your connection and reload the page."; });
   }
   function loadReal(s) {
-    real.manifest = null; real.buffers = {}; real.sched = null; useReal = false;
+    real.manifest = null; real.baseManifest = null; real.castIdx = null; real.buffers = {}; real.sched = null; useReal = false;
     $("noRec").hidden = !!(s && s.clips);
     $("modeNote").hidden = !(s && s.clips);
     renderCast();
     if (!s || !s.clips) return;
     real.base = s.clips.replace(/[^/]*$/, "");
+    var castIdx = s.cast ? fetch(s.cast).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }) : Promise.resolve(null);
     fetch(s.clips).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (m) {
+      return castIdx.then(function (ci) { return [m, ci]; });
+    }).then(function (both) {
       if (pick.value !== s.id) return;
-      real.manifest = m;
+      real.baseManifest = both[0]; real.castIdx = both[1];
+      real.manifest = effectiveManifest();
+      renderCast();
       return loadRealBuffers().then(function () { if (pick.value === s.id) realReady(); });
     }).catch(function () { $("noRec").hidden = false; $("modeNote").hidden = true; });
   }
@@ -1170,7 +1283,7 @@ CUT TO BLACK.
       lg.appendChild(s);
     });
   }
-  (function vizLoop(t) { drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
+  (function vizLoop(t) { if (real.noiseGain) real.noiseGain.gain.value = playing && !waitingForMe && !real.paused ? real.air : 0; drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
   tl.addEventListener("click", function (ev) {
     if (!real.sched) return;
     var r = tl.getBoundingClientRect(), pos = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)) * real.sched.total;

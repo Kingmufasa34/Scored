@@ -443,7 +443,7 @@ select:disabled { opacity: 0.6; }
   })();
 
   /* Cast options: several recorded voices per part (audio/<draft>.cast.json). */
-  function castOptions(who) { return (real.castIdx && real.castIdx.roles[who]) || []; }
+  function castOptions(who) { return (real.castIdx && real.castIdx.roles[who === DIRECTOR ? "DIRECTOR" : who]) || []; }
   function chosen(who) {
     var opts = castOptions(who), p = cast[who] && cast[who].pick;
     if (p === "original" || opts.some(function (o) { return o.id === p; })) return p;
