@@ -1,0 +1,103 @@
+name: Record cast
+
+# Records several British and Irish voice options per part (one job each), then
+# writes audio/draft-03.cast.json so the table-read page can offer a voice picker.
+on:
+  push:
+    branches: [ccr-adb08150-sjiujb]
+    paths:
+      - "screenplays/tools/record_cast.py"
+      - ".github/workflows/record-cast.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: record-cast
+  cancel-in-progress: true
+
+env:
+  TQDM_DISABLE: "1"
+  EP: screenplays/life-after-alice/ep01-contingency
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        role: [ALICE, DANIEL, RUTH, DIRECTOR]
+        option: [0, 1, 2]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Chatterbox, Whisper and the dataset reader (CPU)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install --upgrade pip
+          pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          pip install --upgrade chatterbox-tts soundfile librosa datasets huggingface_hub pyarrow openai-whisper
+
+      - name: Cache model downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+            ~/.cache/whisper
+          key: recordcast-models-v1
+
+      - name: Record ${{ matrix.role }} option ${{ matrix.option }}
+        run: |
+          python screenplays/tools/record_cast.py "$EP/drafts/draft-03.fountain" cast \
+            ${{ matrix.role }} ${{ matrix.option }} --performance "$EP/performance/draft-03.json"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cast-${{ matrix.role }}-${{ matrix.option }}
+          path: cast
+
+  merge:
+    needs: record
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cast-*
+          merge-multiple: true
+          path: cast
+
+      - name: Write the cast index and commit
+        run: |
+          DEST="$EP/audio/draft-03-cast"
+          mkdir -p "$DEST"
+          cp -r cast/* "$DEST"/ 2>/dev/null || { echo "nothing recorded"; exit 1; }
+          python3 - "$DEST" "$EP/audio/draft-03.cast.json" <<'PY'
+          import glob, json, os, sys
+          dest, out = sys.argv[1], sys.argv[2]
+          roles = {}
+          for f in sorted(glob.glob(os.path.join(dest, "*.json"))):
+              m = json.load(open(f))
+              for clips in m["clips"].values():
+                  for c in clips:
+                      c["f"] = "draft-03-cast/" + c["f"]
+              roles.setdefault(m["role"], []).append(m)
+          json.dump({"roles": roles}, open(out, "w"))
+          for f in glob.glob(os.path.join(dest, "*.json")):
+              os.remove(f)
+          print({r: [o["label"] for o in v] for r, v in roles.items()})
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898315+github-actions[bot]@users.noreply.github.com"
+          git add "$EP/audio"
+          git commit -m "Record British and Irish cast options for draft 03 [skip ci]" || exit 0
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 5; done
+          exit 1
