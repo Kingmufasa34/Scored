@@ -14,6 +14,7 @@ VOICES = {
     "daniel.wav": "bm_george",
     "ruth.wav": "bf_isabella",
     "extra.wav": "bm_lewis",
+    "director.wav": "bm_fable",
 }
 TEXT = ("I wasn't sure about coming, honestly. But we're here now, aren't we. "
         "I suppose we just start somewhere and see where it goes. "

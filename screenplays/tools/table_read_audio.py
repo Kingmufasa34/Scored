@@ -44,6 +44,9 @@ CAST = {
     "RUTH": {"ref": "ruth.wav", "exaggeration": 0.35, "cfg_weight": 0.4},
 }
 DEFAULT_ROLE = {"ref": "extra.wav", "exaggeration": 0.5, "cfg_weight": 0.5}
+# The director reads scene headings, action, transitions and parentheticals:
+# steady and unshowy, so it sits apart from the performances.
+DIRECTOR = {"ref": "director.wav", "exaggeration": 0.3, "cfg_weight": 0.5}
 
 SCENE_RE = re.compile(r"^(INT|EXT|INT\./EXT|I/E|EST)[. ]", re.I)
 TRANS_RE = re.compile(r"^(FADE IN:|FADE OUT\.|CUT TO BLACK\.|[A-Z ]+ TO:)$")
@@ -115,14 +118,14 @@ class Voice:
             self.model = ChatterboxTTS.from_pretrained(device="cpu")
 
     def say(self, who, text, ex, cfg):
-        role = CAST.get(who, DEFAULT_ROLE)
+        role = DIRECTOR if who == "DIRECTOR" else CAST.get(who, DEFAULT_ROLE)
         key = hashlib.sha1(f"{who}|{text}|{ex:.2f}|{cfg:.2f}|{self.fake}".encode()).hexdigest()[:16]
         path = os.path.join(self.cache, key + ".wav")
         if os.path.exists(path):
             a, _ = sf.read(path, dtype="float32")
             return a
         if self.fake:
-            f = {"ALICE": 330, "DANIEL": 180, "RUTH": 250}.get(who, 220)
+            f = {"ALICE": 330, "DANIEL": 180, "RUTH": 250, "DIRECTOR": 140}.get(who, 220)
             n = int(SR * (0.25 + 0.055 * len(text)))
             t = np.arange(n) / SR
             a = (0.2 * np.sin(2 * np.pi * f * t)).astype(np.float32)
@@ -246,12 +249,128 @@ def render(els, voice, log=print):
     return track, cues
 
 
-def write_mp3(track, path):
+# ---------- Director's narration ----------
+
+DECADES = {"20s": "twenties", "30s": "thirties", "40s": "forties", "50s": "fifties",
+           "60s": "sixties", "70s": "seventies", "80s": "eighties", "90s": "nineties"}
+
+
+def _decap(text):
+    """Screenplay capitals (ALICE, LIFE AFTER ALICE) read as names, not acronyms; 40s as forties."""
+    text = re.sub(r"\b[A-Z][A-Z'’]+\b", lambda m: m.group(0).capitalize(), text)
+    return re.sub(r"\b([2-9]0s)\b", lambda m: DECADES[m.group(1)], text)
+
+
+def narration(e):
+    t = e["t"]
+    if t == "scene":
+        parts = [p.strip() for p in re.split(r"\s+-\s+", e["text"]) if p.strip()]
+        head = parts[0]
+        head = re.sub(r"^INT\.?/EXT\.?\s*", "Interior, exterior. ", head)
+        head = re.sub(r"^INT\.?\s*", "Interior. ", head)
+        head = re.sub(r"^EXT\.?\s*", "Exterior. ", head)
+        out = [head] + parts[1:]
+        out = [re.sub(r"\((.*?)\)", r". \1", x) for x in out]
+        return _decap(". ".join(o.rstrip(".") for o in out)) + "."
+    if t == "trans":
+        return _decap(e["text"].rstrip(":.")).capitalize() + "."
+    if t == "center":
+        return "Title card. " + _decap(e["text"]) + "."
+    if t == "action":
+        s = re.sub(r"^INSERT\s*-\s*", "Insert. ", e["text"])
+        s = re.sub(r"\s*--\s*", ", ", s)
+        return _decap(s)
+    return ""
+
+
+def chunks(text, limit=220):
+    """Long action paragraphs are voiced in sentence groups the model handles well."""
+    sents = re.split(r"(?<=[.!?])\s+", text)
+    out, cur = [], ""
+    for x in sents:
+        if cur and len(cur) + len(x) + 1 > limit:
+            out.append(cur)
+            cur = x
+        else:
+            cur = (cur + " " + x).strip()
+    if cur:
+        out.append(cur)
+    return out
+
+
+def export_clips(els, voice, base, log=print):
+    """Every element as its own clip, so a player can choose what is read aloud.
+
+    Writes <base>/eNNN-K.mp3 and <base>.clips.json. Dialogue clips are stored as
+    performed (gain, cut-offs already applied); the player schedules them.
+    """
+    folder = base
+    os.makedirs(folder, exist_ok=True)
+    rel = os.path.basename(base)
+    units = []
+    for i, e in enumerate(els):
+        if e["t"] in ("scene", "trans", "center", "action"):
+            units.append(len(narration(e)))
+        elif e["t"] == "dlg":
+            units += [len(l.get("text") or l.get("par", "")) for l in e["lines"]]
+    total_chars, chars_done, began = sum(units) or 1, 0, time.time()
+    manifest = []
+    n_items = len(units)
+    item = 0
+    for i, e in enumerate(els):
+        entry = {"i": i, "t": e["t"], "who": e.get("who"), "overlap": bool(e.get("overlap")), "clips": []}
+
+        def save(a, k, kind, **extra):
+            name = f"e{i:03d}-{k}.mp3"
+            write_mp3(a, os.path.join(folder, name), bitrate="64k")
+            entry["clips"].append(dict(f=f"{rel}/{name}", kind=kind, dur=round(len(a) / SR, 3), **extra))
+
+        if e["t"] in ("scene", "trans", "center", "action"):
+            text = narration(e)
+            pieces = [voice.say("DIRECTOR", c, DIRECTOR["exaggeration"], DIRECTOR["cfg_weight"]) for c in chunks(text)]
+            gap = np.zeros(int(0.25 * SR), dtype=np.float32)
+            a = np.concatenate([x for p in pieces for x in (p, gap)][:-1]) if pieces else gap
+            save(fade(a), 0, "narr")
+            item += 1
+            chars_done += len(text)
+            log(progress(item, n_items, chars_done, total_chars, began) + f"  DIRECTOR: {text[:50]}")
+        elif e["t"] == "dlg":
+            role = CAST.get(e["who"], DEFAULT_ROLE)
+            par, k = None, 0
+            for ln in e["lines"]:
+                item += 1
+                if "par" in ln:
+                    par = ln["par"]
+                    ptxt = _decap(par.strip("()")).capitalize() + "."
+                    a = voice.say("DIRECTOR", ptxt, DIRECTOR["exaggeration"], DIRECTOR["cfg_weight"])
+                    save(fade(a), k, "par")
+                    k += 1
+                    chars_done += len(par)
+                    log(progress(item, n_items, chars_done, total_chars, began) + f"  DIRECTOR: {ptxt[:50]}")
+                    continue
+                text, cut, trail = clean(ln["text"])
+                if not text:
+                    continue
+                ex, cfg, gain = delivery(role, par)
+                a = voice.say(e["who"], text, ex, cfg) * gain
+                if cut:
+                    a = a[: max(int(len(a) * 0.9), len(a) - int(0.18 * SR))]
+                save(fade(a, ms_out=25 if cut else 60), k, "line", cut=cut, trail=trail)
+                k += 1
+                chars_done += len(ln["text"])
+                log(progress(item, n_items, chars_done, total_chars, began) + f"  {e['who']}: {text[:50]}")
+        manifest.append(entry)
+    with open(base + ".clips.json", "w") as f:
+        json.dump({"version": 1, "elements": manifest}, f, indent=0)
+    return manifest
+
+
+def write_mp3(track, path, bitrate="96k"):
     """MP3 via ffmpeg when present, otherwise libsndfile's own MP3 encoder."""
     if shutil.which("ffmpeg"):
         wav = path[:-4] + ".tmp.wav"
         sf.write(wav, track, SR)
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-ac", "1", "-b:a", "96k", path], check=True)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-ac", "1", "-b:a", bitrate, path], check=True)
         os.remove(wav)
     else:
         sf.write(path, track, SR, format="MP3")
@@ -267,7 +386,10 @@ def main():
     a = ap.parse_args()
     els = parse(open(a.script, encoding="utf-8").read())
     voice = Voice(a.refs, fake=a.fake, cache=a.cache)
-    track, cues = render(els, voice, log=lambda m: print(m, flush=True))
+    log = lambda m: print(m, flush=True)
+    clips = export_clips(els, voice, a.out, log=log)
+    print(f"wrote {sum(len(c['clips']) for c in clips)} clips and {a.out}.clips.json", flush=True)
+    track, cues = render(els, voice, log=lambda m: None)  # all lines cached by now
     json.dump({"duration": round(len(track) / SR, 2), "cues": cues}, open(a.out + ".json", "w"), indent=0)
     write_mp3(track, a.out + ".mp3")
     print(f"wrote {a.out}.mp3 ({len(track) / SR:.1f}s) and {a.out}.json", flush=True)
