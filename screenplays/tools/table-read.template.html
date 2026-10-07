@@ -103,16 +103,30 @@ details[open] > summary::after { content: "Hide"; }
 .warn { background: var(--hl-5); color: var(--ink); padding: 10px 12px; border-radius: 8px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
+<style>
+.step { display: grid; gap: 12px; }
+.step h2 { margin: 0; font-size: 1rem; display: flex; gap: 10px; align-items: baseline; }
+.step h2 .num { font-family: var(--font-script); font-weight: 700; color: var(--accent); }
+.opts { display: grid; gap: 8px; }
+@media (min-width: 620px) { .opts { grid-template-columns: 1fr 1fr; } }
+.opt { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border: 1px solid var(--rule); border-radius: 8px; cursor: pointer; }
+.opt input { margin-top: 3px; }
+.opt b { display: block; }
+.opt span { color: var(--ink-soft); font-size: 0.88rem; }
+.loadbar { height: 6px; border-radius: 3px; background: var(--paper); overflow: hidden; }
+.loadbar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.2s; }
+select:disabled { opacity: 0.6; }
+</style>
 
 <div class="wrap">
   <header>
     <h1>Table Read</h1>
-    <p>Hear the script out loud. Each character gets their own voice, and you can read any part yourself. Tap a line to start from there.</p>
+    <p>Hear the script out loud. Choose what gets read, then who reads it. Tap any line to start from there.</p>
   </header>
 
-  <div id="noSpeech" class="warn" hidden>This browser can't speak text aloud. Try Chrome or Safari on your phone, or Chrome or Edge on a computer.</div>
+  <div id="noSpeech" class="warn" hidden>This browser can't speak text aloud with phone voices. Real voices still work.</div>
 
-  <section class="panel" aria-label="Script and options">
+  <section class="panel" aria-label="Script">
     <div class="row">
       <div style="display:grid;gap:4px;min-width:0;flex:1 1 220px">
         <label class="small" for="pick">Script</label>
@@ -123,25 +137,31 @@ details[open] > summary::after { content: "Hide"; }
         <label class="check"><input id="file" type="file" accept=".fountain,.txt,text/plain"></label>
       </div>
     </div>
+  </section>
+
+  <section class="panel step" aria-labelledby="step1">
+    <h2 id="step1"><span class="num">1.</span> How to read it</h2>
+    <div class="opts">
+      <label class="opt"><input type="checkbox" id="readScenes" checked><div><b>Scene headings</b><span>"Interior. Counselling practice. Waiting room. Morning."</span></div></label>
+      <label class="opt"><input type="checkbox" id="readAction" checked><div><b>Directions</b><span>The action between lines: what people do, what we see.</span></div></label>
+      <label class="opt"><input type="checkbox" id="readPars"><div><b>Delivery notes</b><span>The notes in brackets, like "(barely)", read before the line.</span></div></label>
+      <label class="opt"><input type="checkbox" id="readTrans" checked><div><b>Transitions</b><span>"Flash to", "Back to", "Cut to black" and the title card.</span></div></label>
+      <label class="opt"><input type="checkbox" id="holdAction" checked><div><b>Leave time for unread directions</b><span>When directions aren't read, pause for as long as they'd take on screen.</span></div></label>
+    </div>
+  </section>
+
+  <section class="panel step" aria-labelledby="step2">
+    <h2 id="step2"><span class="num">2.</span> Voices</h2>
     <div class="row" id="modeRow" hidden>
-      <span class="lab">Voices</span>
       <div class="seg" role="group" aria-label="Which voices">
         <button type="button" id="modeReal" aria-pressed="true">Real voices</button>
         <button type="button" id="modePhone" aria-pressed="false">Phone voices</button>
       </div>
-      <span class="note" id="modeNote">Recorded with Chatterbox, an open-source voice model. Tap a line to jump there.</span>
-      <audio id="aud" preload="auto"></audio>
+      <span class="note" id="modeNote">Recorded with Chatterbox, an open-source voice model.</span>
     </div>
-    <div class="row" id="phoneOpts">
-      <label class="check"><input type="checkbox" id="readAction"> Read the action lines aloud</label>
-      <label class="check"><input type="checkbox" id="readScenes" checked> Read scene headings</label>
-      <label class="check"><input type="checkbox" id="holdAction" checked> Pause for action when it isn't read</label>
-    </div>
-    <details id="castBox">
-      <summary>Cast</summary>
-      <p class="note" style="margin-top:8px">Pick a voice for each character. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself. Which voices you get depends on your phone or computer.</p>
-      <div class="cast" id="cast"></div>
-    </details>
+    <div id="loading" hidden><div class="note" id="loadingText">Loading voices...</div><div class="loadbar"><i id="loadingBar"></i></div></div>
+    <p class="note" id="castNote">Pick a voice for each part. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself.</p>
+    <div class="cast" id="cast"></div>
   </section>
 
   <article class="script" id="script" aria-live="off"></article>
@@ -175,14 +195,31 @@ details[open] > summary::after { content: "Hide"; }
   if (!hasSpeech) document.getElementById("noSpeech").hidden = false;
 
   var SCRIPTS = [
-    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, audio: "audio/draft-03.mp3", cues: "audio/draft-03.json" },
+    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json" },
     { id: "d02", label: "Life After Alice, Ep. 1: draft 02", text: document.getElementById("src-d02").textContent }
   ];
   var HL = ["--hl-1", "--hl-2", "--hl-3", "--hl-4", "--hl-5", "--hl-6"];
+  var DIRECTOR = "__DIRECTOR";
   var store = {
     get: function (k) { try { return JSON.parse(localStorage.getItem("tableread:" + k)); } catch (e) { return null; } },
     set: function (k, v) { try { localStorage.setItem("tableread:" + k, JSON.stringify(v)); } catch (e) {} }
   };
+  function $(id) { return document.getElementById(id); }
+
+  /* ---------- Reading options (step 1) ---------- */
+  var OPT_IDS = ["readScenes", "readAction", "readPars", "readTrans", "holdAction"];
+  function opt(id) { return $(id).checked; }
+  OPT_IDS.forEach(function (id) {
+    var el = $(id), v = store.get("opt:" + id);
+    if (typeof v === "boolean") el.checked = v;
+    el.onchange = function () {
+      store.set("opt:" + id, el.checked);
+      var wasPlaying = playing, at = idx;
+      stop("Ready");
+      if (useReal) buildSchedule();
+      if (wasPlaying) start(at);
+    };
+  });
 
   /* ---------- Fountain parsing ---------- */
   var SCENE_RE = /^(INT|EXT|INT\.\/EXT|I\/E|EST)[. ]/i;
@@ -192,10 +229,8 @@ details[open] > summary::after { content: "Hide"; }
     src = src.replace(/\r\n?/g, "\n");
     var parts = src.split(/\n====\n/);
     var body = parts.length > 1 ? parts.slice(1).join("\n====\n") : src;
-    var titleM = src.match(/^Title:\s*(.+)$/m);
-    var blocks = body.trim().split(/\n\s*\n/);
     var out = [];
-    blocks.forEach(function (b) {
+    body.trim().split(/\n\s*\n/).forEach(function (b) {
       var lines = b.split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
       if (!lines.length) return;
       var first = lines[0];
@@ -210,10 +245,10 @@ details[open] > summary::after { content: "Hide"; }
       }
       out.push({ t: "action", text: lines.join(" ") });
     });
-    return { title: titleM ? titleM[1].trim() : "Untitled", els: out };
+    return { els: out };
   }
 
-  /* ---------- Voices and cast ---------- */
+  /* ---------- Cast ---------- */
   var voices = [];
   function loadVoices() {
     if (!hasSpeech) return;
@@ -227,6 +262,7 @@ details[open] > summary::after { content: "Hide"; }
 
   var doc = null, cast = {}, castOrder = [];
   var PITCH = [1.12, 0.85, 1.0, 0.95, 1.2, 0.9];
+  var RECORDED = { ALICE: "Alice (recorded)", DANIEL: "Daniel (recorded)", RUTH: "Ruth (recorded)" };
   function defaultMember(i) {
     var en = voices.filter(function (v) { return /^en/i.test(v.lang); });
     var pool = en.length ? en : voices;
@@ -239,8 +275,9 @@ details[open] > summary::after { content: "Hide"; }
     doc.els.forEach(function (e) { if (e.t === "dlg" && castOrder.indexOf(e.who) < 0) castOrder.push(e.who); });
     cast = {};
     castOrder.forEach(function (w, i) { cast[w] = saved[w] || defaultMember(i); cast[w].hl = HL[i % HL.length]; });
-    cast.__NARRATOR = saved.__NARRATOR || { voice: voices[0] ? voices[0].voiceURI : "", pitch: 1, rate: 1.05, mode: "voice" };
-    cast.__NARRATOR.hl = "--hl-n";
+    var en = voices.filter(function (v) { return /^en/i.test(v.lang); });
+    cast[DIRECTOR] = saved[DIRECTOR] || { voice: en[0] ? en[0].voiceURI : (voices[0] ? voices[0].voiceURI : ""), pitch: 0.95, rate: 1.0, mode: "voice" };
+    cast[DIRECTOR].hl = "--hl-n";
     renderCast(); renderLegend();
   }
   function saveCast() {
@@ -249,18 +286,18 @@ details[open] > summary::after { content: "Hide"; }
     store.set("cast", s);
   }
   function voiceFor(uri) { for (var i = 0; i < voices.length; i++) if (voices[i].voiceURI === uri) return voices[i]; return null; }
+  function label(who) { return who === DIRECTOR ? "Director (headings, directions, notes)" : who; }
   function renderCast() {
-    var box = document.getElementById("cast");
+    var box = $("cast");
     if (!doc) return;
     box.textContent = "";
-    castOrder.concat(["__NARRATOR"]).forEach(function (who, i) {
+    [DIRECTOR].concat(castOrder).forEach(function (who, i) {
       var m = cast[who]; if (!m) return;
-      var label = who === "__NARRATOR" ? "Narrator (action & headings)" : who;
       var row = document.createElement("div"); row.className = "member";
       var top = document.createElement("div"); top.className = "who";
-      var nm = document.createElement("span"); nm.className = "name"; nm.textContent = label; nm.style.background = "var(" + m.hl + ")";
+      var nm = document.createElement("span"); nm.className = "name"; nm.textContent = label(who); nm.style.background = "var(" + m.hl + ")";
       top.appendChild(nm);
-      if (who !== "__NARRATOR") {
+      if (who !== DIRECTOR) {
         var seg = document.createElement("div"); seg.className = "seg"; seg.setAttribute("role", "group"); seg.setAttribute("aria-label", "Who reads " + who);
         ["voice", "me"].forEach(function (mode) {
           var b = document.createElement("button"); b.type = "button"; b.textContent = mode === "voice" ? "Voice" : "Me";
@@ -275,18 +312,26 @@ details[open] > summary::after { content: "Hide"; }
       var vWrap = document.createElement("div");
       var vl = document.createElement("label"); vl.className = "small"; vl.textContent = "Voice"; vl.htmlFor = "v-" + i;
       var sel = document.createElement("select"); sel.id = "v-" + i;
-      if (!voices.length) { var o0 = document.createElement("option"); o0.textContent = hasSpeech ? "Loading voices..." : "No voices"; sel.appendChild(o0); }
-      voices.forEach(function (v) { var o = document.createElement("option"); o.value = v.voiceURI; o.textContent = v.name + " (" + v.lang + ")"; if (v.voiceURI === m.voice) o.selected = true; sel.appendChild(o); });
-      sel.onchange = function () { m.voice = sel.value; saveCast(); sample(who); };
+      if (useReal) {
+        var o1 = document.createElement("option");
+        o1.textContent = who === DIRECTOR ? "Director (recorded)" : (RECORDED[who] || who + " (recorded)");
+        sel.appendChild(o1); sel.disabled = true;
+      } else {
+        if (!voices.length) { var o0 = document.createElement("option"); o0.textContent = hasSpeech ? "Loading voices..." : "No voices"; sel.appendChild(o0); }
+        voices.forEach(function (v) { var o = document.createElement("option"); o.value = v.voiceURI; o.textContent = v.name + " (" + v.lang + ")"; if (v.voiceURI === m.voice) o.selected = true; sel.appendChild(o); });
+        sel.onchange = function () { m.voice = sel.value; saveCast(); sample(who); };
+      }
       vWrap.appendChild(vl); vWrap.appendChild(sel);
       c.appendChild(vWrap);
-      [["pitch", "Pitch", 0.6, 1.5], ["rate", "Pace", 0.7, 1.4]].forEach(function (p) {
-        var w = document.createElement("div");
-        var l = document.createElement("label"); l.className = "small"; l.textContent = p[1]; l.htmlFor = p[0] + "-" + i;
-        var r = document.createElement("input"); r.type = "range"; r.id = p[0] + "-" + i; r.min = p[2]; r.max = p[3]; r.step = 0.05; r.value = m[p[0]];
-        r.onchange = function () { m[p[0]] = parseFloat(r.value); saveCast(); sample(who); };
-        w.appendChild(l); w.appendChild(r); c.appendChild(w);
-      });
+      if (!useReal) {
+        [["pitch", "Pitch", 0.6, 1.5], ["rate", "Pace", 0.7, 1.4]].forEach(function (p) {
+          var w = document.createElement("div");
+          var l = document.createElement("label"); l.className = "small"; l.textContent = p[1]; l.htmlFor = p[0] + "-" + i;
+          var r = document.createElement("input"); r.type = "range"; r.id = p[0] + "-" + i; r.min = p[2]; r.max = p[3]; r.step = 0.05; r.value = m[p[0]];
+          r.onchange = function () { m[p[0]] = parseFloat(r.value); saveCast(); sample(who); };
+          w.appendChild(l); w.appendChild(r); c.appendChild(w);
+        });
+      }
       row.appendChild(c);
       box.appendChild(row);
     });
@@ -294,13 +339,15 @@ details[open] > summary::after { content: "Hide"; }
   function sample(who) {
     if (!hasSpeech || playing) return;
     synth.cancel();
-    var line = "This is how I sound.";
-    for (var i = 0; i < doc.els.length; i++) { var e = doc.els[i]; if (e.t === "dlg" && e.who === who) { var t = e.lines.filter(function (l) { return l.text; })[0]; if (t) { line = t.text; break; } } }
+    var line = "Interior. Counselling practice. Morning.";
+    if (who !== DIRECTOR) {
+      for (var i = 0; i < doc.els.length; i++) { var e = doc.els[i]; if (e.t === "dlg" && e.who === who) { var t = e.lines.filter(function (l) { return l.text; })[0]; if (t) { line = t.text; break; } } }
+    }
     speakOne(clean(line).text, cast[who], {}, function () {});
   }
 
-  /* ---------- Rendering ---------- */
-  var scriptEl = document.getElementById("script");
+  /* ---------- Script rendering ---------- */
+  var scriptEl = $("script");
   var nodes = [];
   function paintScript() {
     scriptEl.textContent = "";
@@ -324,15 +371,34 @@ details[open] > summary::after { content: "Hide"; }
     });
   }
 
-  /* ---------- Speech text and timing ---------- */
-  // Turn written imperfection into audible timing: cut-offs latch on, trail-offs hang.
+  /* ---------- Text helpers ---------- */
   function clean(t) {
     var cutOff = /--\s*$/.test(t), trail = /(\.\.\.|…)\s*$/.test(t);
     var s = t.replace(/^\s*--\s*/, "").replace(/\s*--\s*$/, "").replace(/\s+--\s+/g, ", ").replace(/--/g, ", ")
              .replace(/["“”]/g, "").replace(/\s{2,}/g, " ").trim();
     return { text: s, cutOff: cutOff, trail: trail };
   }
-  var SILENCE_RE = /\b(nothing\.|a beat|beat\.|long time|doesn't answer|does not answer|silence|waits|can't\.|it's out|it lands|nobody moves)\b/i;
+  var DECADES = { "20s": "twenties", "30s": "thirties", "40s": "forties", "50s": "fifties", "60s": "sixties", "70s": "seventies", "80s": "eighties", "90s": "nineties" };
+  function decap(s) {
+    return s.replace(/\b[A-Z][A-Z'’]+\b/g, function (w) { return w.charAt(0) + w.slice(1).toLowerCase(); })
+            .replace(/\b([2-9]0s)\b/g, function (m) { return DECADES[m]; });
+  }
+  function narrationText(e) {
+    if (e.t === "scene") {
+      var parts = e.text.split(/\s+-\s+/);
+      parts[0] = parts[0].replace(/^INT\.?\/EXT\.?\s*/i, "Interior, exterior. ").replace(/^INT\.?\s*/i, "Interior. ").replace(/^EXT\.?\s*/i, "Exterior. ");
+      return decap(parts.map(function (p) { return p.replace(/\((.*?)\)/g, ". $1").replace(/\.$/, ""); }).join(". ")) + ".";
+    }
+    if (e.t === "trans") { var t = decap(e.text.replace(/[:.]$/, "")); return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase() + "."; }
+    if (e.t === "center") return "Title card. " + decap(e.text) + ".";
+    return decap(e.text.replace(/^INSERT\s*-\s*/, "Insert. ").replace(/\s*--\s*/g, ", "));
+  }
+  var SILENCE_RE = /\b(nothing\.|a beat|beat\.|long time|doesn't answer|does not answer|silence|waits|can't\.|it's out|it lands|nobody moves)/i;
+  function holdFor(e) { return SILENCE_RE.test(e.text) ? 2.2 : Math.min(0.35 + e.text.length * 0.008, 1.8); }
+  function isRead(e) {
+    return (e.t === "scene" && opt("readScenes")) || (e.t === "action" && opt("readAction")) ||
+           ((e.t === "trans" || e.t === "center") && opt("readTrans"));
+  }
   function parMods(par) {
     var p = (par || "").toLowerCase();
     if (/barely|quiet|whisper|muffled|into her|into his|small/.test(p)) return { volume: 0.6, rate: 0.9 };
@@ -340,175 +406,271 @@ details[open] > summary::after { content: "Hide"; }
     return {};
   }
 
-  /* ---------- Playback ---------- */
-  var idx = 0, playing = false, token = 0, waitingForMe = false, wakeLock = null;
-  var statusEl = document.getElementById("status"), playBtn = document.getElementById("play");
+  /* ---------- Shared playback state ---------- */
+  var idx = 0, playing = false, waitingForMe = false, wakeLock = null, speaking = null;
+  var statusEl = $("status"), playBtn = $("play");
   function setStatus(s) { statusEl.textContent = s; }
   function mark(i) {
     nodes.forEach(function (n) { n.classList.remove("now"); });
     if (nodes[i]) { nodes[i].classList.add("now"); nodes[i].scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
   }
+  function requestWake() { try { if (navigator.wakeLock) navigator.wakeLock.request("screen").then(function (l) { wakeLock = l; }).catch(function () {}); } catch (e) {} }
+  function releaseWake() { try { if (wakeLock) wakeLock.release(); } catch (e) {} wakeLock = null; }
+  function speed() { return parseFloat($("speed").value) || 1; }
+
+  function start(i) {
+    i = Math.max(0, Math.min(i, doc.els.length - 1));
+    if (useReal) { realStart(i); return; }
+    phoneStart(i);
+  }
+  function stop(msg) {
+    phoneToken++; playing = false; waitingForMe = false; speaking = null;
+    if (hasSpeech) synth.cancel();
+    realStopAll();
+    playBtn.textContent = "Play"; releaseWake();
+    setStatus(msg || "Paused");
+  }
+  playBtn.onclick = function () {
+    if (playing) {
+      if (useReal) { realPause(); return; }
+      stop(); return;
+    }
+    if (useReal && real.paused) { realResume(); return; }
+    start(idx);
+  };
+  $("next").onclick = function () {
+    if (waitingForMe) {
+      waitingForMe = false;
+      if (useReal) { realStart(idx + 1); return; }
+      idx++; phoneStep(phoneToken); return;
+    }
+    var n = Math.min(idx + 1, doc.els.length - 1);
+    if (playing) start(n); else { idx = n; mark(idx); }
+  };
+  $("back").onclick = function () {
+    var n = Math.max(idx - 1, 0);
+    if (playing) start(n); else { idx = n; mark(idx); }
+  };
+  $("speed").onchange = function () { if (playing) start(idx); };
+
+  /* ---------- Phone voices (speechSynthesis) ---------- */
+  var phoneToken = 0;
   function speakOne(text, m, mods, done) {
-    if (!text) { done(); return; }
+    if (!text || !hasSpeech) { done(); return; }
     var u = new SpeechSynthesisUtterance(text);
     var v = voiceFor(m.voice); if (v) { u.voice = v; u.lang = v.lang; }
-    var speed = parseFloat(document.getElementById("speed").value) || 1;
     u.pitch = m.pitch;
-    u.rate = Math.max(0.5, Math.min(2, m.rate * speed * (mods.rate || 1)));
+    u.rate = Math.max(0.5, Math.min(2, m.rate * speed() * (mods.rate || 1)));
     u.volume = mods.volume || 1;
     var finished = false;
     function fin() { if (finished) return; finished = true; clearTimeout(guard); done(); }
-    // Some phones never fire onend; move on after a generous estimate.
     var guard = setTimeout(fin, 2500 + text.length * 120 / u.rate);
     u.onend = fin; u.onerror = fin;
     synth.speak(u);
   }
-  function step(my) {
-    if (my !== token || !playing) return;
+  function phoneStart(i) {
+    if (!hasSpeech) return;
+    phoneToken++; synth.cancel();
+    idx = i; playing = true; waitingForMe = false;
+    playBtn.textContent = "Pause"; requestWake();
+    var my = phoneToken; setTimeout(function () { phoneStep(my); }, 60);
+  }
+  function phoneStep(my) {
+    if (my !== phoneToken || !playing) return;
     if (idx >= doc.els.length) { stop("End of script"); return; }
-    var e = doc.els[idx];
+    var e = doc.els[idx], nextE = doc.els[idx + 1];
     mark(idx);
-    var nextE = doc.els[idx + 1];
-    var gap = 350;
-    function advance(g) { setTimeout(function () { if (my !== token || !playing) return; idx++; step(my); }, g); }
-
+    function advance(g) { setTimeout(function () { if (my !== phoneToken || !playing) return; idx++; phoneStep(my); }, g); }
     if (e.t === "dlg") {
       var m = cast[e.who];
-      if (m.mode === "me") { waitingForMe = true; setStatus(e.who + ": your line. Tap Next when done."); return; }
-      setStatus(e.who); speaking = e.who;
+      if (m.mode === "me") { waitingForMe = true; speaking = null; setStatus(e.who + ": your line. Tap Next when done."); return; }
       var parts = [], mods = {};
-      e.lines.forEach(function (l) { if (l.par) mods = parMods(l.par); else parts.push({ c: clean(l.text), mods: mods }); });
+      e.lines.forEach(function (l) {
+        if (l.par) { mods = parMods(l.par); if (opt("readPars")) parts.push({ dir: true, text: decap(l.par.replace(/[()]/g, "")) + "." }); }
+        else parts.push({ c: clean(l.text), mods: mods });
+      });
       var k = 0, last = null;
       (function sayNext() {
-        if (my !== token || !playing) return;
+        if (my !== phoneToken || !playing) return;
         if (k >= parts.length) {
-          if (last && last.cutOff) gap = 0;          // cut off: next speaker comes straight in
-          else if (last && last.trail) gap = 900;     // trailing off: let it hang
-          if (nextE && nextE.overlap) gap = 0;        // overlap: no gap at all
+          var gap = 350;
+          if (last && last.cutOff) gap = 0; else if (last && last.trail) gap = 900;
+          if (nextE && nextE.overlap) gap = 0;
           advance(gap); return;
         }
-        var p = parts[k++]; last = p.c;
+        var p = parts[k++];
+        if (p.dir) { speaking = DIRECTOR; setStatus("Director"); speakOne(p.text, cast[DIRECTOR], {}, function () { setTimeout(sayNext, 120); }); return; }
+        speaking = e.who; setStatus(e.who); last = p.c;
         speakOne(p.c.text, m, p.mods, function () { setTimeout(sayNext, p.c.cutOff || p.c.trail ? 0 : 150); });
       })();
       return;
     }
-
-    var readIt = (e.t === "action" && document.getElementById("readAction").checked) ||
-                 (e.t === "scene" && document.getElementById("readScenes").checked) ||
-                 (e.t === "center");
-    if (readIt) {
-      setStatus(e.t === "scene" ? "Scene" : "Narrator");
-      var txt = e.t === "scene" ? e.text.replace(/^INT\.?/i, "Interior.").replace(/^EXT\.?/i, "Exterior.").replace(/ - /g, ". ") : e.text;
-      speakOne(clean(txt).text, cast.__NARRATOR, {}, function () { advance(e.t === "scene" ? 600 : gap); });
+    if (isRead(e)) {
+      speaking = DIRECTOR; setStatus("Director");
+      speakOne(narrationText(e), cast[DIRECTOR], {}, function () { advance(e.t === "scene" ? 500 : 300); });
       return;
     }
-    if (e.t === "action" && document.getElementById("holdAction").checked) {
-      // Unread action still takes screen time. Silences in the text get a real silence.
-      var hold = SILENCE_RE.test(e.text) ? 2400 : Math.min(500 + e.text.length * 14, 3000);
-      setStatus("(action)");
-      advance(hold); return;
-    }
-    if (e.t === "trans" && /FLASH|BACK TO/.test(e.text)) { setStatus(e.text); advance(900); return; }
-    advance(e.t === "scene" ? 600 : 120);
+    speaking = null;
+    if (e.t === "action" && opt("holdAction")) { setStatus("(directions)"); advance(holdFor(e) * 1000 / speed()); return; }
+    advance(e.t === "trans" && /FLASH|BACK TO/.test(e.text) ? 900 : (e.t === "scene" ? 500 : 120));
   }
-  function requestWake() { try { if (navigator.wakeLock) navigator.wakeLock.request("screen").then(function (l) { wakeLock = l; }).catch(function () {}); } catch (e) {} }
-  function releaseWake() { try { if (wakeLock) wakeLock.release(); } catch (e) {} wakeLock = null; }
-  function start(i) {
-    if (useReal) { realStart(i); return; }
-    if (!hasSpeech) return;
-    token++; synth.cancel();
-    idx = Math.max(0, Math.min(i, doc.els.length - 1));
-    playing = true; waitingForMe = false;
-    playBtn.textContent = "Pause"; requestWake();
-    var my = token; setTimeout(function () { step(my); }, 60);
-  }
-  function stop(msg) {
-    token++; playing = false; waitingForMe = false;
-    if (hasSpeech) synth.cancel();
-    aud.pause();
-    playBtn.textContent = "Play"; releaseWake();
-    setStatus(msg || "Paused");
-  }
-  playBtn.onclick = function () { if (playing) stop(); else start(idx); };
-  document.getElementById("next").onclick = function () {
-    if (useReal && waitingForMe) { waitingForMe = false; skipCue = meCue.i; aud.currentTime = meCue.end + 0.02; aud.play(); return; }
-    if (waitingForMe) { waitingForMe = false; idx++; step(token); return; }
-    var n = Math.min(idx + 1, doc.els.length - 1);
-    if (playing) start(n); else { idx = n; mark(idx); }
-  };
-  document.getElementById("back").onclick = function () {
-    var n = Math.max(idx - 1, 0);
-    if (playing) start(n); else { idx = n; mark(idx); }
-  };
 
-  /* ---------- Real voices: a pre-recorded mix plus a timing file ---------- */
-  var aud = document.getElementById("aud");
-  var useReal = false, realCues = null, skipCue = -1, meCue = null, lastCueI = -1, rafId = 0;
-  function cueFor(i) {
-    if (!realCues) return null;
-    for (var k = 0; k < realCues.length; k++) if (realCues[k].i >= i) return realCues[k];
-    return realCues[realCues.length - 1];
+  /* ---------- Real voices: recorded clips, assembled live with Web Audio ---------- */
+  var useReal = false;
+  var real = { manifest: null, buffers: {}, ctx: null, master: null, analyser: null, sources: [], sched: null, t0: 0, offset: 0, rate: 1, paused: false, skip: -1, raf: 0, base: "" };
+  function ensureCtx() {
+    if (real.ctx) return real.ctx;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    real.ctx = new AC();
+    real.master = real.ctx.createGain();
+    real.analyser = real.ctx.createAnalyser(); real.analyser.fftSize = 1024;
+    real.master.connect(real.analyser); real.analyser.connect(real.ctx.destination);
+    return real.ctx;
   }
-  function cueAt(t) {
-    var c = null;
-    for (var k = 0; k < realCues.length; k++) { if (realCues[k].start <= t) c = realCues[k]; else break; }
-    return c;
+  function decodeAll(onProgress) {
+    var ctx = ensureCtx();
+    var files = [];
+    real.manifest.elements.forEach(function (el) { el.clips.forEach(function (c) { if (!real.buffers[c.f]) files.push(c.f); }); });
+    var done = 0, total = files.length;
+    if (!total) return Promise.resolve();
+    function one(f) {
+      return fetch(real.base + f).then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+        .then(function (ab) { return new Promise(function (res, rej) { ctx.decodeAudioData(ab, res, rej); }); })
+        .then(function (buf) { real.buffers[f] = buf; done++; onProgress(done, total); });
+    }
+    // a few at a time keeps phones responsive
+    var queue = files.slice(), workers = [];
+    for (var w = 0; w < 6; w++) workers.push((function next() { var f = queue.shift(); return f ? one(f).then(next) : Promise.resolve(); })());
+    return Promise.all(workers);
   }
-  function tick() {
-    if (!playing || !useReal) return;
-    var c = cueAt(aud.currentTime);
-    if (c && c.i !== lastCueI) {
-      lastCueI = c.i; idx = c.i; mark(idx);
-      setStatus(c.who ? c.who : "(action)");
-    }
-    if (c && c.who && cast[c.who] && cast[c.who].mode === "me" && skipCue !== c.i && !waitingForMe) {
-      aud.pause(); waitingForMe = true; meCue = c;
-      setStatus(c.who + ": your line. Tap Next when done.");
-    }
-    rafId = requestAnimationFrame(tick);
+  // Lay the read out on one timeline from the reading options: the same timing rules
+  // the recorder uses, so cut-offs tread on the next line and overlaps really overlap.
+  function buildSchedule() {
+    if (!real.manifest) return;
+    var items = [], t = 0.5, prevEnd = 0, lastDlgStart = 0;
+    real.manifest.elements.forEach(function (m) {
+      var e = doc.els[m.i]; if (!e) return;
+      var it = { i: m.i, who: null, start: t, end: t, clips: [], narr: false };
+      if (m.t === "dlg") {
+        var startAt = m.overlap ? Math.max(lastDlgStart + 0.3, prevEnd - 0.9) : t, last = null;
+        it.start = startAt; it.who = m.who;
+        m.clips.forEach(function (c) {
+          if (c.kind === "par") {
+            if (!opt("readPars")) return;
+            it.clips.push({ f: c.f, at: startAt, who: DIRECTOR }); startAt += c.dur + 0.15; return;
+          }
+          it.clips.push({ f: c.f, at: startAt, who: m.who });
+          prevEnd = startAt + c.dur; startAt = prevEnd + 0.18; last = c;
+        });
+        it.end = prevEnd; lastDlgStart = it.start;
+        t = last && last.cut ? prevEnd - 0.12 : last && last.trail ? prevEnd + 0.9 : prevEnd + 0.3;
+      } else if (isRead(e) && m.clips[0]) {
+        it.narr = true; it.who = DIRECTOR;
+        it.clips.push({ f: m.clips[0].f, at: t, who: DIRECTOR });
+        it.end = t + m.clips[0].dur; t = it.end + (m.t === "scene" ? 0.5 : 0.35);
+      } else {
+        var hold = m.t === "action" ? (opt("holdAction") ? holdFor(e) : 0.15)
+                 : m.t === "trans" && /FLASH|BACK TO/.test(e.text) ? 1.4 : 0.6;
+        it.end = t + hold; t = it.end;
+      }
+      items.push(it);
+    });
+    real.sched = { items: items, total: Math.max(t, prevEnd) + 0.5 };
+  }
+  // Never earlier than where playback was started from (the first clip is scheduled a beat ahead).
+  function position() { return Math.max(real.offset, real.offset + (real.ctx.currentTime - real.t0) * real.rate); }
+  function realStopAll() {
+    real.sources.forEach(function (s) { try { s.stop(); } catch (e) {} });
+    real.sources = []; real.paused = false;
+    cancelAnimationFrame(real.raf);
   }
   function realStart(i) {
-    var c = cueFor(i); if (!c) return;
-    skipCue = -1; lastCueI = -1; waitingForMe = false;
-    aud.currentTime = c.start;
-    aud.playbackRate = parseFloat(document.getElementById("speed").value) || 1;
-    ensureAudioGraph(); if (actx && actx.state === "suspended") actx.resume();
-    playing = true; playBtn.textContent = "Pause"; requestWake();
-    var pr = aud.play();
-    if (pr && pr.catch) pr.catch(function () { stop("Tap Play to start"); });
-    cancelAnimationFrame(rafId); rafId = requestAnimationFrame(tick);
+    if (!real.sched) return;
+    realStopAll(); phoneToken++; if (hasSpeech) synth.cancel();
+    var ctx = ensureCtx(); if (ctx.state === "suspended") ctx.resume();
+    var items = real.sched.items, k = 0;
+    while (k < items.length && items[k].i < i) k++;
+    if (k >= items.length) { stop("End of script"); return; }
+    real.rate = speed(); real.offset = items[k].start; real.t0 = ctx.currentTime + 0.12; real.skip = -1;
+    items.slice(k).forEach(function (it) {
+      if (it.who && it.who !== DIRECTOR && cast[it.who] && cast[it.who].mode === "me") return;
+      it.clips.forEach(function (c) {
+        var buf = real.buffers[c.f]; if (!buf) return;
+        var src = ctx.createBufferSource(); src.buffer = buf; src.playbackRate.value = real.rate;
+        src.connect(real.master);
+        src.start(real.t0 + (c.at - real.offset) / real.rate);
+        real.sources.push(src);
+      });
+    });
+    idx = items[k].i; playing = true; waitingForMe = false;
+    playBtn.textContent = "Pause"; requestWake();
+    mark(idx);
+    real.raf = requestAnimationFrame(realTick);
   }
-  aud.onended = function () { stop("End of script"); };
-  aud.onerror = function () { if (useReal) { setMode(false); setStatus("Couldn't load the recording. Using phone voices."); } };
-  document.getElementById("speed").addEventListener("change", function () { aud.playbackRate = parseFloat(this.value) || 1; });
-  function setMode(real) {
+  function realPause() { if (real.ctx) real.ctx.suspend(); real.paused = true; playing = false; playBtn.textContent = "Play"; setStatus("Paused"); releaseWake(); }
+  function realResume() { real.ctx.resume(); real.paused = false; playing = true; playBtn.textContent = "Pause"; requestWake(); real.raf = requestAnimationFrame(realTick); }
+  function currentItem(pos) {
+    var items = real.sched.items, c = null;
+    for (var k = 0; k < items.length; k++) { if (items[k].start <= pos) c = items[k]; else break; }
+    return c;
+  }
+  function realTick() {
+    if (!playing || !useReal) return;
+    var pos = position(), it = currentItem(pos);
+    if (pos >= real.sched.total) { stop("End of script"); return; }
+    if (it) {
+      if (it.i !== idx) { idx = it.i; mark(idx); }
+      speaking = null;
+      it.clips.forEach(function (c) { var b = real.buffers[c.f]; if (b && pos >= c.at && pos <= c.at + b.duration) speaking = c.who; });
+      setStatus(speaking === DIRECTOR ? "Director" : speaking ? speaking : "(directions)");
+      if (it.who && it.who !== DIRECTOR && cast[it.who] && cast[it.who].mode === "me" && real.skip !== it.i) {
+        real.skip = it.i; realStopAll(); playing = true; waitingForMe = true; speaking = null;
+        setStatus(it.who + ": your line. Tap Next when done.");
+        return;
+      }
+    }
+    real.raf = requestAnimationFrame(realTick);
+  }
+  function setMode(isReal) {
     stop("Ready");
-    useReal = real && !!realCues;
-    document.getElementById("modeReal").setAttribute("aria-pressed", String(useReal));
-    document.getElementById("modePhone").setAttribute("aria-pressed", String(!useReal));
-    document.getElementById("phoneOpts").hidden = useReal;
+    useReal = isReal && !!real.manifest;
+    $("modeReal").setAttribute("aria-pressed", String(useReal));
+    $("modePhone").setAttribute("aria-pressed", String(!useReal));
+    $("speed").options[0].disabled = false;
     store.set("realVoices", useReal);
+    if (useReal) buildSchedule();
+    renderCast();
   }
-  document.getElementById("modeReal").onclick = function () { setMode(true); };
-  document.getElementById("modePhone").onclick = function () { setMode(false); };
-  function loadAudio(s) {
-    realCues = null; useReal = false;
-    document.getElementById("modeRow").hidden = true;
-    document.getElementById("phoneOpts").hidden = false;
-    aud.removeAttribute("src");
-    if (!s || !s.audio) return;
-    fetch(s.cues).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+  $("modeReal").onclick = function () {
+    if (!real.manifest) return;
+    if (Object.keys(real.buffers).length) { setMode(true); return; }
+    loadRealBuffers().then(function () { setMode(true); });
+  };
+  $("modePhone").onclick = function () { setMode(false); };
+  function loadRealBuffers() {
+    $("loading").hidden = false;
+    return decodeAll(function (d, n) {
+      $("loadingText").textContent = "Loading voices " + d + " of " + n + "...";
+      $("loadingBar").style.width = Math.round(d / n * 100) + "%";
+    }).then(function () { $("loading").hidden = true; })
+      .catch(function () { $("loading").hidden = true; $("modeNote").textContent = "Couldn't load the recording. Using phone voices."; setMode(false); });
+  }
+  function loadReal(s) {
+    real.manifest = null; real.buffers = {}; real.sched = null; useReal = false;
+    $("modeRow").hidden = true;
+    if (!s || !s.clips) { renderCast(); return; }
+    real.base = s.clips.replace(/[^/]*$/, "");
+    fetch(s.clips).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (m) {
       if (pick.value !== s.id) return;
-      realCues = d.cues; aud.src = s.audio;
-      document.getElementById("modeRow").hidden = false;
-      var pref = store.get("realVoices");
-      setMode(pref !== false);
+      real.manifest = m;
+      $("modeRow").hidden = false;
+      if (store.get("realVoices") === false) { setMode(false); return; }
+      return loadRealBuffers().then(function () { if (pick.value === s.id) setMode(true); });
     }).catch(function () {});
   }
 
-  /* ---------- Visualiser: live sound in the speaker's colour + who-speaks-when strip ---------- */
-  var wave = document.getElementById("wave"), tl = document.getElementById("timeline");
-  var actx = null, analyser = null, buf = null, speaking = null;
+  /* ---------- Visualiser ---------- */
+  var wave = $("wave"), tl = $("timeline"), wbuf = new Uint8Array(1024);
   var reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#999"; }
   function colorFor(who) { return who && cast[who] ? cssVar(cast[who].hl) : cssVar("--rule"); }
@@ -517,116 +679,75 @@ details[open] > summary::after { content: "Hide"; }
     if (c.width !== Math.round(w * r) || c.height !== Math.round(h * r)) { c.width = Math.round(w * r); c.height = Math.round(h * r); }
     var g = c.getContext("2d"); g.setTransform(r, 0, 0, r, 0, 0); return { g: g, w: w, h: h };
   }
-  function ensureAudioGraph() {
-    if (actx || !window.AudioContext && !window.webkitAudioContext) return;
-    try {
-      actx = new (window.AudioContext || window.webkitAudioContext)();
-      var src = actx.createMediaElementSource(aud);
-      analyser = actx.createAnalyser(); analyser.fftSize = 1024;
-      src.connect(analyser); analyser.connect(actx.destination);
-      buf = new Uint8Array(analyser.fftSize);
-    } catch (e) { actx = null; analyser = null; }
-  }
   function drawWave(t) {
     var f = fit(wave), g = f.g, w = f.w, h = f.h, mid = h / 2;
     g.clearRect(0, 0, w, h);
-    var col = speaking ? colorFor(speaking) : cssVar("--rule");
-    g.lineWidth = 2; g.strokeStyle = col; g.lineCap = "round";
-    if (useReal && analyser && playing && !reduceMotion) {
-      analyser.getByteTimeDomainData(buf);
-      g.beginPath();
-      for (var x = 0; x < w; x++) {
-        var v = (buf[Math.floor(x / w * buf.length)] - 128) / 128;
-        var y = mid + v * mid * 1.6;
-        x ? g.lineTo(x, y) : g.moveTo(x, y);
-      }
-      g.stroke();
+    g.lineWidth = 2; g.lineCap = "round";
+    g.strokeStyle = speaking ? (speaking === DIRECTOR ? cssVar("--ink-soft") : colorFor(speaking)) : cssVar("--rule");
+    g.beginPath();
+    if (useReal && real.analyser && playing && !reduceMotion) {
+      real.analyser.getByteTimeDomainData(wbuf);
+      for (var x = 0; x < w; x++) { var v = (wbuf[Math.floor(x / w * wbuf.length)] - 128) / 128; var y = mid + v * mid * 1.6; x ? g.lineTo(x, y) : g.moveTo(x, y); }
     } else if (playing && speaking && !reduceMotion) {
-      // phone voices can't be measured, so draw a calm moving line instead
-      g.beginPath();
-      for (var x2 = 0; x2 < w; x2++) {
-        var y2 = mid + Math.sin(x2 / 9 + t / 120) * Math.sin(x2 / 53 + t / 400) * mid * 0.6;
-        x2 ? g.lineTo(x2, y2) : g.moveTo(x2, y2);
-      }
-      g.stroke();
-    } else {
-      g.beginPath(); g.moveTo(0, mid); g.lineTo(w, mid); g.stroke();
-    }
-    if (speaking) {
-      g.font = "700 12px " + cssVar("--font-script"); g.fillStyle = cssVar("--ink");
-      g.fillText(speaking, 8, 14);
-    }
+      for (var x2 = 0; x2 < w; x2++) { var y2 = mid + Math.sin(x2 / 9 + t / 120) * Math.sin(x2 / 53 + t / 400) * mid * 0.6; x2 ? g.lineTo(x2, y2) : g.moveTo(x2, y2); }
+    } else { g.moveTo(0, mid); g.lineTo(w, mid); }
+    g.stroke();
+    if (speaking) { g.font = "700 12px " + cssVar("--font-script"); g.fillStyle = cssVar("--ink"); g.fillText(speaking === DIRECTOR ? "DIRECTOR" : speaking, 8, 14); }
   }
   function drawTimeline() {
-    var f = fit(tl), g = f.g, w = f.w, h = f.h;
-    g.clearRect(0, 0, w, h);
-    var dur = aud.duration || (realCues && realCues.length ? realCues[realCues.length - 1].end : 0);
-    if (!useReal || !realCues || !dur) { tl.hidden = true; return; }
+    if (!useReal || !real.sched) { tl.hidden = true; return; }
     tl.hidden = false;
-    // overlapping lines are drawn in two lanes, so crosstalk is visible
-    var laneEnd = 0;
-    realCues.forEach(function (c) {
-      if (!c.who) return;
-      var x = c.start / dur * w, x2 = Math.max(x + 1, c.end / dur * w);
-      var top = c.start < laneEnd ? h / 2 : 0;
-      g.fillStyle = colorFor(c.who); g.fillRect(x, top, x2 - x, top ? h / 2 : h);
-      laneEnd = Math.max(laneEnd, c.end);
+    var f = fit(tl), g = f.g, w = f.w, h = f.h, total = real.sched.total, laneEnd = 0;
+    g.clearRect(0, 0, w, h);
+    real.sched.items.forEach(function (it) {
+      if (!it.clips.length) return;
+      var x = it.start / total * w, x2 = Math.max(x + 1, it.end / total * w);
+      var top = it.who !== DIRECTOR && it.start < laneEnd ? h / 2 : 0;
+      g.fillStyle = it.who === DIRECTOR ? cssVar("--hl-n") : colorFor(it.who);
+      g.fillRect(x, top, x2 - x, top ? h / 2 : h);
+      if (it.who !== DIRECTOR) laneEnd = Math.max(laneEnd, it.end);
     });
-    var px = (aud.currentTime || 0) / dur * w;
-    g.fillStyle = cssVar("--accent"); g.fillRect(px - 1, 0, 2, h);
+    var pos = real.ctx && (playing || real.paused) ? position() : (real.sched.items.filter(function (it) { return it.i >= idx; })[0] || { start: 0 }).start;
+    g.fillStyle = cssVar("--accent"); g.fillRect(pos / total * w - 1, 0, 2, h);
   }
   function renderLegend() {
-    var lg = document.getElementById("legend"); lg.textContent = "";
-    castOrder.forEach(function (who) {
+    var lg = $("legend"); lg.textContent = "";
+    [DIRECTOR].concat(castOrder).forEach(function (who) {
       var s = document.createElement("span"), sw = document.createElement("i");
-      sw.style.background = "var(" + cast[who].hl + ")"; s.appendChild(sw); s.appendChild(document.createTextNode(who));
+      sw.style.background = "var(" + cast[who].hl + ")"; s.appendChild(sw); s.appendChild(document.createTextNode(who === DIRECTOR ? "DIRECTOR" : who));
       lg.appendChild(s);
     });
   }
-  function vizLoop(t) {
-    if (useReal && realCues) {
-      var c = cueAt(aud.currentTime || 0);
-      speaking = c && c.who && aud.currentTime <= c.end ? c.who : null;
-    } else if (!playing) speaking = null;
-    drawWave(t || 0); drawTimeline();
-    requestAnimationFrame(vizLoop);
-  }
-  function seekTimeline(clientX) {
-    if (!useReal || !realCues) return;
-    var r = tl.getBoundingClientRect(), dur = aud.duration || realCues[realCues.length - 1].end;
-    var tt = Math.max(0, Math.min(1, (clientX - r.left) / r.width)) * dur;
-    var c = cueAt(tt); if (c) start(c.i);
-  }
-  tl.addEventListener("click", function (ev) { seekTimeline(ev.clientX); });
-  tl.addEventListener("keydown", function (ev) {
-    if (ev.key === "ArrowRight") document.getElementById("next").click();
-    if (ev.key === "ArrowLeft") document.getElementById("back").click();
+  (function vizLoop(t) { drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
+  tl.addEventListener("click", function (ev) {
+    if (!real.sched) return;
+    var r = tl.getBoundingClientRect(), pos = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)) * real.sched.total;
+    var it = currentItem(pos); if (it) start(it.i);
   });
-  requestAnimationFrame(vizLoop);
+  tl.addEventListener("keydown", function (ev) {
+    if (ev.key === "ArrowRight") $("next").click();
+    if (ev.key === "ArrowLeft") $("back").click();
+  });
 
   /* ---------- Loading scripts ---------- */
-  var pick = document.getElementById("pick");
+  var pick = $("pick");
   SCRIPTS.forEach(function (s) { var o = document.createElement("option"); o.value = s.id; o.textContent = s.label; pick.appendChild(o); });
   function load(text) {
     stop("Ready");
     doc = parse(text); idx = 0;
     setupCast(); paintScript();
   }
-  pick.onchange = function () { var s = SCRIPTS.filter(function (x) { return x.id === pick.value; })[0]; if (s) { store.set("script", s.id); load(s.text); loadAudio(s); } };
-  document.getElementById("file").onchange = function (ev) {
+  pick.onchange = function () { var s = SCRIPTS.filter(function (x) { return x.id === pick.value; })[0]; if (s) { store.set("script", s.id); load(s.text); loadReal(s); } };
+  $("file").onchange = function (ev) {
     var f = ev.target.files && ev.target.files[0]; if (!f) return;
     var r = new FileReader();
     r.onload = function () {
       var o = document.createElement("option"); o.value = "file-" + Date.now(); o.textContent = f.name;
       SCRIPTS.push({ id: o.value, label: f.name, text: String(r.result) });
-      pick.appendChild(o); pick.value = o.value; load(String(r.result)); loadAudio(null);
+      pick.appendChild(o); pick.value = o.value; load(String(r.result)); loadReal(null);
     };
     r.readAsText(f);
   };
-  ["readAction", "readScenes", "holdAction"].forEach(function (id) {
-    var el = document.getElementById(id); var v = store.get(id); if (typeof v === "boolean") el.checked = v;
-    el.onchange = function () { store.set(id, el.checked); };
-  });
   var last = store.get("script");
   if (last && SCRIPTS.some(function (s) { return s.id === last; })) pick.value = last;
   pick.onchange();
