@@ -124,21 +124,31 @@ def fetch_human_refs(outdir, max_rows=6000):
     for spk in ranked:
         log(f"  {spk}: median pitch {pitch[spk]:.0f} Hz -> {gender[spk]}")
     os.makedirs(outdir, exist_ok=True)
-    used, credits = set(), {}
-    for role, (g, styles) in WANT.items():
-        cands = [s for s in speakers if gender[s] == g]
-        fresh = [s for s in cands if s not in used] or cands
-        choice = None
-        for st in styles:
-            for s in fresh:
-                if (s, st) in pool:
-                    choice = (s, st)
-                    break
-            if choice:
-                break
-        if not choice:
-            raise RuntimeError(f"no {g} voice for {role}")
-        used.add(choice[0])
+    # Cast each gender's parts together: try every pairing of speakers to parts and
+    # keep the one where each part gets the style nearest the top of its wish list.
+    import itertools
+    casting = {}
+    for g in ("female", "male"):
+        roles = [r for r, (rg, _) in WANT.items() if rg == g]
+        voices = [s for s in speakers if gender[s] == g] or speakers
+        perms = list(itertools.permutations(voices, len(roles))) if len(voices) >= len(roles) \
+            else list(itertools.product(voices, repeat=len(roles)))
+
+        def fit(spk, styles):
+            for rank, st in enumerate(styles):
+                if (spk, st) in pool:
+                    return len(styles) - rank, st
+            have = sorted(st for sp, st in pool if sp == spk)
+            return (0, have[0]) if have else (-99, None)
+        best = max(perms, key=lambda p: sum(fit(spk, WANT[r][1])[0] for spk, r in zip(p, roles)))
+        for spk, r in zip(best, roles):
+            casting[r] = (spk, fit(spk, WANT[r][1])[1])
+    os.makedirs(outdir, exist_ok=True)
+    credits = {}
+    for role in WANT:
+        choice = casting.get(role)
+        if not choice or not choice[1]:
+            raise RuntimeError(f"no voice for {role}")
         clips, total = [], 0.0
         for a in pool[choice]:
             clips += [a, np.zeros(int(0.3 * SR), dtype=np.float32)]
