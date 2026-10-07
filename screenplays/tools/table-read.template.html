@@ -124,17 +124,11 @@ select:disabled { opacity: 0.6; }
     <p>Hear the script out loud. Choose what gets read, then who reads it. Tap any line to start from there.</p>
   </header>
 
-  <div id="noSpeech" class="warn" hidden>This browser can't speak text aloud with phone voices. Real voices still work.</div>
-
   <section class="panel" aria-label="Script">
     <div class="row">
       <div style="display:grid;gap:4px;min-width:0;flex:1 1 220px">
         <label class="small" for="pick">Script</label>
         <select id="pick"></select>
-      </div>
-      <div style="display:grid;gap:4px">
-        <span class="lab">Or open your own</span>
-        <label class="check"><input id="file" type="file" accept=".fountain,.txt,text/plain"></label>
       </div>
     </div>
   </section>
@@ -152,15 +146,10 @@ select:disabled { opacity: 0.6; }
 
   <section class="panel step" aria-labelledby="step2">
     <h2 id="step2"><span class="num">2.</span> Voices</h2>
-    <div class="row" id="modeRow" hidden>
-      <div class="seg" role="group" aria-label="Which voices">
-        <button type="button" id="modeReal" aria-pressed="true">Real voices</button>
-        <button type="button" id="modePhone" aria-pressed="false">Phone voices</button>
-      </div>
-      <span class="note" id="modeNote">Recorded with Chatterbox, an open-source voice model.</span>
-    </div>
+    <p class="note" id="modeNote">Recorded with Chatterbox, an open-source voice model.</p>
+    <p class="warn" id="noRec" hidden>This draft hasn't been recorded yet. It records automatically on GitHub when a draft is added to the screenplays folder. You can still read along.</p>
     <div id="loading" hidden><div class="note" id="loadingText">Loading voices...</div><div class="loadbar"><i id="loadingBar"></i></div></div>
-    <p class="note" id="castNote">Pick a voice for each part. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself.</p>
+    <p class="note" id="castNote">Each part has its own recorded voice. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself.</p>
     <div class="cast" id="cast"></div>
   </section>
 
@@ -190,9 +179,6 @@ select:disabled { opacity: 0.6; }
 <script>
 (function () {
   "use strict";
-  var synth = window.speechSynthesis;
-  var hasSpeech = !!(synth && window.SpeechSynthesisUtterance);
-  if (!hasSpeech) document.getElementById("noSpeech").hidden = false;
 
   var SCRIPTS = [
     { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json" },
@@ -249,43 +235,22 @@ select:disabled { opacity: 0.6; }
   }
 
   /* ---------- Cast ---------- */
-  var voices = [];
-  function loadVoices() {
-    if (!hasSpeech) return;
-    voices = synth.getVoices().slice().sort(function (a, b) {
-      function rank(v) { return /en-GB/i.test(v.lang) ? 0 : /^en/i.test(v.lang) ? 1 : 2; }
-      return rank(a) - rank(b) || a.name.localeCompare(b.name);
-    });
-    renderCast();
-  }
-  if (hasSpeech) { loadVoices(); synth.onvoiceschanged = loadVoices; }
-
   var doc = null, cast = {}, castOrder = [];
-  var PITCH = [1.12, 0.85, 1.0, 0.95, 1.2, 0.9];
   var RECORDED = { ALICE: "Alice (recorded)", DANIEL: "Daniel (recorded)", RUTH: "Ruth (recorded)" };
-  function defaultMember(i) {
-    var en = voices.filter(function (v) { return /^en/i.test(v.lang); });
-    var pool = en.length ? en : voices;
-    var v = pool.length ? pool[(i + 1) % pool.length] : null;
-    return { voice: v ? v.voiceURI : "", pitch: PITCH[i % PITCH.length], rate: 1, mode: "voice" };
-  }
   function setupCast() {
     var saved = store.get("cast") || {};
     castOrder = [];
     doc.els.forEach(function (e) { if (e.t === "dlg" && castOrder.indexOf(e.who) < 0) castOrder.push(e.who); });
     cast = {};
-    castOrder.forEach(function (w, i) { cast[w] = saved[w] || defaultMember(i); cast[w].hl = HL[i % HL.length]; });
-    var en = voices.filter(function (v) { return /^en/i.test(v.lang); });
-    cast[DIRECTOR] = saved[DIRECTOR] || { voice: en[0] ? en[0].voiceURI : (voices[0] ? voices[0].voiceURI : ""), pitch: 0.95, rate: 1.0, mode: "voice" };
-    cast[DIRECTOR].hl = "--hl-n";
+    castOrder.forEach(function (w, i) { cast[w] = { mode: (saved[w] && saved[w].mode) || "voice", hl: HL[i % HL.length] }; });
+    cast[DIRECTOR] = { mode: "voice", hl: "--hl-n" };
     renderCast(); renderLegend();
   }
   function saveCast() {
     var s = store.get("cast") || {};
-    Object.keys(cast).forEach(function (k) { s[k] = { voice: cast[k].voice, pitch: cast[k].pitch, rate: cast[k].rate, mode: cast[k].mode }; });
+    Object.keys(cast).forEach(function (k) { s[k] = { mode: cast[k].mode }; });
     store.set("cast", s);
   }
-  function voiceFor(uri) { for (var i = 0; i < voices.length; i++) if (voices[i].voiceURI === uri) return voices[i]; return null; }
   function label(who) { return who === DIRECTOR ? "Director (headings, directions, notes)" : who; }
   function renderCast() {
     var box = $("cast");
@@ -308,44 +273,12 @@ select:disabled { opacity: 0.6; }
         top.appendChild(seg);
       }
       row.appendChild(top);
-      var c = document.createElement("div"); c.className = "ctrls";
-      var vWrap = document.createElement("div");
-      var vl = document.createElement("label"); vl.className = "small"; vl.textContent = "Voice"; vl.htmlFor = "v-" + i;
-      var sel = document.createElement("select"); sel.id = "v-" + i;
-      if (useReal) {
-        var o1 = document.createElement("option");
-        o1.textContent = who === DIRECTOR ? "Director (recorded)" : (RECORDED[who] || who + " (recorded)");
-        sel.appendChild(o1); sel.disabled = true;
-      } else {
-        if (!voices.length) { var o0 = document.createElement("option"); o0.textContent = hasSpeech ? "Loading voices..." : "No voices"; sel.appendChild(o0); }
-        voices.forEach(function (v) { var o = document.createElement("option"); o.value = v.voiceURI; o.textContent = v.name + " (" + v.lang + ")"; if (v.voiceURI === m.voice) o.selected = true; sel.appendChild(o); });
-        sel.onchange = function () { m.voice = sel.value; saveCast(); sample(who); };
-      }
-      vWrap.appendChild(vl); vWrap.appendChild(sel);
-      c.appendChild(vWrap);
-      if (!useReal) {
-        [["pitch", "Pitch", 0.6, 1.5], ["rate", "Pace", 0.7, 1.4]].forEach(function (p) {
-          var w = document.createElement("div");
-          var l = document.createElement("label"); l.className = "small"; l.textContent = p[1]; l.htmlFor = p[0] + "-" + i;
-          var r = document.createElement("input"); r.type = "range"; r.id = p[0] + "-" + i; r.min = p[2]; r.max = p[3]; r.step = 0.05; r.value = m[p[0]];
-          r.onchange = function () { m[p[0]] = parseFloat(r.value); saveCast(); sample(who); };
-          w.appendChild(l); w.appendChild(r); c.appendChild(w);
-        });
-      }
+      var c = document.createElement("div"); c.className = "note";
+      c.textContent = "Voice: " + (who === DIRECTOR ? "Director (recorded)" : (RECORDED[who] || who + " (recorded)"));
       row.appendChild(c);
       box.appendChild(row);
     });
   }
-  function sample(who) {
-    if (!hasSpeech || playing) return;
-    synth.cancel();
-    var line = "Interior. Counselling practice. Morning.";
-    if (who !== DIRECTOR) {
-      for (var i = 0; i < doc.els.length; i++) { var e = doc.els[i]; if (e.t === "dlg" && e.who === who) { var t = e.lines.filter(function (l) { return l.text; })[0]; if (t) { line = t.text; break; } } }
-    }
-    speakOne(clean(line).text, cast[who], {}, function () {});
-  }
-
   /* ---------- Script rendering ---------- */
   var scriptEl = $("script");
   var nodes = [];
@@ -399,13 +332,6 @@ select:disabled { opacity: 0.6; }
     return (e.t === "scene" && opt("readScenes")) || (e.t === "action" && opt("readAction")) ||
            ((e.t === "trans" || e.t === "center") && opt("readTrans"));
   }
-  function parMods(par) {
-    var p = (par || "").toLowerCase();
-    if (/barely|quiet|whisper|muffled|into her|into his|small/.test(p)) return { volume: 0.6, rate: 0.9 };
-    if (/shout|roar|loud|up,/.test(p)) return { volume: 1, rate: 1.08 };
-    return {};
-  }
-
   /* ---------- Shared playback state ---------- */
   var idx = 0, playing = false, waitingForMe = false, wakeLock = null, speaking = null;
   var statusEl = $("status"), playBtn = $("play");
@@ -420,29 +346,24 @@ select:disabled { opacity: 0.6; }
 
   function start(i) {
     i = Math.max(0, Math.min(i, doc.els.length - 1));
-    if (useReal) { realStart(i); return; }
-    phoneStart(i);
+    if (!real.sched) { setStatus(real.manifest ? "Loading voices..." : "No recording for this draft yet"); idx = i; mark(i); return; }
+    realStart(i);
   }
   function stop(msg) {
-    phoneToken++; playing = false; waitingForMe = false; speaking = null;
-    if (hasSpeech) synth.cancel();
+    playing = false; waitingForMe = false; speaking = null;
     realStopAll();
     playBtn.textContent = "Play"; releaseWake();
     setStatus(msg || "Paused");
   }
   playBtn.onclick = function () {
-    if (playing) {
-      if (useReal) { realPause(); return; }
-      stop(); return;
-    }
-    if (useReal && real.paused) { realResume(); return; }
+    if (playing) { realPause(); return; }
+    if (real.paused) { realResume(); return; }
     start(idx);
   };
   $("next").onclick = function () {
     if (waitingForMe) {
       waitingForMe = false;
-      if (useReal) { realStart(idx + 1); return; }
-      idx++; phoneStep(phoneToken); return;
+      realStart(idx + 1); return;
     }
     var n = Math.min(idx + 1, doc.els.length - 1);
     if (playing) start(n); else { idx = n; mark(idx); }
@@ -452,68 +373,6 @@ select:disabled { opacity: 0.6; }
     if (playing) start(n); else { idx = n; mark(idx); }
   };
   $("speed").onchange = function () { if (playing) start(idx); };
-
-  /* ---------- Phone voices (speechSynthesis) ---------- */
-  var phoneToken = 0;
-  function speakOne(text, m, mods, done) {
-    if (!text || !hasSpeech) { done(); return; }
-    var u = new SpeechSynthesisUtterance(text);
-    var v = voiceFor(m.voice); if (v) { u.voice = v; u.lang = v.lang; }
-    u.pitch = m.pitch;
-    u.rate = Math.max(0.5, Math.min(2, m.rate * speed() * (mods.rate || 1)));
-    u.volume = mods.volume || 1;
-    var finished = false;
-    function fin() { if (finished) return; finished = true; clearTimeout(guard); done(); }
-    var guard = setTimeout(fin, 2500 + text.length * 120 / u.rate);
-    u.onend = fin; u.onerror = fin;
-    synth.speak(u);
-  }
-  function phoneStart(i) {
-    if (!hasSpeech) return;
-    phoneToken++; synth.cancel();
-    idx = i; playing = true; waitingForMe = false;
-    playBtn.textContent = "Pause"; requestWake();
-    var my = phoneToken; setTimeout(function () { phoneStep(my); }, 60);
-  }
-  function phoneStep(my) {
-    if (my !== phoneToken || !playing) return;
-    if (idx >= doc.els.length) { stop("End of script"); return; }
-    var e = doc.els[idx], nextE = doc.els[idx + 1];
-    mark(idx);
-    function advance(g) { setTimeout(function () { if (my !== phoneToken || !playing) return; idx++; phoneStep(my); }, g); }
-    if (e.t === "dlg") {
-      var m = cast[e.who];
-      if (m.mode === "me") { waitingForMe = true; speaking = null; setStatus(e.who + ": your line. Tap Next when done."); return; }
-      var parts = [], mods = {};
-      e.lines.forEach(function (l) {
-        if (l.par) { mods = parMods(l.par); if (opt("readPars")) parts.push({ dir: true, text: decap(l.par.replace(/[()]/g, "")) + "." }); }
-        else parts.push({ c: clean(l.text), mods: mods });
-      });
-      var k = 0, last = null;
-      (function sayNext() {
-        if (my !== phoneToken || !playing) return;
-        if (k >= parts.length) {
-          var gap = 350;
-          if (last && last.cutOff) gap = 0; else if (last && last.trail) gap = 900;
-          if (nextE && nextE.overlap) gap = 0;
-          advance(gap); return;
-        }
-        var p = parts[k++];
-        if (p.dir) { speaking = DIRECTOR; setStatus("Director"); speakOne(p.text, cast[DIRECTOR], {}, function () { setTimeout(sayNext, 120); }); return; }
-        speaking = e.who; setStatus(e.who); last = p.c;
-        speakOne(p.c.text, m, p.mods, function () { setTimeout(sayNext, p.c.cutOff || p.c.trail ? 0 : 150); });
-      })();
-      return;
-    }
-    if (isRead(e)) {
-      speaking = DIRECTOR; setStatus("Director");
-      speakOne(narrationText(e), cast[DIRECTOR], {}, function () { advance(e.t === "scene" ? 500 : 300); });
-      return;
-    }
-    speaking = null;
-    if (e.t === "action" && opt("holdAction")) { setStatus("(directions)"); advance(holdFor(e) * 1000 / speed()); return; }
-    advance(e.t === "trans" && /FLASH|BACK TO/.test(e.text) ? 900 : (e.t === "scene" ? 500 : 120));
-  }
 
   /* ---------- Real voices: recorded clips, assembled live with Web Audio ---------- */
   var useReal = false;
@@ -586,7 +445,7 @@ select:disabled { opacity: 0.6; }
   }
   function realStart(i) {
     if (!real.sched) return;
-    realStopAll(); phoneToken++; if (hasSpeech) synth.cancel();
+    realStopAll();
     var ctx = ensureCtx(); if (ctx.state === "suspended") ctx.resume();
     var items = real.sched.items, k = 0;
     while (k < items.length && items[k].i < i) k++;
@@ -615,7 +474,7 @@ select:disabled { opacity: 0.6; }
     return c;
   }
   function realTick() {
-    if (!playing || !useReal) return;
+    if (!playing || !real.sched) return;
     var pos = position(), it = currentItem(pos);
     if (pos >= real.sched.total) { stop("End of script"); return; }
     if (it) {
@@ -631,42 +490,32 @@ select:disabled { opacity: 0.6; }
     }
     real.raf = requestAnimationFrame(realTick);
   }
-  function setMode(isReal) {
+  function realReady() {
     stop("Ready");
-    useReal = isReal && !!real.manifest;
-    $("modeReal").setAttribute("aria-pressed", String(useReal));
-    $("modePhone").setAttribute("aria-pressed", String(!useReal));
-    $("speed").options[0].disabled = false;
-    store.set("realVoices", useReal);
-    if (useReal) buildSchedule();
+    useReal = true;
+    buildSchedule();
     renderCast();
   }
-  $("modeReal").onclick = function () {
-    if (!real.manifest) return;
-    if (Object.keys(real.buffers).length) { setMode(true); return; }
-    loadRealBuffers().then(function () { setMode(true); });
-  };
-  $("modePhone").onclick = function () { setMode(false); };
   function loadRealBuffers() {
     $("loading").hidden = false;
     return decodeAll(function (d, n) {
       $("loadingText").textContent = "Loading voices " + d + " of " + n + "...";
       $("loadingBar").style.width = Math.round(d / n * 100) + "%";
     }).then(function () { $("loading").hidden = true; })
-      .catch(function () { $("loading").hidden = true; $("modeNote").textContent = "Couldn't load the recording. Using phone voices."; setMode(false); });
+      .catch(function () { $("loading").hidden = true; $("modeNote").textContent = "Couldn't load the recording. Check your connection and reload the page."; });
   }
   function loadReal(s) {
     real.manifest = null; real.buffers = {}; real.sched = null; useReal = false;
-    $("modeRow").hidden = true;
-    if (!s || !s.clips) { renderCast(); return; }
+    $("noRec").hidden = !!(s && s.clips);
+    $("modeNote").hidden = !(s && s.clips);
+    renderCast();
+    if (!s || !s.clips) return;
     real.base = s.clips.replace(/[^/]*$/, "");
     fetch(s.clips).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (m) {
       if (pick.value !== s.id) return;
       real.manifest = m;
-      $("modeRow").hidden = false;
-      if (store.get("realVoices") === false) { setMode(false); return; }
-      return loadRealBuffers().then(function () { if (pick.value === s.id) setMode(true); });
-    }).catch(function () {});
+      return loadRealBuffers().then(function () { if (pick.value === s.id) realReady(); });
+    }).catch(function () { $("noRec").hidden = false; $("modeNote").hidden = true; });
   }
 
   /* ---------- Visualiser ---------- */
@@ -688,8 +537,6 @@ select:disabled { opacity: 0.6; }
     if (useReal && real.analyser && playing && !reduceMotion) {
       real.analyser.getByteTimeDomainData(wbuf);
       for (var x = 0; x < w; x++) { var v = (wbuf[Math.floor(x / w * wbuf.length)] - 128) / 128; var y = mid + v * mid * 1.6; x ? g.lineTo(x, y) : g.moveTo(x, y); }
-    } else if (playing && speaking && !reduceMotion) {
-      for (var x2 = 0; x2 < w; x2++) { var y2 = mid + Math.sin(x2 / 9 + t / 120) * Math.sin(x2 / 53 + t / 400) * mid * 0.6; x2 ? g.lineTo(x2, y2) : g.moveTo(x2, y2); }
     } else { g.moveTo(0, mid); g.lineTo(w, mid); }
     g.stroke();
     if (speaking) { g.font = "700 12px " + cssVar("--font-script"); g.fillStyle = cssVar("--ink"); g.fillText(speaking === DIRECTOR ? "DIRECTOR" : speaking, 8, 14); }
@@ -738,16 +585,6 @@ select:disabled { opacity: 0.6; }
     setupCast(); paintScript();
   }
   pick.onchange = function () { var s = SCRIPTS.filter(function (x) { return x.id === pick.value; })[0]; if (s) { store.set("script", s.id); load(s.text); loadReal(s); } };
-  $("file").onchange = function (ev) {
-    var f = ev.target.files && ev.target.files[0]; if (!f) return;
-    var r = new FileReader();
-    r.onload = function () {
-      var o = document.createElement("option"); o.value = "file-" + Date.now(); o.textContent = f.name;
-      SCRIPTS.push({ id: o.value, label: f.name, text: String(r.result) });
-      pick.appendChild(o); pick.value = o.value; load(String(r.result)); loadReal(null);
-    };
-    r.readAsText(f);
-  };
   var last = store.get("script");
   if (last && SCRIPTS.some(function (s) { return s.id === last; })) pick.value = last;
   pick.onchange();
