@@ -140,6 +140,7 @@ select:disabled { opacity: 0.6; }
       <label class="opt"><input type="checkbox" id="readAction" checked><div><b>Directions</b><span>The action between lines: what people do, what we see.</span></div></label>
       <label class="opt"><input type="checkbox" id="readPars"><div><b>Delivery notes</b><span>The notes in brackets, like "(barely)", read before the line.</span></div></label>
       <label class="opt"><input type="checkbox" id="readTrans" checked><div><b>Transitions</b><span>"Flash to", "Back to", "Cut to black" and the title card.</span></div></label>
+      <label class="opt"><input type="checkbox" id="readSfx" checked><div><b>Room sounds and effects</b><span>The clock, the rain, the strip lights, pages, pens, the vending machine.</span></div></label>
       <label class="opt"><input type="checkbox" id="holdAction" checked><div><b>Leave time for unread directions</b><span>When directions aren't read, pause for as long as they'd take on screen.</span></div></label>
     </div>
     <div style="display:grid;gap:4px;margin-top:12px;max-width:360px">
@@ -157,6 +158,13 @@ select:disabled { opacity: 0.6; }
     <p class="note" id="modeNote">Recorded with Chatterbox, an open-source voice model.</p>
     <p class="warn" id="noRec" hidden>This draft hasn't been recorded yet. It records automatically on GitHub when a draft is added to the screenplays folder. You can still read along.</p>
     <div id="loading" hidden><div class="note" id="loadingText">Loading voices...</div><div class="loadbar"><i id="loadingBar"></i></div></div>
+    <div id="perfBox" hidden style="display:grid;gap:4px;margin-bottom:12px;max-width:360px">
+      <label class="small" for="perf">Performance</label>
+      <select id="perf">
+        <option value="written">As written (the lines exactly as scripted)</option>
+        <option value="rough">Rough (how people actually say them: ums, restarts, laughs)</option>
+      </select>
+    </div>
     <p class="note" id="castNote">Pick a voice for each part. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself.</p>
     <div class="cast" id="cast"></div>
   </section>
@@ -794,7 +802,7 @@ CUT TO BLACK.
   "use strict";
 
   var SCRIPTS = [
-    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json", cast: "audio/draft-03.cast.json" },
+    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json", cast: "audio/draft-03.cast.json", rough: "audio/draft-03-rough.cast.json", sounds: "audio/draft-03.sounds.json" },
     { id: "d02", label: "Life After Alice, Ep. 1: draft 02", text: document.getElementById("src-d02").textContent }
   ];
   var HL = ["--hl-1", "--hl-2", "--hl-3", "--hl-4", "--hl-5", "--hl-6"];
@@ -806,7 +814,7 @@ CUT TO BLACK.
   function $(id) { return document.getElementById(id); }
 
   /* ---------- Reading options (step 1) ---------- */
-  var OPT_IDS = ["readScenes", "readAction", "readPars", "readTrans", "holdAction"];
+  var OPT_IDS = ["readScenes", "readAction", "readPars", "readTrans", "readSfx", "holdAction"];
   function opt(id) { return $(id).checked; }
   OPT_IDS.forEach(function (id) {
     var el = $(id), v = store.get("opt:" + id);
@@ -1001,7 +1009,7 @@ CUT TO BLACK.
 
   /* ---------- Real voices: recorded clips, assembled live with Web Audio ---------- */
   var useReal = false;
-  var real = { manifest: null, buffers: {}, ctx: null, master: null, analyser: null, sources: [], sched: null, t0: 0, offset: 0, rate: 1, paused: false, skip: -1, raf: 0, base: "" };
+  var real = { manifest: null, buffers: {}, sfxBuf: {}, ctx: null, master: null, analyser: null, sources: [], sched: null, t0: 0, offset: 0, rate: 1, paused: false, skip: -1, raf: 0, base: "" };
   function ensureCtx() {
     if (real.ctx) return real.ctx;
     var AC = window.AudioContext || window.webkitAudioContext;
@@ -1050,6 +1058,18 @@ CUT TO BLACK.
   })();
 
   /* Cast options: several recorded voices per part (audio/<draft>.cast.json). */
+  function currentCastIdx() {
+    var w = real.castIdxs && real.castIdxs.written, r = real.castIdxs && real.castIdxs.rough;
+    if (!r || $("perf").value !== "rough") return w || null;
+    var roles = {};
+    Object.keys((w && w.roles) || {}).forEach(function (k) { roles[k] = w.roles[k]; });
+    Object.keys(r.roles).forEach(function (k) { roles[k] = r.roles[k]; });  // the Director's narration is shared
+    return { roles: roles };
+  }
+  (function () {
+    var saved = store.get("perf"); if (saved === "written" || saved === "rough") $("perf").value = saved;
+    $("perf").onchange = function () { store.set("perf", $("perf").value); real.castIdx = currentCastIdx(); applyCast(); };
+  })();
   function castOptions(who) { return (real.castIdx && real.castIdx.roles[who === DIRECTOR ? "DIRECTOR" : who]) || []; }
   function chosen(who) {
     var opts = castOptions(who), p = cast[who] && cast[who].pick;
@@ -1071,8 +1091,14 @@ CUT TO BLACK.
           var l = lines && lines[li++]; return l || c;
         });
       } else if (dir && dir.clips[m.i] && m.clips.length) {
-        out.clips = dir.clips[m.i];
+        out.clips = dir.clips[m.i].filter(function (c) { return c.kind !== "extra"; });
       }
+      // laughs and breaths that aren't lines, from whichever voice each part is using
+      out.extras = [];
+      if (m.t !== "dlg") castOrder.forEach(function (w) {
+        var o = optionFor(w);
+        if (o && o.clips[m.i]) o.clips[m.i].forEach(function (c) { if (c.kind === "extra") out.extras.push({ f: c.f, s: c.s, o: c.o, dur: c.dur, after: c.after || 0, who: w }); });
+      });
       return out;
     }) };
   }
@@ -1090,7 +1116,7 @@ CUT TO BLACK.
     // A clip is either its own file, or a slice (s = sprite file, o = offset) of one
     // file per voice option, so the page stays a few dozen files instead of hundreds.
     var files = [], sprites = {};
-    real.manifest.elements.forEach(function (el) { el.clips.forEach(function (c) {
+    real.manifest.elements.forEach(function (el) { el.clips.concat(el.extras || []).forEach(function (c) {
       if (real.buffers[c.f]) return;
       if (c.s) { if (!sprites[c.s]) { sprites[c.s] = []; files.push(c.s); } sprites[c.s].push(c); }
       else if (files.indexOf(c.f) < 0) files.push(c.f);
@@ -1121,11 +1147,14 @@ CUT TO BLACK.
   // the recorder uses, so cut-offs tread on the next line and overlaps really overlap.
   function buildSchedule() {
     if (!real.manifest) return;
-    var items = [], t = 0.5, prevEnd = 0, lastDlgStart = 0;
+    var items = [], t = 0.5, prevEnd = 0, lastDlgStart = 0, lastEnd = 0;
     real.manifest.elements.forEach(function (m) {
       var e = doc.els[m.i]; if (!e) return;
       var it = { i: m.i, who: null, start: t, end: t, clips: [], narr: false };
       if (m.t === "dlg") {
+        // the rough performance carries its own timing: silence before the line, or jumping in
+        var firstLine = m.clips.filter(function (c) { return c.kind === "line"; })[0];
+        if (firstLine && typeof firstLine.gap === "number") t = Math.max(lastDlgStart + 0.3, lastEnd + firstLine.gap);
         var startAt = m.overlap ? Math.max(lastDlgStart + 0.3, prevEnd - 0.9) : t, last = null;
         it.start = startAt; it.who = m.who;
         m.clips.forEach(function (c) {
@@ -1147,9 +1176,30 @@ CUT TO BLACK.
                  : m.t === "trans" && /FLASH|BACK TO/.test(e.text) ? 1.4 : 0.6;
         it.end = t + hold; t = it.end;
       }
+      (m.extras || []).forEach(function (x) {
+        var at = it.start + x.after;
+        it.clips.push({ f: x.f, at: at, who: x.who, extra: true });
+        t = Math.max(t, at + x.dur + 0.3);
+      });
+      lastEnd = Math.max(it.end, t - 0.3);
       items.push(it);
     });
-    real.sched = { items: items, total: Math.max(t, prevEnd) + 0.5 };
+    real.sched = { items: items, total: Math.max(t, prevEnd) + 0.5, cues: [], beds: [] };
+    // Sounds: one-shots on their element, beds from one element's start to another's.
+    var snd = real.sounds;
+    if (snd && opt("readSfx")) {
+      var startOf = {};
+      items.forEach(function (it) { startOf[it.i] = it.start; });
+      Object.keys(snd.cues || {}).forEach(function (k) {
+        if (startOf[k] === undefined) return;
+        snd.cues[k].forEach(function (c) { real.sched.cues.push({ sfx: c.sfx, at: startOf[k] + c.at, gain: c.gain }); });
+      });
+      (snd.beds || []).forEach(function (b) {
+        if (startOf[b.from] === undefined) return;
+        var end = startOf[b.to] !== undefined ? startOf[b.to] : real.sched.total;
+        real.sched.beds.push({ sfx: b.sfx, from: startOf[b.from], to: end, gain: b.gain });
+      });
+    }
   }
   // Never earlier than where playback was started from (the first clip is scheduled a beat ahead).
   function position() { return Math.max(real.offset, real.offset + (real.ctx.currentTime - real.t0) * real.rate); }
@@ -1169,6 +1219,7 @@ CUT TO BLACK.
     items.slice(k).forEach(function (it) {
       if (it.who && it.who !== DIRECTOR && cast[it.who] && cast[it.who].mode === "me") return;
       it.clips.forEach(function (c) {
+        if (c.extra && cast[c.who] && cast[c.who].mode === "me") return;
         var buf = real.buffers[c.f]; if (!buf) return;
         var src = ctx.createBufferSource(); src.buffer = buf; src.playbackRate.value = real.rate;
         src.connect(real.master);
@@ -1176,10 +1227,31 @@ CUT TO BLACK.
         real.sources.push(src);
       });
     });
+    scheduleSounds(ctx);
     idx = items[k].i; playing = true; waitingForMe = false;
     playBtn.textContent = "Pause"; requestWake();
     mark(idx);
     real.raf = requestAnimationFrame(realTick);
+  }
+  function scheduleSounds(ctx) {
+    var when = function (at) { return real.t0 + (at - real.offset) / real.rate; };
+    real.sched.cues.forEach(function (c) {
+      var buf = real.sfxBuf[c.sfx]; if (!buf || c.at < real.offset - 0.05) return;
+      var src = ctx.createBufferSource(), g = ctx.createGain();
+      src.buffer = buf; g.gain.value = c.gain; src.connect(g); g.connect(real.master);
+      src.start(when(c.at)); real.sources.push(src);
+    });
+    real.sched.beds.forEach(function (b) {
+      var buf = real.sfxBuf[b.sfx]; if (!buf || b.to <= real.offset) return;
+      var from = Math.max(b.from, real.offset), src = ctx.createBufferSource(), g = ctx.createGain();
+      src.buffer = buf; src.loop = true; src.connect(g); g.connect(real.master);
+      // fade each bed in and out so scene changes don't click
+      var t1 = when(from), t2 = when(b.to);
+      g.gain.setValueAtTime(0, t1); g.gain.linearRampToValueAtTime(b.gain, t1 + 0.6);
+      g.gain.setValueAtTime(b.gain, Math.max(t1 + 0.6, t2 - 0.4)); g.gain.linearRampToValueAtTime(0, t2);
+      src.start(t1, (from - b.from) % buf.duration); src.stop(t2 + 0.05);
+      real.sources.push(src);
+    });
   }
   function realPause() { if (real.ctx) real.ctx.suspend(); real.paused = true; playing = false; playBtn.textContent = "Play"; setStatus("Paused"); releaseWake(); }
   function realResume() { real.ctx.resume(); real.paused = false; playing = true; playBtn.textContent = "Pause"; requestWake(); real.raf = requestAnimationFrame(realTick); }
@@ -1211,27 +1283,42 @@ CUT TO BLACK.
     buildSchedule();
     renderCast();
   }
+  function decodeSfx() {
+    var ctx = ensureCtx(), names = {};
+    if (!real.sounds) return Promise.resolve();
+    (real.sounds.beds || []).forEach(function (b) { names[b.sfx] = 1; });
+    Object.keys(real.sounds.cues || {}).forEach(function (k) { real.sounds.cues[k].forEach(function (c) { names[c.sfx] = 1; }); });
+    return Promise.all(Object.keys(names).filter(function (n) { return !real.sfxBuf[n]; }).map(function (n) {
+      return fetch(real.base + "sfx/" + n + ".mp3").then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+        .then(function (ab) { return new Promise(function (res, rej) { ctx.decodeAudioData(ab, res, rej); }); })
+        .then(function (buf) { real.sfxBuf[n] = buf; }).catch(function () {});
+    }));
+  }
   function loadRealBuffers() {
     $("loading").hidden = false;
-    return decodeAll(function (d, n) {
+    return Promise.all([decodeAll(function (d, n) {
       $("loadingText").textContent = "Loading voices " + d + " of " + n + "...";
       $("loadingBar").style.width = Math.round(d / n * 100) + "%";
-    }).then(function () { $("loading").hidden = true; })
+    }), decodeSfx()]).then(function () { $("loading").hidden = true; })
       .catch(function () { $("loading").hidden = true; $("modeNote").textContent = "Couldn't load the recording. Check your connection and reload the page."; });
   }
   function loadReal(s) {
-    real.manifest = null; real.baseManifest = null; real.castIdx = null; real.buffers = {}; real.sched = null; useReal = false;
+    real.manifest = null; real.baseManifest = null; real.castIdx = null; real.castIdxs = null; real.sounds = null; real.buffers = {}; real.sched = null; useReal = false;
+    $("perfBox").hidden = true;
     $("noRec").hidden = !!(s && s.clips);
     $("modeNote").hidden = !(s && s.clips);
     renderCast();
     if (!s || !s.clips) return;
     real.base = s.clips.replace(/[^/]*$/, "");
-    var castIdx = s.cast ? fetch(s.cast).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }) : Promise.resolve(null);
+    function json(url) { return url ? fetch(url).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }) : Promise.resolve(null); }
+    var extra = Promise.all([json(s.cast), json(s.rough), json(s.sounds)]);
     fetch(s.clips).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (m) {
-      return castIdx.then(function (ci) { return [m, ci]; });
-    }).then(function (both) {
+      return extra.then(function (x) { return [m].concat(x); });
+    }).then(function (all) {
       if (pick.value !== s.id) return;
-      real.baseManifest = both[0]; real.castIdx = both[1];
+      real.baseManifest = all[0]; real.castIdxs = { written: all[1], rough: all[2] }; real.sounds = all[3];
+      $("perfBox").hidden = !all[2];
+      real.castIdx = currentCastIdx();
       real.manifest = effectiveManifest();
       renderCast();
       return loadRealBuffers().then(function () { if (pick.value === s.id) realReady(); });
