@@ -1011,7 +1011,7 @@ CUT TO BLACK.
     real.analyser = ctx.createAnalyser(); real.analyser.fftSize = 1024;
     // Room: soften the top end, add a little reverb and a low air/hum bed, so the
     // voices sit in a space instead of in a studio.
-    real.tone = ctx.createBiquadFilter(); real.tone.type = "lowpass";
+    real.tone = ctx.createBiquadFilter(); real.tone.type = "highshelf"; real.tone.frequency.value = 7000;
     real.dry = ctx.createGain(); real.wet = ctx.createGain();
     real.verb = ctx.createConvolver();
     real.master.connect(real.tone);
@@ -1027,9 +1027,11 @@ CUT TO BLACK.
     return ctx;
   }
   var ROOMS = {
-    off: { cut: 20000, wet: 0, dry: 1, secs: 0.5, decay: 4, air: 0 },
-    room: { cut: 7000, wet: 0.22, dry: 0.9, secs: 0.6, decay: 3.5, air: 0.012 },
-    corridor: { cut: 5500, wet: 0.4, dry: 0.8, secs: 1.6, decay: 2.5, air: 0.02 }
+    // A gentle shelf, not a low-pass: cutting the top end off blurs the T in
+    // "solicitor" into an American-sounding D.
+    off: { shelf: 0, wet: 0, dry: 1, secs: 0.5, decay: 4, air: 0 },
+    room: { shelf: -3, wet: 0.2, dry: 0.92, secs: 0.6, decay: 3.5, air: 0.012 },
+    corridor: { shelf: -4, wet: 0.32, dry: 0.85, secs: 1.4, decay: 2.8, air: 0.018 }
   };
   function impulse(ctx, secs, decay) {
     var len = Math.floor(ctx.sampleRate * secs), ir = ctx.createBuffer(2, len, ctx.sampleRate);
@@ -1039,7 +1041,7 @@ CUT TO BLACK.
   function applyRoom() {
     if (!real.ctx) return;
     var r = ROOMS[$("room").value] || ROOMS.room;
-    real.tone.frequency.value = r.cut; real.dry.gain.value = r.dry; real.wet.gain.value = r.wet;
+    real.tone.gain.value = r.shelf; real.dry.gain.value = r.dry; real.wet.gain.value = r.wet;
     real.verb.buffer = impulse(real.ctx, r.secs, r.decay); real.air = r.air;
   }
   (function () {
