@@ -1,0 +1,1916 @@
+{
+"version": 1,
+"elements": [
+{
+"i": 0,
+"t": "trans",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e000-0.mp3",
+"kind": "narr",
+"dur": 0.532
+}
+]
+},
+{
+"i": 1,
+"t": "scene",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e001-0.mp3",
+"kind": "narr",
+"dur": 3.813
+}
+]
+},
+{
+"i": 2,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e002-0.mp3",
+"kind": "narr",
+"dur": 7.451
+}
+]
+},
+{
+"i": 3,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e003-0.mp3",
+"kind": "narr",
+"dur": 8.37
+}
+]
+},
+{
+"i": 4,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e004-0.mp3",
+"kind": "narr",
+"dur": 6.313
+}
+]
+},
+{
+"i": 5,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e005-0.mp3",
+"kind": "line",
+"dur": 0.995,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 6,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e006-0.mp3",
+"kind": "line",
+"dur": 1.602,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 7,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e007-0.mp3",
+"kind": "line",
+"dur": 1.562,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 8,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e008-0.mp3",
+"kind": "line",
+"dur": 0.773,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 9,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e009-0.mp3",
+"kind": "narr",
+"dur": 5.308
+}
+]
+},
+{
+"i": 10,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e010-0.mp3",
+"kind": "narr",
+"dur": 3.336
+}
+]
+},
+{
+"i": 11,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e011-0.mp3",
+"kind": "line",
+"dur": 1.889,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 12,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e012-0.mp3",
+"kind": "narr",
+"dur": 4.672
+}
+]
+},
+{
+"i": 13,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e013-0.mp3",
+"kind": "line",
+"dur": 6.295,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 14,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e014-0.mp3",
+"kind": "line",
+"dur": 0.419,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 15,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e015-0.mp3",
+"kind": "line",
+"dur": 0.52,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 16,
+"t": "scene",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e016-0.mp3",
+"kind": "narr",
+"dur": 3.999
+}
+]
+},
+{
+"i": 17,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e017-0.mp3",
+"kind": "narr",
+"dur": 9.794
+}
+]
+},
+{
+"i": 18,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e018-0.mp3",
+"kind": "narr",
+"dur": 3.769
+}
+]
+},
+{
+"i": 19,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e019-0.mp3",
+"kind": "line",
+"dur": 2.097,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 20,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e020-0.mp3",
+"kind": "narr",
+"dur": 6.922
+}
+]
+},
+{
+"i": 21,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e021-0.mp3",
+"kind": "line",
+"dur": 8.614,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 22,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e022-0.mp3",
+"kind": "line",
+"dur": 0.428,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 23,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e023-0.mp3",
+"kind": "line",
+"dur": 1.953,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 24,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e024-0.mp3",
+"kind": "line",
+"dur": 2.082,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 25,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e025-0.mp3",
+"kind": "line",
+"dur": 4.495,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 26,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e026-0.mp3",
+"kind": "narr",
+"dur": 5.875
+}
+]
+},
+{
+"i": 27,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e027-0.mp3",
+"kind": "line",
+"dur": 3.744,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 28,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e028-0.mp3",
+"kind": "line",
+"dur": 2.488,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 29,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e029-0.mp3",
+"kind": "line",
+"dur": 1.428,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 30,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e030-0.mp3",
+"kind": "line",
+"dur": 0.623,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 31,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e031-0.mp3",
+"kind": "narr",
+"dur": 0.78
+}
+]
+},
+{
+"i": 32,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e032-0.mp3",
+"kind": "line",
+"dur": 4.36,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 33,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e033-0.mp3",
+"kind": "line",
+"dur": 1.305,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 34,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e034-0.mp3",
+"kind": "narr",
+"dur": 5.038
+}
+]
+},
+{
+"i": 35,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e035-0.mp3",
+"kind": "narr",
+"dur": 1.917
+}
+]
+},
+{
+"i": 36,
+"t": "trans",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e036-0.mp3",
+"kind": "narr",
+"dur": 0.765
+}
+]
+},
+{
+"i": 37,
+"t": "scene",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e037-0.mp3",
+"kind": "narr",
+"dur": 3.693
+}
+]
+},
+{
+"i": 38,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e038-0.mp3",
+"kind": "narr",
+"dur": 3.265
+}
+]
+},
+{
+"i": 39,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e039-0.mp3",
+"kind": "narr",
+"dur": 6.934
+}
+]
+},
+{
+"i": 40,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e040-0.mp3",
+"kind": "narr",
+"dur": 1.862
+}
+]
+},
+{
+"i": 41,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e041-0.mp3",
+"kind": "line",
+"dur": 0.971,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 42,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e042-0.mp3",
+"kind": "line",
+"dur": 0.792,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 43,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e043-0.mp3",
+"kind": "line",
+"dur": 1.849,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 44,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e044-0.mp3",
+"kind": "line",
+"dur": 1.12,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 45,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e045-0.mp3",
+"kind": "narr",
+"dur": 3.176
+}
+]
+},
+{
+"i": 46,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e046-0.mp3",
+"kind": "line",
+"dur": 1.081,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 47,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e047-0.mp3",
+"kind": "line",
+"dur": 0.969,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 48,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e048-0.mp3",
+"kind": "line",
+"dur": 0.428,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 49,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e049-0.mp3",
+"kind": "line",
+"dur": 2.851,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 50,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e050-0.mp3",
+"kind": "narr",
+"dur": 5.857
+}
+]
+},
+{
+"i": 51,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e051-0.mp3",
+"kind": "line",
+"dur": 0.879,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 52,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e052-0.mp3",
+"kind": "narr",
+"dur": 2.58
+}
+]
+},
+{
+"i": 53,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e053-0.mp3",
+"kind": "narr",
+"dur": 2.182
+}
+]
+},
+{
+"i": 54,
+"t": "trans",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e054-0.mp3",
+"kind": "narr",
+"dur": 1.335
+}
+]
+},
+{
+"i": 55,
+"t": "scene",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e055-0.mp3",
+"kind": "narr",
+"dur": 3.999
+}
+]
+},
+{
+"i": 56,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e056-0.mp3",
+"kind": "narr",
+"dur": 13.697
+}
+]
+},
+{
+"i": 57,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e057-0.mp3",
+"kind": "line",
+"dur": 1.397,
+"cut": false,
+"trail": true
+}
+]
+},
+{
+"i": 58,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e058-0.mp3",
+"kind": "line",
+"dur": 3.875,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 59,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e059-0.mp3",
+"kind": "line",
+"dur": 1.556,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 60,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e060-0.mp3",
+"kind": "narr",
+"dur": 1.691
+}
+]
+},
+{
+"i": 61,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e061-0.mp3",
+"kind": "line",
+"dur": 1.25,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 62,
+"t": "dlg",
+"who": "ALICE",
+"overlap": true,
+"clips": [
+{
+"f": "draft-03/e062-0.mp3",
+"kind": "line",
+"dur": 0.899,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 63,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e063-0.mp3",
+"kind": "line",
+"dur": 1.405,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 64,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e064-0.mp3",
+"kind": "line",
+"dur": 1.747,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 65,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e065-0.mp3",
+"kind": "narr",
+"dur": 1.036
+}
+]
+},
+{
+"i": 66,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e066-0.mp3",
+"kind": "par",
+"dur": 0.581
+},
+{
+"f": "draft-03/e066-1.mp3",
+"kind": "line",
+"dur": 2.452,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 67,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e067-0.mp3",
+"kind": "line",
+"dur": 1.096,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 68,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e068-0.mp3",
+"kind": "line",
+"dur": 2.477,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 69,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e069-0.mp3",
+"kind": "line",
+"dur": 2.233,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 70,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e070-0.mp3",
+"kind": "line",
+"dur": 1.621,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 71,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e071-0.mp3",
+"kind": "line",
+"dur": 1.907,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 72,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e072-0.mp3",
+"kind": "line",
+"dur": 0.55,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 73,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e073-0.mp3",
+"kind": "narr",
+"dur": 0.565
+}
+]
+},
+{
+"i": 74,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e074-0.mp3",
+"kind": "line",
+"dur": 1.669,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 75,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e075-0.mp3",
+"kind": "narr",
+"dur": 3.648
+}
+]
+},
+{
+"i": 76,
+"t": "trans",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e076-0.mp3",
+"kind": "narr",
+"dur": 0.765
+}
+]
+},
+{
+"i": 77,
+"t": "scene",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e077-0.mp3",
+"kind": "narr",
+"dur": 5.004
+}
+]
+},
+{
+"i": 78,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e078-0.mp3",
+"kind": "narr",
+"dur": 2.378
+}
+]
+},
+{
+"i": 79,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e079-0.mp3",
+"kind": "narr",
+"dur": 6.904
+}
+]
+},
+{
+"i": 80,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e080-0.mp3",
+"kind": "line",
+"dur": 6.785,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 81,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e081-0.mp3",
+"kind": "line",
+"dur": 1.205,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 82,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e082-0.mp3",
+"kind": "line",
+"dur": 0.483,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 83,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e083-0.mp3",
+"kind": "line",
+"dur": 0.62,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 84,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e084-0.mp3",
+"kind": "narr",
+"dur": 3.91
+}
+]
+},
+{
+"i": 85,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e085-0.mp3",
+"kind": "narr",
+"dur": 4.733
+}
+]
+},
+{
+"i": 86,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e086-0.mp3",
+"kind": "narr",
+"dur": 4.886
+}
+]
+},
+{
+"i": 87,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e087-0.mp3",
+"kind": "narr",
+"dur": 4.097
+}
+]
+},
+{
+"i": 88,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e088-0.mp3",
+"kind": "narr",
+"dur": 3.179
+}
+]
+},
+{
+"i": 89,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e089-0.mp3",
+"kind": "line",
+"dur": 1.419,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 90,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e090-0.mp3",
+"kind": "line",
+"dur": 1.297,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 91,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e091-0.mp3",
+"kind": "narr",
+"dur": 8.611
+}
+]
+},
+{
+"i": 92,
+"t": "trans",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e092-0.mp3",
+"kind": "narr",
+"dur": 1.335
+}
+]
+},
+{
+"i": 93,
+"t": "scene",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e093-0.mp3",
+"kind": "narr",
+"dur": 3.999
+}
+]
+},
+{
+"i": 94,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e094-0.mp3",
+"kind": "narr",
+"dur": 5.729
+}
+]
+},
+{
+"i": 95,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e095-0.mp3",
+"kind": "line",
+"dur": 5.669,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 96,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e096-0.mp3",
+"kind": "line",
+"dur": 0.483,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 97,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e097-0.mp3",
+"kind": "line",
+"dur": 1.4,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 98,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e098-0.mp3",
+"kind": "line",
+"dur": 2.681,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 99,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e099-0.mp3",
+"kind": "line",
+"dur": 0.74,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 100,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e100-0.mp3",
+"kind": "narr",
+"dur": 0.686
+}
+]
+},
+{
+"i": 101,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e101-0.mp3",
+"kind": "line",
+"dur": 2.347,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 102,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e102-0.mp3",
+"kind": "line",
+"dur": 1.548,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 103,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e103-0.mp3",
+"kind": "line",
+"dur": 2.142,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 104,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e104-0.mp3",
+"kind": "line",
+"dur": 0.85,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 105,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e105-0.mp3",
+"kind": "narr",
+"dur": 2.441
+}
+]
+},
+{
+"i": 106,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e106-0.mp3",
+"kind": "line",
+"dur": 8.629,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 107,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e107-0.mp3",
+"kind": "narr",
+"dur": 3.615
+}
+]
+},
+{
+"i": 108,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e108-0.mp3",
+"kind": "narr",
+"dur": 7.86
+}
+]
+},
+{
+"i": 109,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e109-0.mp3",
+"kind": "narr",
+"dur": 5.089
+}
+]
+},
+{
+"i": 110,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e110-0.mp3",
+"kind": "par",
+"dur": 1.028
+},
+{
+"f": "draft-03/e110-1.mp3",
+"kind": "line",
+"dur": 0.666,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 111,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e111-0.mp3",
+"kind": "line",
+"dur": 0.855,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 112,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e112-0.mp3",
+"kind": "line",
+"dur": 0.949,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 113,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e113-0.mp3",
+"kind": "line",
+"dur": 0.575,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 114,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e114-0.mp3",
+"kind": "line",
+"dur": 0.656,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 115,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e115-0.mp3",
+"kind": "narr",
+"dur": 3.353
+}
+]
+},
+{
+"i": 116,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e116-0.mp3",
+"kind": "narr",
+"dur": 3.335
+}
+]
+},
+{
+"i": 117,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e117-0.mp3",
+"kind": "line",
+"dur": 11.976,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 118,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e118-0.mp3",
+"kind": "narr",
+"dur": 10.509
+}
+]
+},
+{
+"i": 119,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e119-0.mp3",
+"kind": "narr",
+"dur": 0.832
+}
+]
+},
+{
+"i": 120,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e120-0.mp3",
+"kind": "line",
+"dur": 1.765,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 121,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e121-0.mp3",
+"kind": "narr",
+"dur": 4.907
+}
+]
+},
+{
+"i": 122,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e122-0.mp3",
+"kind": "line",
+"dur": 1.006,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 123,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e123-0.mp3",
+"kind": "line",
+"dur": 0.656,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 124,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e124-0.mp3",
+"kind": "narr",
+"dur": 3.929
+}
+]
+},
+{
+"i": 125,
+"t": "dlg",
+"who": "ALICE",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e125-0.mp3",
+"kind": "line",
+"dur": 3.077,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 126,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e126-0.mp3",
+"kind": "line",
+"dur": 2.372,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 127,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e127-0.mp3",
+"kind": "narr",
+"dur": 2.735
+}
+]
+},
+{
+"i": 128,
+"t": "dlg",
+"who": "DANIEL",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e128-0.mp3",
+"kind": "line",
+"dur": 0.963,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 129,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e129-0.mp3",
+"kind": "narr",
+"dur": 0.673
+}
+]
+},
+{
+"i": 130,
+"t": "dlg",
+"who": "RUTH",
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e130-0.mp3",
+"kind": "line",
+"dur": 3.589,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 131,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e131-0.mp3",
+"kind": "narr",
+"dur": 1.267
+}
+]
+},
+{
+"i": 132,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e132-0.mp3",
+"kind": "narr",
+"dur": 9.287
+}
+]
+},
+{
+"i": 133,
+"t": "trans",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e133-0.mp3",
+"kind": "narr",
+"dur": 1.198
+}
+]
+},
+{
+"i": 134,
+"t": "center",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "draft-03/e134-0.mp3",
+"kind": "narr",
+"dur": 2.513
+}
+]
+}
+]
+}
