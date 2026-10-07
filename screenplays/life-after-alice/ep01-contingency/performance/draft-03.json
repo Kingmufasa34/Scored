@@ -1,0 +1,48 @@
+{
+  "about": "Performance sheet for the voice recording: how each line should be delivered. The script stays clean; acting notes live here. 'say' is what the voice model reads (sound tags like [sigh] or [laugh] are only understood by Chatterbox Turbo). 'exaggeration' 0.25 flat .. 1.0 heightened; 'cfg' lower = slower, more deliberate. Keys are element numbers in the draft; 'text' must match the script line so a revised draft can't silently pick up the wrong note.",
+  "scene": "HOSPITAL CORRIDOR",
+  "lines": {
+    "80": [{
+      "text": "There's a place in Heidelberg. Hang on. Heidelberg or -- there's a trial on, anyway, and if we go private it's --",
+      "mood": "Scrolling his phone, talking too fast, not looking at her. Planning to avoid feeling.",
+      "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
+      "exaggeration": 0.75, "cfg": 0.3
+    }],
+    "81": [{
+      "text": "Can you get me some crisps.",
+      "mood": "Worn out and flat. Not a question. She's stopped listening to him.",
+      "say": "[sigh] Can you get me some crisps.",
+      "exaggeration": 0.3, "cfg": 0.5
+    }],
+    "82": [{
+      "text": "What?",
+      "mood": "Thrown, mid-sentence, genuinely lost.",
+      "say": "What?",
+      "exaggeration": 0.55, "cfg": 0.45
+    }],
+    "83": [{
+      "text": "Crisps.",
+      "mood": "Same flatness, a touch firmer. End of discussion.",
+      "say": "Crisps.",
+      "exaggeration": 0.35, "cfg": 0.5
+    }],
+    "89": [{
+      "text": "They're prawn cocktail.",
+      "mood": "Dazed, out of breath after hitting the machine. Knuckles bleeding.",
+      "say": "[sniff] They're prawn cocktail.",
+      "exaggeration": 0.45, "cfg": 0.4
+    }],
+    "90": [{
+      "text": "I hate prawn cocktail.",
+      "mood": "Deadpan, then it cracks into a laugh she can't stop.",
+      "say": "I hate prawn cocktail. [chuckle]",
+      "exaggeration": 0.6, "cfg": 0.4
+    }]
+  },
+  "sounds": {
+    "91": [
+      {"who": "ALICE", "say": "[laugh]", "after": 0.4, "mood": "Starts laughing and can't stop."},
+      {"who": "DANIEL", "say": "[laugh]", "after": 2.2, "mood": "Joins in, the awful kind of laugh."}
+    ]
+  }
+}

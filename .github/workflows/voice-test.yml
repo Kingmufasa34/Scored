@@ -1,0 +1,68 @@
+name: Voice test
+
+# A/B test for one scene: the current table-read voices vs. real human reference
+# voices + Chatterbox Turbo + the performance sheet + best-of-several takes.
+on:
+  push:
+    branches: [ccr-adb08150-sjiujb]
+    paths:
+      - "screenplays/tools/voice_test.py"
+      - "screenplays/**/performance/*.json"
+      - ".github/workflows/voice-test.yml"
+  workflow_dispatch:
+    inputs:
+      scene:
+        description: "Scene heading text to test"
+        default: "HOSPITAL CORRIDOR"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: voice-test
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      EP: screenplays/life-after-alice/ep01-contingency
+      SCENE: ${{ github.event.inputs.scene || 'HOSPITAL CORRIDOR' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Chatterbox, Whisper and the dataset reader (CPU)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install --upgrade pip
+          pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          pip install --upgrade chatterbox-tts soundfile librosa datasets openai-whisper
+          pip show chatterbox-tts torch datasets | grep -E '^(Name|Version)'
+
+      - name: Cache model downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/huggingface
+            ~/.cache/whisper
+          key: voicetest-models-v1
+
+      - name: Record the A/B test
+        run: |
+          python screenplays/tools/voice_test.py \
+            "$EP/drafts/draft-03.fountain" "$EP/audio" "$EP/performance/draft-03.json" "$EP/voice-test" \
+            --scene "$SCENE" --fallback-refs screenplays/tools/voices --takes 3
+
+      - name: Commit the test
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898315+github-actions[bot]@users.noreply.github.com"
+          git add "$EP/voice-test"
+          git commit -m "Voice test for $SCENE" || exit 0
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 5; done
+          exit 1
