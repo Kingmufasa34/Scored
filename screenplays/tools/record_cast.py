@@ -191,7 +191,7 @@ def main():
                 c, _ = say(chunk, base_ex, base_cfg, takes=1)
                 pieces += [c, np.zeros(int(0.25 * SR), dtype=np.float32)]
             audio = T.fade(np.concatenate(pieces[:-1]))
-            out.append(("narr", audio, False, False))
+            out.append(("narr", audio, False, False, None))
         elif e["t"] == "dlg" and (e["who"] == a.role or a.role == "DIRECTOR"):
             notes = perf["lines"].get(str(i), [])
             par, n = None, 0
@@ -200,7 +200,7 @@ def main():
                     par = ln["par"]
                     if a.role == "DIRECTOR":
                         c, _ = say(T._decap(par.strip("()")).capitalize() + ".", base_ex, base_cfg, takes=1)
-                        out.append(("par", T.fade(c), False, False))
+                        out.append(("par", T.fade(c), False, False, None))
                     continue
                 if a.role == "DIRECTOR":
                     continue
@@ -213,13 +213,21 @@ def main():
                 c = c * gain
                 if cut:
                     c = c[: max(int(len(c) * 0.9), len(c) - int(0.18 * SR))]
-                out.append(("line", T.fade(c, ms_out=25 if cut else 60), cut, trail))
+                out.append(("line", T.fade(c, ms_out=25 if cut else 60), cut, trail, note.get("gap")))
+        # Sounds people make that aren't lines (laughs, breaths), from the performance sheet.
+        for x in perf.get("extras", {}).get(str(i), []):
+            if x["who"] == a.role:
+                c, _ = say(x["say"], x.get("exaggeration", base_ex), x.get("cfg", base_cfg), takes=1)
+                out.append(("extra", T.fade(c), False, False, x.get("after", 0)))
         if out:
             clips[str(i)] = []
-            for k, (kind, audio, cut, trail) in enumerate(out):
+            for k, (kind, audio, cut, trail, when) in enumerate(out):
                 name = f"e{i:03d}-{k}.mp3"
                 T.write_mp3(audio, os.path.join(folder, name), bitrate="64k")
-                clips[str(i)].append({"f": f"{oid}/{name}", "kind": kind, "dur": round(len(audio) / SR, 3), "cut": cut, "trail": trail})
+                c = {"f": f"{oid}/{name}", "kind": kind, "dur": round(len(audio) / SR, 3), "cut": cut, "trail": trail}
+                if when is not None:
+                    c["gap" if kind == "line" else "after"] = when
+                clips[str(i)].append(c)
     os.remove(ref_path)
     json.dump({"id": oid, "role": a.role, "label": label, "credit": credit, "clips": clips},
               open(os.path.join(a.out, oid + ".json"), "w"), indent=0)

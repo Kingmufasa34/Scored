@@ -1,16 +1,21 @@
-name: Record cast
+name: Record rough cast
 
-# Records several British and Irish voice options per part (one job each), then
-# writes audio/draft-03.cast.json so the table-read page can offer a voice picker.
-# Only runs by hand, so changes to the recorder never overwrite the recording.
+# The rough performance (performance/draft-03-rough.json): same voices, spoken
+# versions of the lines, laughs and breaths. A separate recording; the "as written"
+# one in audio/draft-03-cast is never touched. The Director's narration is shared.
 on:
+  push:
+    branches: [ccr-adb08150-sjiujb]
+    paths:
+      - "screenplays/life-after-alice/ep01-contingency/performance/draft-03-rough.json"
+      - ".github/workflows/record-rough.yml"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: record-cast
+  group: record-rough
   cancel-in-progress: true
 
 env:
@@ -24,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        role: [ALICE, DANIEL, RUTH, DIRECTOR]
+        role: [ALICE, DANIEL, RUTH]
         option: [0, 1, 2]
     steps:
       - uses: actions/checkout@v4
@@ -47,15 +52,16 @@ jobs:
             ~/.cache/huggingface
             ~/.cache/whisper
           key: recordcast-models-v1
+          restore-keys: recordcast-models-
 
       - name: Record ${{ matrix.role }} option ${{ matrix.option }}
         run: |
           python screenplays/tools/record_cast.py "$EP/drafts/draft-03.fountain" cast \
-            ${{ matrix.role }} ${{ matrix.option }} --performance "$EP/performance/draft-03.json"
+            ${{ matrix.role }} ${{ matrix.option }} --performance "$EP/performance/draft-03-rough.json"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: cast-${{ matrix.role }}-${{ matrix.option }}
+          name: rough-${{ matrix.role }}-${{ matrix.option }}
           path: cast
 
   merge:
@@ -67,16 +73,16 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          pattern: cast-*
+          pattern: rough-*
           merge-multiple: true
           path: cast
 
       - name: Write the cast index and commit
         run: |
-          DEST="$EP/audio/draft-03-cast"
+          DEST="$EP/audio/draft-03-rough-cast"
           mkdir -p "$DEST"
           cp -r cast/* "$DEST"/ 2>/dev/null || { echo "nothing recorded"; exit 1; }
-          python3 - "$DEST" "$EP/audio/draft-03.cast.json" <<'PY'
+          python3 - "$DEST" "$EP/audio/draft-03-rough.cast.json" <<'PY'
           import glob, json, os, sys
           dest, out = sys.argv[1], sys.argv[2]
           roles = {}
@@ -84,7 +90,7 @@ jobs:
               m = json.load(open(f))
               for clips in m["clips"].values():
                   for c in clips:
-                      c["f"] = "draft-03-cast/" + c["f"]
+                      c["f"] = "draft-03-rough-cast/" + c["f"]
               roles.setdefault(m["role"], []).append(m)
           json.dump({"roles": roles}, open(out, "w"))
           for f in glob.glob(os.path.join(dest, "*.json")):
@@ -94,6 +100,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898315+github-actions[bot]@users.noreply.github.com"
           git add "$EP/audio"
-          git commit -m "Record British and Irish cast options for draft 03 [skip ci]" || exit 0
+          git commit -m "Record the rough performance of draft 03 [skip ci]" || exit 0
           for i in 1 2 3; do git pull --rebase && git push && exit 0; sleep 5; done
           exit 1
