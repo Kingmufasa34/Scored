@@ -1,0 +1,815 @@
+{
+"duration": 238.69,
+"cues": [
+{
+"i": 0,
+"start": 0.5,
+"end": 1.1,
+"who": null
+},
+{
+"i": 1,
+"start": 1.1,
+"end": 1.7,
+"who": null
+},
+{
+"i": 2,
+"start": 1.7,
+"end": 2.96,
+"who": null
+},
+{
+"i": 3,
+"start": 2.96,
+"end": 4.34,
+"who": null
+},
+{
+"i": 4,
+"start": 4.34,
+"end": 5.47,
+"who": null
+},
+{
+"i": 5,
+"start": 5.47,
+"end": 6.46,
+"who": "ALICE"
+},
+{
+"i": 6,
+"start": 6.76,
+"end": 8.37,
+"who": "DANIEL"
+},
+{
+"i": 7,
+"start": 8.67,
+"end": 10.23,
+"who": "ALICE"
+},
+{
+"i": 8,
+"start": 10.53,
+"end": 11.3,
+"who": "DANIEL"
+},
+{
+"i": 9,
+"start": 11.6,
+"end": 12.67,
+"who": null
+},
+{
+"i": 10,
+"start": 12.67,
+"end": 13.37,
+"who": null
+},
+{
+"i": 11,
+"start": 13.37,
+"end": 15.25,
+"who": "DANIEL"
+},
+{
+"i": 12,
+"start": 15.55,
+"end": 16.41,
+"who": null
+},
+{
+"i": 13,
+"start": 16.41,
+"end": 22.7,
+"who": "RUTH"
+},
+{
+"i": 14,
+"start": 23.0,
+"end": 23.42,
+"who": "DANIEL"
+},
+{
+"i": 15,
+"start": 23.72,
+"end": 24.24,
+"who": "ALICE"
+},
+{
+"i": 16,
+"start": 24.54,
+"end": 25.14,
+"who": null
+},
+{
+"i": 17,
+"start": 25.14,
+"end": 26.59,
+"who": null
+},
+{
+"i": 18,
+"start": 26.59,
+"end": 27.4,
+"who": null
+},
+{
+"i": 19,
+"start": 27.4,
+"end": 29.49,
+"who": "RUTH"
+},
+{
+"i": 20,
+"start": 29.37,
+"end": 30.64,
+"who": null
+},
+{
+"i": 21,
+"start": 30.64,
+"end": 39.26,
+"who": "ALICE"
+},
+{
+"i": 22,
+"start": 39.14,
+"end": 39.56,
+"who": "DANIEL"
+},
+{
+"i": 23,
+"start": 39.86,
+"end": 41.82,
+"who": "ALICE"
+},
+{
+"i": 24,
+"start": 41.7,
+"end": 43.78,
+"who": "DANIEL"
+},
+{
+"i": 25,
+"start": 44.08,
+"end": 48.57,
+"who": "ALICE"
+},
+{
+"i": 26,
+"start": 48.87,
+"end": 51.07,
+"who": null
+},
+{
+"i": 27,
+"start": 51.07,
+"end": 54.82,
+"who": "RUTH"
+},
+{
+"i": 28,
+"start": 55.12,
+"end": 57.61,
+"who": "DANIEL"
+},
+{
+"i": 29,
+"start": 57.91,
+"end": 59.33,
+"who": "RUTH"
+},
+{
+"i": 30,
+"start": 59.21,
+"end": 59.84,
+"who": "DANIEL"
+},
+{
+"i": 31,
+"start": 60.14,
+"end": 60.64,
+"who": null
+},
+{
+"i": 32,
+"start": 60.64,
+"end": 65.0,
+"who": "DANIEL"
+},
+{
+"i": 33,
+"start": 65.3,
+"end": 66.6,
+"who": "ALICE"
+},
+{
+"i": 34,
+"start": 66.9,
+"end": 67.89,
+"who": null
+},
+{
+"i": 35,
+"start": 67.89,
+"end": 68.56,
+"who": null
+},
+{
+"i": 36,
+"start": 68.56,
+"end": 69.96,
+"who": null
+},
+{
+"i": 37,
+"start": 69.96,
+"end": 70.56,
+"who": null
+},
+{
+"i": 38,
+"start": 70.56,
+"end": 71.23,
+"who": null
+},
+{
+"i": 39,
+"start": 71.23,
+"end": 72.47,
+"who": null
+},
+{
+"i": 40,
+"start": 72.47,
+"end": 73.09,
+"who": null
+},
+{
+"i": 41,
+"start": 73.09,
+"end": 74.06,
+"who": "DANIEL"
+},
+{
+"i": 42,
+"start": 74.36,
+"end": 75.15,
+"who": "ALICE"
+},
+{
+"i": 43,
+"start": 75.45,
+"end": 77.3,
+"who": "DANIEL"
+},
+{
+"i": 44,
+"start": 77.18,
+"end": 78.3,
+"who": "ALICE"
+},
+{
+"i": 45,
+"start": 78.6,
+"end": 79.39,
+"who": null
+},
+{
+"i": 46,
+"start": 79.39,
+"end": 80.47,
+"who": "DANIEL"
+},
+{
+"i": 47,
+"start": 80.77,
+"end": 81.74,
+"who": "ALICE"
+},
+{
+"i": 48,
+"start": 82.04,
+"end": 82.47,
+"who": "DANIEL"
+},
+{
+"i": 49,
+"start": 82.77,
+"end": 85.62,
+"who": "ALICE"
+},
+{
+"i": 50,
+"start": 85.92,
+"end": 87.24,
+"who": null
+},
+{
+"i": 51,
+"start": 87.24,
+"end": 88.12,
+"who": "ALICE"
+},
+{
+"i": 52,
+"start": 88.42,
+"end": 90.62,
+"who": null
+},
+{
+"i": 53,
+"start": 90.62,
+"end": 91.34,
+"who": null
+},
+{
+"i": 54,
+"start": 91.34,
+"end": 92.74,
+"who": null
+},
+{
+"i": 55,
+"start": 92.74,
+"end": 93.34,
+"who": null
+},
+{
+"i": 56,
+"start": 93.34,
+"end": 95.14,
+"who": null
+},
+{
+"i": 57,
+"start": 95.14,
+"end": 96.54,
+"who": "RUTH"
+},
+{
+"i": 58,
+"start": 97.44,
+"end": 101.31,
+"who": "ALICE"
+},
+{
+"i": 59,
+"start": 101.61,
+"end": 103.17,
+"who": "DANIEL"
+},
+{
+"i": 60,
+"start": 103.05,
+"end": 105.25,
+"who": null
+},
+{
+"i": 61,
+"start": 105.25,
+"end": 106.5,
+"who": "DANIEL"
+},
+{
+"i": 62,
+"start": 105.6,
+"end": 106.5,
+"who": "ALICE"
+},
+{
+"i": 63,
+"start": 106.8,
+"end": 108.2,
+"who": "RUTH"
+},
+{
+"i": 64,
+"start": 108.08,
+"end": 109.83,
+"who": "ALICE"
+},
+{
+"i": 65,
+"start": 110.13,
+"end": 110.59,
+"who": null
+},
+{
+"i": 66,
+"start": 110.59,
+"end": 113.04,
+"who": "RUTH"
+},
+{
+"i": 67,
+"start": 113.34,
+"end": 114.44,
+"who": "DANIEL"
+},
+{
+"i": 68,
+"start": 114.74,
+"end": 117.22,
+"who": "ALICE"
+},
+{
+"i": 69,
+"start": 117.52,
+"end": 119.75,
+"who": "DANIEL"
+},
+{
+"i": 70,
+"start": 120.05,
+"end": 121.67,
+"who": "ALICE"
+},
+{
+"i": 71,
+"start": 121.55,
+"end": 123.46,
+"who": "DANIEL"
+},
+{
+"i": 72,
+"start": 123.76,
+"end": 124.31,
+"who": "ALICE"
+},
+{
+"i": 73,
+"start": 124.61,
+"end": 126.81,
+"who": null
+},
+{
+"i": 74,
+"start": 126.81,
+"end": 128.48,
+"who": "ALICE"
+},
+{
+"i": 75,
+"start": 128.78,
+"end": 129.65,
+"who": null
+},
+{
+"i": 76,
+"start": 129.65,
+"end": 131.05,
+"who": null
+},
+{
+"i": 77,
+"start": 131.05,
+"end": 131.65,
+"who": null
+},
+{
+"i": 78,
+"start": 131.65,
+"end": 132.29,
+"who": null
+},
+{
+"i": 79,
+"start": 132.29,
+"end": 133.5,
+"who": null
+},
+{
+"i": 80,
+"start": 133.5,
+"end": 140.28,
+"who": "DANIEL"
+},
+{
+"i": 81,
+"start": 140.16,
+"end": 141.37,
+"who": "ALICE"
+},
+{
+"i": 82,
+"start": 141.67,
+"end": 142.15,
+"who": "DANIEL"
+},
+{
+"i": 83,
+"start": 142.45,
+"end": 143.07,
+"who": "ALICE"
+},
+{
+"i": 84,
+"start": 143.37,
+"end": 144.14,
+"who": null
+},
+{
+"i": 85,
+"start": 144.14,
+"end": 145.1,
+"who": null
+},
+{
+"i": 86,
+"start": 145.1,
+"end": 145.93,
+"who": null
+},
+{
+"i": 87,
+"start": 145.93,
+"end": 146.86,
+"who": null
+},
+{
+"i": 88,
+"start": 146.86,
+"end": 147.62,
+"who": null
+},
+{
+"i": 89,
+"start": 147.62,
+"end": 149.04,
+"who": "DANIEL"
+},
+{
+"i": 90,
+"start": 149.34,
+"end": 150.64,
+"who": "ALICE"
+},
+{
+"i": 91,
+"start": 150.94,
+"end": 152.41,
+"who": null
+},
+{
+"i": 92,
+"start": 152.41,
+"end": 153.81,
+"who": null
+},
+{
+"i": 93,
+"start": 153.81,
+"end": 154.41,
+"who": null
+},
+{
+"i": 94,
+"start": 154.41,
+"end": 155.46,
+"who": null
+},
+{
+"i": 95,
+"start": 155.46,
+"end": 161.13,
+"who": "RUTH"
+},
+{
+"i": 96,
+"start": 161.43,
+"end": 161.91,
+"who": "DANIEL"
+},
+{
+"i": 97,
+"start": 162.21,
+"end": 163.61,
+"who": "RUTH"
+},
+{
+"i": 98,
+"start": 163.49,
+"end": 166.17,
+"who": "DANIEL"
+},
+{
+"i": 99,
+"start": 166.47,
+"end": 167.21,
+"who": "RUTH"
+},
+{
+"i": 100,
+"start": 167.51,
+"end": 169.71,
+"who": null
+},
+{
+"i": 101,
+"start": 169.71,
+"end": 172.06,
+"who": "DANIEL"
+},
+{
+"i": 102,
+"start": 171.94,
+"end": 173.49,
+"who": "RUTH"
+},
+{
+"i": 103,
+"start": 173.79,
+"end": 175.93,
+"who": "DANIEL"
+},
+{
+"i": 104,
+"start": 176.23,
+"end": 177.08,
+"who": "RUTH"
+},
+{
+"i": 105,
+"start": 177.38,
+"end": 179.58,
+"who": null
+},
+{
+"i": 106,
+"start": 179.58,
+"end": 188.21,
+"who": "ALICE"
+},
+{
+"i": 107,
+"start": 188.09,
+"end": 188.99,
+"who": null
+},
+{
+"i": 108,
+"start": 188.99,
+"end": 190.47,
+"who": null
+},
+{
+"i": 109,
+"start": 190.47,
+"end": 191.58,
+"who": null
+},
+{
+"i": 110,
+"start": 191.58,
+"end": 192.24,
+"who": "DANIEL"
+},
+{
+"i": 111,
+"start": 192.12,
+"end": 192.98,
+"who": "ALICE"
+},
+{
+"i": 112,
+"start": 193.28,
+"end": 194.23,
+"who": "DANIEL"
+},
+{
+"i": 113,
+"start": 194.53,
+"end": 195.1,
+"who": "ALICE"
+},
+{
+"i": 114,
+"start": 195.4,
+"end": 196.06,
+"who": "DANIEL"
+},
+{
+"i": 115,
+"start": 196.36,
+"end": 197.16,
+"who": null
+},
+{
+"i": 116,
+"start": 197.16,
+"end": 199.36,
+"who": null
+},
+{
+"i": 117,
+"start": 199.36,
+"end": 211.33,
+"who": "RUTH"
+},
+{
+"i": 118,
+"start": 211.63,
+"end": 213.83,
+"who": null
+},
+{
+"i": 119,
+"start": 213.83,
+"end": 214.29,
+"who": null
+},
+{
+"i": 120,
+"start": 214.29,
+"end": 216.05,
+"who": "ALICE"
+},
+{
+"i": 121,
+"start": 216.35,
+"end": 217.25,
+"who": null
+},
+{
+"i": 122,
+"start": 217.25,
+"end": 218.26,
+"who": "DANIEL"
+},
+{
+"i": 123,
+"start": 218.56,
+"end": 219.22,
+"who": "ALICE"
+},
+{
+"i": 124,
+"start": 219.52,
+"end": 220.31,
+"who": null
+},
+{
+"i": 125,
+"start": 220.31,
+"end": 223.38,
+"who": "ALICE"
+},
+{
+"i": 126,
+"start": 223.68,
+"end": 226.06,
+"who": "RUTH"
+},
+{
+"i": 127,
+"start": 226.36,
+"end": 227.1,
+"who": null
+},
+{
+"i": 128,
+"start": 227.1,
+"end": 228.06,
+"who": "DANIEL"
+},
+{
+"i": 129,
+"start": 227.94,
+"end": 230.14,
+"who": null
+},
+{
+"i": 130,
+"start": 230.14,
+"end": 233.73,
+"who": "RUTH"
+},
+{
+"i": 131,
+"start": 234.03,
+"end": 234.49,
+"who": null
+},
+{
+"i": 132,
+"start": 234.49,
+"end": 236.09,
+"who": null
+},
+{
+"i": 133,
+"start": 236.09,
+"end": 236.69,
+"who": null
+},
+{
+"i": 134,
+"start": 236.69,
+"end": 237.69,
+"who": null
+}
+]
+}
