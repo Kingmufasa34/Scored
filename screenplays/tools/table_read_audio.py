@@ -271,7 +271,7 @@ def narration(e):
         head = re.sub(r"^EXT\.?\s*", "Exterior. ", head)
         out = [head] + parts[1:]
         out = [re.sub(r"\((.*?)\)", r". \1", x) for x in out]
-        return _decap(". ".join(o.rstrip(".") for o in out)) + "."
+        return re.sub(r"\s+\.", ".", _decap(". ".join(o.strip().rstrip(".") for o in out))) + "."
     if t == "trans":
         return _decap(e["text"].rstrip(":.")).capitalize() + "."
     if t == "center":
