@@ -62,17 +62,37 @@ def median_f0(a):
 
 # ---------- Human reference voices ----------
 
+def open_expresso(tried):
+    """Find a loadable copy of the Expresso corpus on the Hugging Face hub."""
+    from datasets import Audio, load_dataset
+    names = ["ylacombe/expresso"]
+    try:
+        from huggingface_hub import list_datasets
+        names += [d.id for d in list_datasets(search="expresso", limit=20) if d.id not in names]
+    except Exception as e:
+        tried.append(f"hub search failed: {e!r}"[:300])
+    log("expresso candidates:", names)
+    for name in names:
+        try:
+            ds = load_dataset(name, split="train", streaming=True)
+            first = next(iter(ds.cast_column("audio", Audio(decode=False))))
+            cols = list(first.keys())
+            spk = next((k for k in ("speaker_id", "speaker", "spk_id") if k in cols), None)
+            sty = next((k for k in ("style", "emotion", "expression") if k in cols), None)
+            log(f"  {name}: columns {cols}")
+            if spk and sty and "audio" in cols:
+                return ds.cast_column("audio", Audio(decode=False)), spk, sty, name
+            tried.append(f"{name}: columns {cols}")
+        except Exception as e:
+            tried.append(f"{name}: {e!r}"[:300])
+            log(f"  {name}: {e!r}"[:300])
+    raise RuntimeError("no usable Expresso copy; tried: " + " | ".join(tried))
+
+
 def fetch_human_refs(outdir, max_rows=6000):
     """Pull real-speaker reference clips from the Expresso corpus (CC BY-NC 4.0)."""
-    from datasets import Audio, load_dataset
-    ds = load_dataset("ylacombe/expresso", split="train", streaming=True)
-    feats = list(ds.features.keys()) if ds.features else []
-    log("expresso columns:", feats)
-    ds = ds.cast_column("audio", Audio(decode=False))
-    spk_key = next((k for k in ("speaker_id", "speaker") if k in feats), None)
-    sty_key = "style" if "style" in feats else None
-    if not spk_key or not sty_key:
-        raise RuntimeError(f"unexpected columns {feats}")
+    tried = []
+    ds, spk_key, sty_key, name = open_expresso(tried)
     pool = {}  # (speaker, style) -> list of audio arrays
     for n, row in enumerate(ds):
         if n >= max_rows:
@@ -119,7 +139,7 @@ def fetch_human_refs(outdir, max_rows=6000):
         ref = np.concatenate(clips)
         ref = ref / (np.max(np.abs(ref)) or 1) * 0.9
         sf.write(os.path.join(outdir, role.lower() + ".wav"), ref, SR)
-        credits[role] = {"corpus": "Expresso (CC BY-NC 4.0)", "speaker": choice[0], "style": choice[1],
+        credits[role] = {"corpus": f"Expresso (CC BY-NC 4.0) via {name}", "speaker": choice[0], "style": choice[1],
                          "seconds": round(len(ref) / SR, 1)}
         log(f"{role}: speaker {choice[0]}, style {choice[1]}, {len(ref) / SR:.1f}s")
     return credits
@@ -170,7 +190,9 @@ class Judge:
         want = self.words(text)
         if not want:
             return 1.0
-        got = self.words(self.m.transcribe(a, language="en", fp16=False)["text"])
+        heard = self.m.transcribe(a, language="en", fp16=False)["text"]
+        self.last_heard = heard.strip()
+        got = self.words(heard)
         # word error rate via edit distance
         d = list(range(len(got) + 1))
         for i, w in enumerate(want, 1):
@@ -180,13 +202,28 @@ class Judge:
         return max(0.0, 1 - d[len(got)] / len(want))
 
 
-def best_take(model, judge, text, ref, ex, cfg, takes, check_text):
+def best_take(model, judge, text, ref, ex, cfg, takes, check_text, heard=None):
     results = []
     for k in range(takes):
         a = model.say(text, ref, ex, cfg)
         s = judge.score(a, check_text) if check_text else 1.0
         results.append((s, a))
-        log(f"    take {k + 1}: {s:.2f} match, {len(a) / SR:.1f}s")
+        h = getattr(judge, "last_heard", "")
+        if heard is not None:
+            heard.append({"say": text, "heard": h, "match": round(s, 2), "seconds": round(len(a) / SR, 1)})
+        log(f"    take {k + 1}: {s:.2f} match, {len(a) / SR:.1f}s, heard: {h!r}")
+    # every take garbled? try again without the sound tags, which can derail short lines
+    if max(s for s, _ in results) < 0.5 and TAG_RE.search(text):
+        plain = TAG_RE.sub("", text).strip()
+        log("    all takes failed; retrying without sound tags:", plain)
+        for k in range(takes):
+            a = model.say(plain, ref, ex, cfg)
+            s = judge.score(a, check_text) if check_text else 1.0
+            results.append((s, a))
+            h = getattr(judge, "last_heard", "")
+            if heard is not None:
+                heard.append({"say": plain, "heard": h, "match": round(s, 2), "seconds": round(len(a) / SR, 1)})
+            log(f"    retry {k + 1}: {s:.2f} match, {len(a) / SR:.1f}s, heard: {h!r}")
     top = max(s for s, _ in results)
     good = [(s, a) for s, a in results if s >= top - 0.05]
     durs = sorted(len(a) for _, a in good)
@@ -276,7 +313,8 @@ def main():
         report["voices"] = fetch_human_refs(refs)
         report["human_voices"] = True
     except Exception as ex:
-        log("Couldn't get human reference voices, falling back to the Kokoro ones:", repr(ex)[:400])
+        log("Couldn't get human reference voices, falling back to the Kokoro ones:", repr(ex)[:800])
+        report["human_voices_error"] = repr(ex)[:1500]
         os.makedirs(refs, exist_ok=True)
         for role in WANT:
             src = os.path.join(a.fallback_refs, role.lower() + ".wav")
@@ -305,10 +343,11 @@ def main():
                 ex = note.get("exaggeration", 0.5)
                 cfg = note.get("cfg", 0.5)
                 log(f"[{i}] {e['who']} ({note.get('mood', 'no note')}): {say}")
-                clip, score, scores = best_take(model, judge, say, ref_for(e["who"]), ex, cfg, a.takes, text)
+                heard = []
+                clip, score, scores = best_take(model, judge, say, ref_for(e["who"]), ex, cfg, a.takes, text, heard)
                 if cut:
                     clip = clip[: max(int(len(clip) * 0.9), len(clip) - int(0.18 * SR))]
-                report["lines"][str(i)] = {"who": e["who"], "say": say, "takes": scores, "kept": round(score, 2)}
+                report["lines"][str(i)] = {"who": e["who"], "say": say, "takes": heard, "kept": round(score, 2)}
                 out.append(("line", T.fade(clip, ms_out=25 if cut else 60), cut, trail))
             return out
         text = T.narration(e)
