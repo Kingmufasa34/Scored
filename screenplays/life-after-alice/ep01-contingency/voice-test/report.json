@@ -1,0 +1,84 @@
+{
+ "scene": "HOSPITAL CORRIDOR",
+ "elements": [
+  77,
+  78,
+  79,
+  80,
+  81,
+  82,
+  83,
+  84,
+  85,
+  86,
+  87,
+  88,
+  89,
+  90,
+  91
+ ],
+ "human_voices": false,
+ "model": "turbo",
+ "lines": {
+  "80": {
+   "who": "DANIEL",
+   "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
+   "takes": [
+    0.9,
+    0.75,
+    1.0
+   ],
+   "kept": 1.0
+  },
+  "81": {
+   "who": "ALICE",
+   "say": "[sigh] Can you get me some crisps.",
+   "takes": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "kept": 1.0
+  },
+  "82": {
+   "who": "DANIEL",
+   "say": "What?",
+   "takes": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kept": 0.0
+  },
+  "83": {
+   "who": "ALICE",
+   "say": "Crisps.",
+   "takes": [
+    1.0,
+    0.0,
+    1.0
+   ],
+   "kept": 1.0
+  },
+  "89": {
+   "who": "DANIEL",
+   "say": "[sniff] They're prawn cocktail.",
+   "takes": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "kept": 0.0
+  },
+  "90": {
+   "who": "ALICE",
+   "say": "I hate prawn cocktail. [chuckle]",
+   "takes": [
+    1.0,
+    0.75,
+    1.0
+   ],
+   "kept": 1.0
+  }
+ }
+}
