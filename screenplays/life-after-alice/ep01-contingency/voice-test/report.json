@@ -56,21 +56,21 @@
    "takes": [
     {
      "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
-     "heard": "There's a place in Heidelberg. Hang on, Heidelberg or there's a trial on anyway, and if we go private it's...",
+     "heard": "There's a place in Heidelberg? Hang on. Heidelberg, there's a trial on anyway, and if we go private, it's...",
+     "match": 0.95,
+     "seconds": 7.2
+    },
+    {
+     "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
+     "heard": "There's a place in Heidelberg. Hang on. Heidelberg, or there's a trial on anyway, and if we go private, it's...",
      "match": 1.0,
-     "seconds": 6.6
+     "seconds": 7.3
     },
     {
      "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
-     "heard": "There's a place in Heidelberg. Hang on. Heidelberg or there's a trial on anyway. If we go private, it's...",
-     "match": 0.95,
-     "seconds": 7.5
-    },
-    {
-     "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
-     "heard": "There's a place in Heidelberg. Hang on. Heidelberg, there's a trial on anyway, and if we go private, it's...",
-     "match": 0.95,
-     "seconds": 6.6
+     "heard": "There's a place in Heidelberg. Hang on. Heidelberg or... There's a trial on anyway, and if we go private it's...",
+     "match": 1.0,
+     "seconds": 6.9
     }
    ],
    "kept": 0.95
@@ -81,21 +81,21 @@
    "takes": [
     {
      "say": "[sigh] Can you get me some crisps.",
-     "heard": "Huh, can you get me some crisps?",
-     "match": 0.83,
+     "heard": "Can you get me some crisps?",
+     "match": 1.0,
      "seconds": 2.1
     },
     {
      "say": "[sigh] Can you get me some crisps.",
      "heard": "Can you get me some crisps?",
      "match": 1.0,
-     "seconds": 2.0
+     "seconds": 1.8
     },
     {
      "say": "[sigh] Can you get me some crisps.",
-     "heard": "Can you get me some crisps?",
-     "match": 1.0,
-     "seconds": 1.2
+     "heard": "Ugh. Can you get me some crisps?",
+     "match": 0.83,
+     "seconds": 2.3
     }
    ],
    "kept": 1.0
@@ -106,21 +106,21 @@
    "takes": [
     {
      "say": "What?",
-     "heard": "Yeah.",
-     "match": 0.0,
+     "heard": "What?",
+     "match": 1.0,
+     "seconds": 0.5
+    },
+    {
+     "say": "What?",
+     "heard": "What?",
+     "match": 1.0,
      "seconds": 0.3
     },
     {
      "say": "What?",
      "heard": "What?",
      "match": 1.0,
-     "seconds": 0.4
-    },
-    {
-     "say": "What?",
-     "heard": "What?",
-     "match": 1.0,
-     "seconds": 0.5
+     "seconds": 0.3
     }
    ],
    "kept": 1.0
@@ -131,24 +131,24 @@
    "takes": [
     {
      "say": "Crisps.",
-     "heard": "Chris.",
-     "match": 0.0,
+     "heard": "Crisps.",
+     "match": 1.0,
      "seconds": 0.7
     },
     {
      "say": "Crisps.",
-     "heard": "Grisps...",
-     "match": 0.0,
-     "seconds": 0.7
+     "heard": "Crisps.",
+     "match": 1.0,
+     "seconds": 0.8
     },
     {
      "say": "Crisps.",
-     "heard": "Quipsps.",
-     "match": 0.0,
+     "heard": "crisps",
+     "match": 1.0,
      "seconds": 0.7
     }
    ],
-   "kept": 0.0
+   "kept": 1.0
   },
   "89": {
    "who": "DANIEL",
@@ -156,39 +156,39 @@
    "takes": [
     {
      "say": "[sniff] They're prawn cocktail.",
-     "heard": "Dupurn cocktail.",
-     "match": 0.33,
-     "seconds": 1.8
-    },
-    {
-     "say": "[sniff] They're prawn cocktail.",
-     "heard": "The PROME caught tail.",
-     "match": 0.0,
-     "seconds": 1.7
-    },
-    {
-     "say": "[sniff] They're prawn cocktail.",
-     "heard": "thia prime cocktail",
+     "heard": "Your prime cocktail",
      "match": 0.33,
      "seconds": 2.0
     },
     {
-     "say": "They're prawn cocktail.",
-     "heard": "their plum cocktail.",
+     "say": "[sniff] They're prawn cocktail.",
+     "heard": "Their Prom Cocktail",
      "match": 0.33,
+     "seconds": 1.9
+    },
+    {
+     "say": "[sniff] They're prawn cocktail.",
+     "heard": "alarmi rail.",
+     "match": 0.0,
      "seconds": 1.6
     },
     {
      "say": "They're prawn cocktail.",
-     "heard": "the prime cocktail.",
-     "match": 0.33,
-     "seconds": 1.4
+     "heard": "Do prong cuck too.",
+     "match": 0.0,
+     "seconds": 1.2
     },
     {
      "say": "They're prawn cocktail.",
-     "heard": "The prong cocktail.",
+     "heard": "their prime cocktail.",
      "match": 0.33,
-     "seconds": 1.3
+     "seconds": 1.5
+    },
+    {
+     "say": "They're prawn cocktail.",
+     "heard": "the pr went cut out.",
+     "match": 0.0,
+     "seconds": 1.2
     }
    ],
    "kept": 0.33
@@ -199,24 +199,24 @@
    "takes": [
     {
      "say": "I hate prawn cocktail. [chuckle]",
-     "heard": "I hate prong cocktail.",
+     "heard": "I hate prom cocktail.",
      "match": 0.75,
-     "seconds": 2.0
+     "seconds": 1.9
     },
     {
      "say": "I hate prawn cocktail. [chuckle]",
-     "heard": "A heat-prone cocktail.",
-     "match": 0.25,
-     "seconds": 2.0
+     "heard": "I hate prom cocktail.",
+     "match": 0.75,
+     "seconds": 2.3
     },
     {
      "say": "I hate prawn cocktail. [chuckle]",
-     "heard": "I hate prong cocktail.",
-     "match": 0.75,
-     "seconds": 1.5
+     "heard": "I hate prawn cocktail.",
+     "match": 1.0,
+     "seconds": 1.6
     }
    ],
-   "kept": 0.75
+   "kept": 1.0
   }
  }
 }
