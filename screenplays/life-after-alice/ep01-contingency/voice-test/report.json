@@ -27,24 +27,24 @@
    "takes": [
     {
      "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
-     "heard": "There's a place in Heidelberg. Hang on. Heidelberg. Or. There's a trial on anyway, and if we go private, it's...",
-     "match": 1.0,
-     "seconds": 6.4
-    },
-    {
-     "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
-     "heard": "There's a place in Heidelberg. Hang on. Heidelberg or... There's a trial on anyway. And if we go private, it's...",
-     "match": 1.0,
-     "seconds": 7.5
-    },
-    {
-     "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
-     "heard": "There's a place in Heidelberg. Hang on. Heidelberg, or... There's a trial on anyway. And if we go private, it's...",
-     "match": 1.0,
+     "heard": "There's a place in Heidelberg. And I'm... Heidelberg, or... There's a trial on anyway. And if we go private, it's...",
+     "match": 0.9,
      "seconds": 7.7
+    },
+    {
+     "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
+     "heard": "There's a place in Heidelberg. Hang on. Heidelberg, well, there's a trial on anyway, and if we go private, it's...",
+     "match": 0.95,
+     "seconds": 6.6
+    },
+    {
+     "say": "There's a place in Heidelberg. Hang on. Heidelberg or... there's a trial on, anyway, and if we go private it's--",
+     "heard": "There's a place in Heidelberg. Hang on. Heidelberg, who... There's a trial on anyway. And if we get private, it's...",
+     "match": 0.9,
+     "seconds": 7.0
     }
    ],
-   "kept": 1.0
+   "kept": 0.9
   },
   "81": {
    "who": "ALICE",
@@ -54,19 +54,19 @@
      "say": "[sigh] Can you get me some crisps.",
      "heard": "Can you get me some crisps?",
      "match": 1.0,
-     "seconds": 2.0
-    },
-    {
-     "say": "[sigh] Can you get me some crisps.",
-     "heard": "Can you get me some crisps?",
-     "match": 1.0,
-     "seconds": 1.3
+     "seconds": 1.9
     },
     {
      "say": "[sigh] Can you get me some crisps.",
      "heard": "Can you get me some crisps?",
      "match": 1.0,
      "seconds": 1.8
+    },
+    {
+     "say": "[sigh] Can you get me some crisps.",
+     "heard": "Can you get me some crisps?",
+     "match": 1.0,
+     "seconds": 1.6
     }
    ],
    "kept": 1.0
@@ -77,24 +77,24 @@
    "takes": [
     {
      "say": "What?",
-     "heard": "What?",
-     "match": 1.0,
-     "seconds": 0.5
+     "heard": "Yeah.",
+     "match": 0.0,
+     "seconds": 0.3
     },
     {
      "say": "What?",
-     "heard": "bond",
+     "heard": "Yes.",
      "match": 0.0,
      "seconds": 0.4
     },
     {
      "say": "What?",
-     "heard": "YES!",
+     "heard": "Yeah.",
      "match": 0.0,
-     "seconds": 0.6
+     "seconds": 0.4
     }
    ],
-   "kept": 1.0
+   "kept": 0.0
   },
   "83": {
    "who": "ALICE",
@@ -104,13 +104,13 @@
      "say": "Crisps.",
      "heard": "Crisps.",
      "match": 1.0,
-     "seconds": 0.7
+     "seconds": 0.6
     },
     {
      "say": "Crisps.",
-     "heard": "ille constructs",
-     "match": 0.0,
-     "seconds": 0.7
+     "heard": "crisps",
+     "match": 1.0,
+     "seconds": 0.5
     },
     {
      "say": "Crisps.",
@@ -127,39 +127,39 @@
    "takes": [
     {
      "say": "[sniff] They're prawn cocktail.",
-     "heard": "The pre-cop tale.",
+     "heard": "It",
      "match": 0.0,
-     "seconds": 1.8
+     "seconds": 1.0
     },
     {
      "say": "[sniff] They're prawn cocktail.",
-     "heard": "CGI maidenforming 2020 1986 Holmesick CHI UK claimed stimulating two actions against Humanities adulthood 2021",
+     "heard": "the Screen Copped treat!",
      "match": 0.0,
-     "seconds": 1.8
+     "seconds": 2.0
     },
     {
      "say": "[sniff] They're prawn cocktail.",
-     "heard": "exchange will return after.",
-     "match": 0.0,
-     "seconds": 1.8
+     "heard": "The praying cocktail.",
+     "match": 0.33,
+     "seconds": 1.7
     },
     {
      "say": "They're prawn cocktail.",
-     "heard": "The plan cocktail.",
+     "heard": "their clear cocktail.",
+     "match": 0.33,
+     "seconds": 1.7
+    },
+    {
+     "say": "They're prawn cocktail.",
+     "heard": "their prayer cop syrup",
+     "match": 0.0,
+     "seconds": 1.1
+    },
+    {
+     "say": "They're prawn cocktail.",
+     "heard": "their praying cocktail.",
      "match": 0.33,
      "seconds": 1.4
-    },
-    {
-     "say": "They're prawn cocktail.",
-     "heard": "their plan cocktail.",
-     "match": 0.33,
-     "seconds": 1.3
-    },
-    {
-     "say": "They're prawn cocktail.",
-     "heard": "The Playing crappetail",
-     "match": 0.0,
-     "seconds": 1.5
     }
    ],
    "kept": 0.33
@@ -170,21 +170,21 @@
    "takes": [
     {
      "say": "I hate prawn cocktail. [chuckle]",
-     "heard": "I hate porn cocktail.",
-     "match": 0.75,
-     "seconds": 2.2
-    },
-    {
-     "say": "I hate prawn cocktail. [chuckle]",
-     "heard": "I hate prawn cocktail.",
-     "match": 1.0,
-     "seconds": 2.0
-    },
-    {
-     "say": "I hate prawn cocktail. [chuckle]",
      "heard": "I hate prawn cocktail.",
      "match": 1.0,
      "seconds": 2.1
+    },
+    {
+     "say": "I hate prawn cocktail. [chuckle]",
+     "heard": "I hate prawn cocktail.",
+     "match": 1.0,
+     "seconds": 1.8
+    },
+    {
+     "say": "I hate prawn cocktail. [chuckle]",
+     "heard": "I hate porn cocktail.",
+     "match": 0.75,
+     "seconds": 1.5
     }
    ],
    "kept": 1.0
