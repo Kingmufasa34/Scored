@@ -108,12 +108,21 @@ def fetch_human_refs(outdir, max_rows=6000):
             pool.setdefault(key, []).append(T.trim(a))
     speakers = sorted({s for s, _ in pool})
     log("speakers found:", speakers, "styles:", sorted({st for _, st in pool}))
-    gender = {}
-    for s in speakers:
-        sample = next(v[0] for (sp, _), v in pool.items() if sp == s)
-        f0 = median_f0(sample)
-        gender[s] = "female" if f0 > 165 else "male"
-        log(f"  {s}: median pitch {f0:.0f} Hz -> {gender[s]}")
+    # Rank speakers by typical pitch, measured over a few clips each (expressive
+    # styles can run high), and call the lower half male. A fixed cut-off failed
+    # on this corpus.
+    pitch = {}
+    for spk in speakers:
+        clips = [a for (sp, st), v in pool.items() if sp == spk and st in ("default", "narration", "enunciated", "sad") for a in v[:2]]
+        clips = clips or [a for (sp, _), v in pool.items() if sp == spk for a in v[:2]]
+        f0s = [median_f0(a) for a in clips[:4]]
+        f0s = [f for f in f0s if f > 0]
+        pitch[spk] = float(np.median(f0s)) if f0s else 0.0
+    ranked = sorted(speakers, key=lambda x: pitch[x])
+    half = max(1, len(ranked) // 2)
+    gender = {spk: ("male" if k < half else "female") for k, spk in enumerate(ranked)}
+    for spk in ranked:
+        log(f"  {spk}: median pitch {pitch[spk]:.0f} Hz -> {gender[spk]}")
     os.makedirs(outdir, exist_ok=True)
     used, credits = set(), {}
     for role, (g, styles) in WANT.items():
@@ -140,6 +149,7 @@ def fetch_human_refs(outdir, max_rows=6000):
         ref = ref / (np.max(np.abs(ref)) or 1) * 0.9
         sf.write(os.path.join(outdir, role.lower() + ".wav"), ref, SR)
         credits[role] = {"corpus": f"Expresso (CC BY-NC 4.0) via {name}", "speaker": choice[0], "style": choice[1],
+                         "pitch_hz": round(pitch[choice[0]]),
                          "seconds": round(len(ref) / SR, 1)}
         log(f"{role}: speaker {choice[0]}, style {choice[1]}, {len(ref) / SR:.1f}s")
     return credits
