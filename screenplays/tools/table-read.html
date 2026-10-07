@@ -41,8 +41,9 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { background: var(--paper); color: var(--ink); font-family: var(--font-ui); font-size: 16px; line-height: 1.45; }
-.wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 140px; display: grid; gap: 16px; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 220px; display: grid; gap: 16px; }
 header h1 { font-family: var(--font-script); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.04em; margin: 0; text-transform: uppercase; }
 header p { margin: 4px 0 0; color: var(--ink-soft); max-width: 60ch; }
 .panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
@@ -93,6 +94,11 @@ details[open] > summary::after { content: "Hide"; }
 .transport .in { max-width: 760px; margin: 0 auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .transport button { min-width: 48px; min-height: 44px; }
 #play { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; min-width: 96px; }
+.viz { max-width: 760px; margin: 0 auto 8px; display: grid; gap: 4px; }
+.viz canvas { display: block; width: 100%; height: 44px; border-radius: 6px; background: var(--paper); }
+.viz canvas#timeline { height: 14px; cursor: pointer; }
+.viz .legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.75rem; color: var(--ink-soft); }
+.viz .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
 #status { flex: 1 1 160px; min-width: 0; font-size: 0.9rem; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .warn { background: var(--hl-5); color: var(--ink); padding: 10px 12px; border-radius: 8px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
@@ -117,7 +123,16 @@ details[open] > summary::after { content: "Hide"; }
         <label class="check"><input id="file" type="file" accept=".fountain,.txt,text/plain"></label>
       </div>
     </div>
-    <div class="row">
+    <div class="row" id="modeRow" hidden>
+      <span class="lab">Voices</span>
+      <div class="seg" role="group" aria-label="Which voices">
+        <button type="button" id="modeReal" aria-pressed="true">Real voices</button>
+        <button type="button" id="modePhone" aria-pressed="false">Phone voices</button>
+      </div>
+      <span class="note" id="modeNote">Recorded with Chatterbox, an open-source voice model. Tap a line to jump there.</span>
+      <audio id="aud" preload="auto"></audio>
+    </div>
+    <div class="row" id="phoneOpts">
       <label class="check"><input type="checkbox" id="readAction"> Read the action lines aloud</label>
       <label class="check"><input type="checkbox" id="readScenes" checked> Read scene headings</label>
       <label class="check"><input type="checkbox" id="holdAction" checked> Pause for action when it isn't read</label>
@@ -133,6 +148,11 @@ details[open] > summary::after { content: "Hide"; }
 </div>
 
 <div class="transport" role="toolbar" aria-label="Playback">
+  <div class="viz" id="viz">
+    <canvas id="wave" aria-hidden="true"></canvas>
+    <canvas id="timeline" role="slider" aria-label="Position in the scene. Tap to jump." tabindex="0"></canvas>
+    <div class="legend" id="legend"></div>
+  </div>
   <div class="in">
     <button id="back" aria-label="Previous line" title="Previous line">&#9198;</button>
     <button id="play">Play</button>
@@ -760,7 +780,7 @@ CUT TO BLACK.
   if (!hasSpeech) document.getElementById("noSpeech").hidden = false;
 
   var SCRIPTS = [
-    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent },
+    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, audio: "audio/draft-03.mp3", cues: "audio/draft-03.json" },
     { id: "d02", label: "Life After Alice, Ep. 1: draft 02", text: document.getElementById("src-d02").textContent }
   ];
   var HL = ["--hl-1", "--hl-2", "--hl-3", "--hl-4", "--hl-5", "--hl-6"];
@@ -826,7 +846,7 @@ CUT TO BLACK.
     castOrder.forEach(function (w, i) { cast[w] = saved[w] || defaultMember(i); cast[w].hl = HL[i % HL.length]; });
     cast.__NARRATOR = saved.__NARRATOR || { voice: voices[0] ? voices[0].voiceURI : "", pitch: 1, rate: 1.05, mode: "voice" };
     cast.__NARRATOR.hl = "--hl-n";
-    renderCast();
+    renderCast(); renderLegend();
   }
   function saveCast() {
     var s = store.get("cast") || {};
@@ -960,7 +980,7 @@ CUT TO BLACK.
     if (e.t === "dlg") {
       var m = cast[e.who];
       if (m.mode === "me") { waitingForMe = true; setStatus(e.who + ": your line. Tap Next when done."); return; }
-      setStatus(e.who);
+      setStatus(e.who); speaking = e.who;
       var parts = [], mods = {};
       e.lines.forEach(function (l) { if (l.par) mods = parMods(l.par); else parts.push({ c: clean(l.text), mods: mods }); });
       var k = 0, last = null;
@@ -999,6 +1019,7 @@ CUT TO BLACK.
   function requestWake() { try { if (navigator.wakeLock) navigator.wakeLock.request("screen").then(function (l) { wakeLock = l; }).catch(function () {}); } catch (e) {} }
   function releaseWake() { try { if (wakeLock) wakeLock.release(); } catch (e) {} wakeLock = null; }
   function start(i) {
+    if (useReal) { realStart(i); return; }
     if (!hasSpeech) return;
     token++; synth.cancel();
     idx = Math.max(0, Math.min(i, doc.els.length - 1));
@@ -1009,11 +1030,13 @@ CUT TO BLACK.
   function stop(msg) {
     token++; playing = false; waitingForMe = false;
     if (hasSpeech) synth.cancel();
+    aud.pause();
     playBtn.textContent = "Play"; releaseWake();
     setStatus(msg || "Paused");
   }
   playBtn.onclick = function () { if (playing) stop(); else start(idx); };
   document.getElementById("next").onclick = function () {
+    if (useReal && waitingForMe) { waitingForMe = false; skipCue = meCue.i; aud.currentTime = meCue.end + 0.02; aud.play(); return; }
     if (waitingForMe) { waitingForMe = false; idx++; step(token); return; }
     var n = Math.min(idx + 1, doc.els.length - 1);
     if (playing) start(n); else { idx = n; mark(idx); }
@@ -1023,6 +1046,169 @@ CUT TO BLACK.
     if (playing) start(n); else { idx = n; mark(idx); }
   };
 
+  /* ---------- Real voices: a pre-recorded mix plus a timing file ---------- */
+  var aud = document.getElementById("aud");
+  var useReal = false, realCues = null, skipCue = -1, meCue = null, lastCueI = -1, rafId = 0;
+  function cueFor(i) {
+    if (!realCues) return null;
+    for (var k = 0; k < realCues.length; k++) if (realCues[k].i >= i) return realCues[k];
+    return realCues[realCues.length - 1];
+  }
+  function cueAt(t) {
+    var c = null;
+    for (var k = 0; k < realCues.length; k++) { if (realCues[k].start <= t) c = realCues[k]; else break; }
+    return c;
+  }
+  function tick() {
+    if (!playing || !useReal) return;
+    var c = cueAt(aud.currentTime);
+    if (c && c.i !== lastCueI) {
+      lastCueI = c.i; idx = c.i; mark(idx);
+      setStatus(c.who ? c.who : "(action)");
+    }
+    if (c && c.who && cast[c.who] && cast[c.who].mode === "me" && skipCue !== c.i && !waitingForMe) {
+      aud.pause(); waitingForMe = true; meCue = c;
+      setStatus(c.who + ": your line. Tap Next when done.");
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+  function realStart(i) {
+    var c = cueFor(i); if (!c) return;
+    skipCue = -1; lastCueI = -1; waitingForMe = false;
+    aud.currentTime = c.start;
+    aud.playbackRate = parseFloat(document.getElementById("speed").value) || 1;
+    ensureAudioGraph(); if (actx && actx.state === "suspended") actx.resume();
+    playing = true; playBtn.textContent = "Pause"; requestWake();
+    var pr = aud.play();
+    if (pr && pr.catch) pr.catch(function () { stop("Tap Play to start"); });
+    cancelAnimationFrame(rafId); rafId = requestAnimationFrame(tick);
+  }
+  aud.onended = function () { stop("End of script"); };
+  aud.onerror = function () { if (useReal) { setMode(false); setStatus("Couldn't load the recording. Using phone voices."); } };
+  document.getElementById("speed").addEventListener("change", function () { aud.playbackRate = parseFloat(this.value) || 1; });
+  function setMode(real) {
+    stop("Ready");
+    useReal = real && !!realCues;
+    document.getElementById("modeReal").setAttribute("aria-pressed", String(useReal));
+    document.getElementById("modePhone").setAttribute("aria-pressed", String(!useReal));
+    document.getElementById("phoneOpts").hidden = useReal;
+    store.set("realVoices", useReal);
+  }
+  document.getElementById("modeReal").onclick = function () { setMode(true); };
+  document.getElementById("modePhone").onclick = function () { setMode(false); };
+  function loadAudio(s) {
+    realCues = null; useReal = false;
+    document.getElementById("modeRow").hidden = true;
+    document.getElementById("phoneOpts").hidden = false;
+    aud.removeAttribute("src");
+    if (!s || !s.audio) return;
+    fetch(s.cues).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+      if (pick.value !== s.id) return;
+      realCues = d.cues; aud.src = s.audio;
+      document.getElementById("modeRow").hidden = false;
+      var pref = store.get("realVoices");
+      setMode(pref !== false);
+    }).catch(function () {});
+  }
+
+  /* ---------- Visualiser: live sound in the speaker's colour + who-speaks-when strip ---------- */
+  var wave = document.getElementById("wave"), tl = document.getElementById("timeline");
+  var actx = null, analyser = null, buf = null, speaking = null;
+  var reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#999"; }
+  function colorFor(who) { return who && cast[who] ? cssVar(cast[who].hl) : cssVar("--rule"); }
+  function fit(c) {
+    var r = window.devicePixelRatio || 1, w = c.clientWidth, h = c.clientHeight;
+    if (c.width !== Math.round(w * r) || c.height !== Math.round(h * r)) { c.width = Math.round(w * r); c.height = Math.round(h * r); }
+    var g = c.getContext("2d"); g.setTransform(r, 0, 0, r, 0, 0); return { g: g, w: w, h: h };
+  }
+  function ensureAudioGraph() {
+    if (actx || !window.AudioContext && !window.webkitAudioContext) return;
+    try {
+      actx = new (window.AudioContext || window.webkitAudioContext)();
+      var src = actx.createMediaElementSource(aud);
+      analyser = actx.createAnalyser(); analyser.fftSize = 1024;
+      src.connect(analyser); analyser.connect(actx.destination);
+      buf = new Uint8Array(analyser.fftSize);
+    } catch (e) { actx = null; analyser = null; }
+  }
+  function drawWave(t) {
+    var f = fit(wave), g = f.g, w = f.w, h = f.h, mid = h / 2;
+    g.clearRect(0, 0, w, h);
+    var col = speaking ? colorFor(speaking) : cssVar("--rule");
+    g.lineWidth = 2; g.strokeStyle = col; g.lineCap = "round";
+    if (useReal && analyser && playing && !reduceMotion) {
+      analyser.getByteTimeDomainData(buf);
+      g.beginPath();
+      for (var x = 0; x < w; x++) {
+        var v = (buf[Math.floor(x / w * buf.length)] - 128) / 128;
+        var y = mid + v * mid * 1.6;
+        x ? g.lineTo(x, y) : g.moveTo(x, y);
+      }
+      g.stroke();
+    } else if (playing && speaking && !reduceMotion) {
+      // phone voices can't be measured, so draw a calm moving line instead
+      g.beginPath();
+      for (var x2 = 0; x2 < w; x2++) {
+        var y2 = mid + Math.sin(x2 / 9 + t / 120) * Math.sin(x2 / 53 + t / 400) * mid * 0.6;
+        x2 ? g.lineTo(x2, y2) : g.moveTo(x2, y2);
+      }
+      g.stroke();
+    } else {
+      g.beginPath(); g.moveTo(0, mid); g.lineTo(w, mid); g.stroke();
+    }
+    if (speaking) {
+      g.font = "700 12px " + cssVar("--font-script"); g.fillStyle = cssVar("--ink");
+      g.fillText(speaking, 8, 14);
+    }
+  }
+  function drawTimeline() {
+    var f = fit(tl), g = f.g, w = f.w, h = f.h;
+    g.clearRect(0, 0, w, h);
+    var dur = aud.duration || (realCues && realCues.length ? realCues[realCues.length - 1].end : 0);
+    if (!useReal || !realCues || !dur) { tl.hidden = true; return; }
+    tl.hidden = false;
+    // overlapping lines are drawn in two lanes, so crosstalk is visible
+    var laneEnd = 0;
+    realCues.forEach(function (c) {
+      if (!c.who) return;
+      var x = c.start / dur * w, x2 = Math.max(x + 1, c.end / dur * w);
+      var top = c.start < laneEnd ? h / 2 : 0;
+      g.fillStyle = colorFor(c.who); g.fillRect(x, top, x2 - x, top ? h / 2 : h);
+      laneEnd = Math.max(laneEnd, c.end);
+    });
+    var px = (aud.currentTime || 0) / dur * w;
+    g.fillStyle = cssVar("--accent"); g.fillRect(px - 1, 0, 2, h);
+  }
+  function renderLegend() {
+    var lg = document.getElementById("legend"); lg.textContent = "";
+    castOrder.forEach(function (who) {
+      var s = document.createElement("span"), sw = document.createElement("i");
+      sw.style.background = "var(" + cast[who].hl + ")"; s.appendChild(sw); s.appendChild(document.createTextNode(who));
+      lg.appendChild(s);
+    });
+  }
+  function vizLoop(t) {
+    if (useReal && realCues) {
+      var c = cueAt(aud.currentTime || 0);
+      speaking = c && c.who && aud.currentTime <= c.end ? c.who : null;
+    } else if (!playing) speaking = null;
+    drawWave(t || 0); drawTimeline();
+    requestAnimationFrame(vizLoop);
+  }
+  function seekTimeline(clientX) {
+    if (!useReal || !realCues) return;
+    var r = tl.getBoundingClientRect(), dur = aud.duration || realCues[realCues.length - 1].end;
+    var tt = Math.max(0, Math.min(1, (clientX - r.left) / r.width)) * dur;
+    var c = cueAt(tt); if (c) start(c.i);
+  }
+  tl.addEventListener("click", function (ev) { seekTimeline(ev.clientX); });
+  tl.addEventListener("keydown", function (ev) {
+    if (ev.key === "ArrowRight") document.getElementById("next").click();
+    if (ev.key === "ArrowLeft") document.getElementById("back").click();
+  });
+  requestAnimationFrame(vizLoop);
+
   /* ---------- Loading scripts ---------- */
   var pick = document.getElementById("pick");
   SCRIPTS.forEach(function (s) { var o = document.createElement("option"); o.value = s.id; o.textContent = s.label; pick.appendChild(o); });
@@ -1031,14 +1217,14 @@ CUT TO BLACK.
     doc = parse(text); idx = 0;
     setupCast(); paintScript();
   }
-  pick.onchange = function () { var s = SCRIPTS.filter(function (x) { return x.id === pick.value; })[0]; if (s) { store.set("script", s.id); load(s.text); } };
+  pick.onchange = function () { var s = SCRIPTS.filter(function (x) { return x.id === pick.value; })[0]; if (s) { store.set("script", s.id); load(s.text); loadAudio(s); } };
   document.getElementById("file").onchange = function (ev) {
     var f = ev.target.files && ev.target.files[0]; if (!f) return;
     var r = new FileReader();
     r.onload = function () {
       var o = document.createElement("option"); o.value = "file-" + Date.now(); o.textContent = f.name;
       SCRIPTS.push({ id: o.value, label: f.name, text: String(r.result) });
-      pick.appendChild(o); pick.value = o.value; load(String(r.result));
+      pick.appendChild(o); pick.value = o.value; load(String(r.result)); loadAudio(null);
     };
     r.readAsText(f);
   };
