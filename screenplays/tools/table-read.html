@@ -140,7 +140,8 @@ select:disabled { opacity: 0.6; }
       <label class="opt"><input type="checkbox" id="readAction" checked><div><b>Directions</b><span>The action between lines: what people do, what we see.</span></div></label>
       <label class="opt"><input type="checkbox" id="readPars"><div><b>Delivery notes</b><span>The notes in brackets, like "(barely)", read before the line.</span></div></label>
       <label class="opt"><input type="checkbox" id="readTrans" checked><div><b>Transitions</b><span>"Flash to", "Back to", "Cut to black" and the title card.</span></div></label>
-      <label class="opt"><input type="checkbox" id="readSfx" checked><div><b>Room sounds and effects</b><span>The clock, the rain, the strip lights, pages, pens, the vending machine.</span></div></label>
+      <label class="opt"><input type="checkbox" id="readBeds" checked><div><b>Background noise</b><span>The room underneath: the ticking clock, rain on the window, strip lights, the water cooler.</span></div></label>
+      <label class="opt"><input type="checkbox" id="readSfx" checked><div><b>Sound effects</b><span>Things that happen: pages, pens, doors, footsteps, the vending machine.</span></div></label>
       <label class="opt"><input type="checkbox" id="holdAction" checked><div><b>Leave time for unread directions</b><span>When directions aren't read, pause for as long as they'd take on screen.</span></div></label>
     </div>
     <div style="display:grid;gap:4px;margin-top:12px;max-width:360px">
@@ -814,7 +815,7 @@ CUT TO BLACK.
   function $(id) { return document.getElementById(id); }
 
   /* ---------- Reading options (step 1) ---------- */
-  var OPT_IDS = ["readScenes", "readAction", "readPars", "readTrans", "readSfx", "holdAction"];
+  var OPT_IDS = ["readScenes", "readAction", "readPars", "readTrans", "readBeds", "readSfx", "holdAction"];
   function opt(id) { return $(id).checked; }
   OPT_IDS.forEach(function (id) {
     var el = $(id), v = store.get("opt:" + id);
@@ -1187,14 +1188,14 @@ CUT TO BLACK.
     real.sched = { items: items, total: Math.max(t, prevEnd) + 0.5, cues: [], beds: [] };
     // Sounds: one-shots on their element, beds from one element's start to another's.
     var snd = real.sounds;
-    if (snd && opt("readSfx")) {
+    if (snd) {
       var startOf = {};
       items.forEach(function (it) { startOf[it.i] = it.start; });
-      Object.keys(snd.cues || {}).forEach(function (k) {
+      if (opt("readSfx")) Object.keys(snd.cues || {}).forEach(function (k) {
         if (startOf[k] === undefined) return;
         snd.cues[k].forEach(function (c) { real.sched.cues.push({ sfx: c.sfx, at: startOf[k] + c.at, gain: c.gain }); });
       });
-      (snd.beds || []).forEach(function (b) {
+      if (opt("readBeds")) (snd.beds || []).forEach(function (b) {
         if (startOf[b.from] === undefined) return;
         var end = startOf[b.to] !== undefined ? startOf[b.to] : real.sched.total;
         real.sched.beds.push({ sfx: b.sfx, from: startOf[b.from], to: end, gain: b.gain });
