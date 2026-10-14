@@ -28,3 +28,18 @@ Decisions the writer has made by ear. Newest first.
   Both takes are in the table-read app's Performance menu.
 - The corridor test player: https://claude.ai/artifact/8GiPa5Nm7e3YkETX8KUSLQ
 - Casting page with voice samples: https://claude.ai/artifact/BsMxydV3ha43Crh798riZG
+
+## How we prompt ElevenLabs (learned the hard way)
+From ElevenLabs' v3 prompting guide and its audio-tag docs, tested on take 3:
+- One tag where the delivery changes, not on every line. Tags last until the next tag. Stacking clashing tags
+  (`[softly] [crying] [tenderly]`) makes delivery jump around. That was the problem with take 2.
+- Use plain, listed tags that describe how the line is spoken: `[sarcastic]`, `[whispers]`, `[crying]`, `[laughs]`,
+  `[jumping in]`, `[pause]`. Use punctuation, ellipses and the odd CAPITAL for emphasis.
+- Short single lines come out unstable. The model sets the mood from the surrounding text, and longer passages
+  (250+ characters) are more consistent. So take 3 records each character's whole scene in one pass, with
+  `[long pause]` between lines. ElevenLabs' transcriber returns word timings, which tell us where to cut it back into lines.
+- The Director reads each scene in one pass with no emotion tags: steady and even.
+- Stability "Natural" is recommended, but this connector doesn't expose it.
+- Alice and Daniel are a young couple in their 30s, not long married, so play the waiting room as banter, not weariness.
+  (The draft's action lines still say "forties".)
+
