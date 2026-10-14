@@ -164,7 +164,8 @@ select:disabled { opacity: 0.6; }
       <select id="perf">
         <option value="written">As written (the lines exactly as scripted)</option>
         <option value="rough">Rough (how people actually say them: ums, restarts, laughs)</option>
-        <option value="eleven" selected>ElevenLabs: Shauna, Yowz and Beatrice, acted (rough)</option>
+        <option value="eleven">ElevenLabs take 1: Shauna, Yowz and Beatrice</option>
+        <option value="eleven2" selected>ElevenLabs take 2: Shauna, Uzi, Beatrice, Jase directing (full acting)</option>
       </select>
     </div>
     <p class="note" id="castNote">Pick a voice for each part. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself.</p>
@@ -199,7 +200,7 @@ select:disabled { opacity: 0.6; }
   "use strict";
 
   var SCRIPTS = [
-    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json", cast: "audio/draft-03.cast.json", rough: "audio/draft-03-rough.cast.json", eleven: "audio/draft-03-eleven.cast.json", sounds: "audio/draft-03.sounds.json" },
+    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json", cast: "audio/draft-03.cast.json", rough: "audio/draft-03-rough.cast.json", eleven: "audio/draft-03-eleven.cast.json", eleven2: "audio/draft-03-eleven2.cast.json", sounds: "audio/draft-03.sounds.json" },
     { id: "d02", label: "Life After Alice, Ep. 1: draft 02", text: document.getElementById("src-d02").textContent }
   ];
   var HL = ["--hl-1", "--hl-2", "--hl-3", "--hl-4", "--hl-5", "--hl-6"];
@@ -464,8 +465,8 @@ select:disabled { opacity: 0.6; }
     return { roles: roles };
   }
   (function () {
-    var saved = store.get("perf2"); if (saved === "written" || saved === "rough" || saved === "eleven") $("perf").value = saved;
-    $("perf").onchange = function () { store.set("perf2", $("perf").value); real.castIdx = currentCastIdx(); applyCast(); };
+    var saved = store.get("perf3"); if (saved === "written" || saved === "rough" || saved === "eleven" || saved === "eleven2") $("perf").value = saved;
+    $("perf").onchange = function () { store.set("perf3", $("perf").value); real.castIdx = currentCastIdx(); applyCast(); };
   })();
   function castOptions(who) { return (real.castIdx && real.castIdx.roles[who === DIRECTOR ? "DIRECTOR" : who]) || []; }
   function chosen(who) {
@@ -708,13 +709,14 @@ select:disabled { opacity: 0.6; }
     if (!s || !s.clips) return;
     real.base = s.clips.replace(/[^/]*$/, "");
     function json(url) { return url ? fetch(url).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }) : Promise.resolve(null); }
-    var extra = Promise.all([json(s.cast), json(s.rough), json(s.sounds), json(s.eleven)]);
+    var extra = Promise.all([json(s.cast), json(s.rough), json(s.sounds), json(s.eleven), json(s.eleven2)]);
     fetch(s.clips).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (m) {
       return extra.then(function (x) { return [m].concat(x); });
     }).then(function (all) {
       if (pick.value !== s.id) return;
-      real.baseManifest = all[0]; real.castIdxs = { written: all[1], rough: all[2], eleven: all[4] }; real.sounds = all[3];
-      $("perfBox").hidden = !(all[2] || all[4]);
+      real.baseManifest = all[0]; real.castIdxs = { written: all[1], rough: all[2], eleven: all[4], eleven2: all[5] }; real.sounds = all[3];
+      $("perfBox").hidden = !(all[2] || all[4] || all[5]);
+      if (!all[5] && $("perf").value === "eleven2") $("perf").value = all[4] ? "eleven" : "rough";
       if (!all[4] && $("perf").value === "eleven") $("perf").value = all[2] ? "rough" : "written";
       real.castIdx = currentCastIdx();
       real.manifest = effectiveManifest();
