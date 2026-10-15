@@ -147,8 +147,8 @@ select:disabled { opacity: 0.6; }
     <div style="display:grid;gap:4px;margin-top:12px;max-width:360px">
       <label class="small" for="room">Room: takes the studio shine off the voices</label>
       <select id="room">
-        <option value="off">Dry (as recorded)</option>
-        <option value="room" selected>Small room</option>
+        <option value="off" selected>Dry (as recorded, crisp)</option>
+        <option value="room">Small room</option>
         <option value="corridor">Hospital corridor</option>
       </select>
     </div>
@@ -166,7 +166,8 @@ select:disabled { opacity: 0.6; }
         <option value="rough">Rough (how people actually say them: ums, restarts, laughs)</option>
         <option value="eleven">ElevenLabs take 1: Shauna, Yowz and Beatrice</option>
         <option value="eleven2">ElevenLabs take 2: Shauna, Uzi, Beatrice, Jase (line by line)</option>
-        <option value="eleven3" selected>ElevenLabs take 3: same cast, each scene played through</option>
+        <option value="eleven3">ElevenLabs take 3: same cast, each scene played through</option>
+        <option value="eleven4" selected>ElevenLabs take 4: designed voices from the character notes</option>
       </select>
     </div>
     <p class="note" id="castNote">Pick a voice for each part. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself.</p>
@@ -806,7 +807,7 @@ CUT TO BLACK.
   "use strict";
 
   var SCRIPTS = [
-    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json", cast: "audio/draft-03.cast.json", rough: "audio/draft-03-rough.cast.json", eleven: "audio/draft-03-eleven.cast.json", eleven2: "audio/draft-03-eleven2.cast.json", eleven3: "audio/draft-03-eleven3.cast.json", sounds: "audio/draft-03.sounds.json" },
+    { id: "d03", label: "Life After Alice, Ep. 1: draft 03 (roughened)", text: document.getElementById("src-d03").textContent, clips: "audio/draft-03.clips.json", cast: "audio/draft-03.cast.json", rough: "audio/draft-03-rough.cast.json", eleven: "audio/draft-03-eleven.cast.json", eleven2: "audio/draft-03-eleven2.cast.json", eleven3: "audio/draft-03-eleven3.cast.json", eleven4: "audio/draft-03-eleven4.cast.json", sounds: "audio/draft-03.sounds.json" },
     { id: "d02", label: "Life After Alice, Ep. 1: draft 02", text: document.getElementById("src-d02").textContent }
   ];
   var HL = ["--hl-1", "--hl-2", "--hl-3", "--hl-4", "--hl-5", "--hl-6"];
@@ -1052,13 +1053,13 @@ CUT TO BLACK.
   }
   function applyRoom() {
     if (!real.ctx) return;
-    var r = ROOMS[$("room").value] || ROOMS.room;
+    var r = ROOMS[$("room").value] || ROOMS.off;
     real.tone.gain.value = r.shelf; real.dry.gain.value = r.dry; real.wet.gain.value = r.wet;
     real.verb.buffer = impulse(real.ctx, r.secs, r.decay); real.air = r.air;
   }
   (function () {
-    var saved = store.get("room"); if (saved && ROOMS[saved]) $("room").value = saved;
-    $("room").onchange = function () { store.set("room", $("room").value); applyRoom(); };
+    var saved = store.get("room2"); if (saved && ROOMS[saved]) $("room").value = saved;
+    $("room").onchange = function () { store.set("room2", $("room").value); applyRoom(); };
   })();
 
   /* Cast options: several recorded voices per part (audio/<draft>.cast.json). */
@@ -1071,8 +1072,8 @@ CUT TO BLACK.
     return { roles: roles };
   }
   (function () {
-    var saved = store.get("perf4"); if (saved === "written" || saved === "rough" || saved === "eleven" || saved === "eleven2" || saved === "eleven3") $("perf").value = saved;
-    $("perf").onchange = function () { store.set("perf4", $("perf").value); real.castIdx = currentCastIdx(); applyCast(); };
+    var saved = store.get("perf5"); if (saved === "written" || saved === "rough" || saved === "eleven" || saved === "eleven2" || saved === "eleven3" || saved === "eleven4") $("perf").value = saved;
+    $("perf").onchange = function () { store.set("perf5", $("perf").value); real.castIdx = currentCastIdx(); applyCast(); };
   })();
   function castOptions(who) { return (real.castIdx && real.castIdx.roles[who === DIRECTOR ? "DIRECTOR" : who]) || []; }
   function chosen(who) {
@@ -1315,13 +1316,14 @@ CUT TO BLACK.
     if (!s || !s.clips) return;
     real.base = s.clips.replace(/[^/]*$/, "");
     function json(url) { return url ? fetch(url).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }) : Promise.resolve(null); }
-    var extra = Promise.all([json(s.cast), json(s.rough), json(s.sounds), json(s.eleven), json(s.eleven2), json(s.eleven3)]);
+    var extra = Promise.all([json(s.cast), json(s.rough), json(s.sounds), json(s.eleven), json(s.eleven2), json(s.eleven3), json(s.eleven4)]);
     fetch(s.clips).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (m) {
       return extra.then(function (x) { return [m].concat(x); });
     }).then(function (all) {
       if (pick.value !== s.id) return;
-      real.baseManifest = all[0]; real.castIdxs = { written: all[1], rough: all[2], eleven: all[4], eleven2: all[5], eleven3: all[6] }; real.sounds = all[3];
-      $("perfBox").hidden = !(all[2] || all[4] || all[5] || all[6]);
+      real.baseManifest = all[0]; real.castIdxs = { written: all[1], rough: all[2], eleven: all[4], eleven2: all[5], eleven3: all[6], eleven4: all[7] }; real.sounds = all[3];
+      $("perfBox").hidden = !(all[2] || all[4] || all[5] || all[6] || all[7]);
+      if (!all[7] && $("perf").value === "eleven4") $("perf").value = all[6] ? "eleven3" : "rough";
       if (!all[6] && $("perf").value === "eleven3") $("perf").value = all[5] ? "eleven2" : "rough";
       if (!all[5] && $("perf").value === "eleven2") $("perf").value = all[4] ? "eleven" : "rough";
       if (!all[4] && $("perf").value === "eleven") $("perf").value = all[2] ? "rough" : "written";

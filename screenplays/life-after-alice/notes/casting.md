@@ -2,6 +2,14 @@
 
 Decisions the writer has made by ear. Newest first.
 
+## Current cast (take 4): designed voices
+Designed with ElevenLabs Voice Design from each character's actor notes (`notes/actor-notes/`). Tendai picked option 1 for every part.
+- **Alice** `JFtJnxBOe89fLv5pCzXE`: Dublin, early 30s, quick, dry, deadpan.
+- **Daniel** `R1aNutsexOJElpbwaj7K`: South London, early 30s, deep, grounded, slightly rough.
+- **Ruth** `7ps0Ffe9dauim9jtawua`: English, 60s, warm, slightly flustered.
+- **Director** `PwJ4cBV49of7bZDw99vG`: calm, plain table-read voice.
+Plays dry by default (Room: "Dry"). Tendai prefers the voices crisp, without the room effect.
+
 ## Alice
 - **Shauna** (ElevenLabs voice library, voice id `VB4JW7V2WFSp1tEyWbj5`): Irish, middle-aged, "warm and engaging".
   Chosen by Tendai after auditioning Irish voices in ElevenReader.
