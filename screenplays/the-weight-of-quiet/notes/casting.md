@@ -14,3 +14,7 @@ Note: draft 04's action lines say "thirties"; the voices are mid twenties.
 Same three designed voices, re-recorded on draft 10 (the package version). One pass per character per beat, tags taken from the actor notes, parentheticals not read, interruption timing set per line (`gap` in `audio/woq-10.cast.json`). Role ids `WQ10-*`. The draft-04 read stays in the menu.
 
 Take 2 options (default): **James (firmer take)** `WQ10B-JAMES` re-records all his lines with harder tags (defensive, sharply, irritated, firmly, coldly, angry) in place of nervous/whispers/softly. **Director (phone moments pointed)** `WQ10B-DIRECTOR` re-reads the 12 phone/scrolling action lines with [pointedly]; the rest of the narration is unchanged. The first takes stay in the voice menus.
+
+## Draft 11 read
+
+Recorded from draft 11 (roughened dialogue) using the "For the voice" sections in the actor notes: plain baseline, tags only at the breaks. Director keeps `[pointedly]` on the phone moments. Role ids `WQ11-*`; files `audio/woq-11.*`.
