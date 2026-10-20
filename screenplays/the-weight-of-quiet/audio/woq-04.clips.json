@@ -239,11 +239,6 @@
 "overlap": false,
 "clips": [
 {
-"f": "woq-04/e017-0.mp3",
-"kind": "par",
-"dur": 1.68
-},
-{
 "f": "woq-04/e017-1.mp3",
 "kind": "line",
 "dur": 0.855,
@@ -390,11 +385,6 @@
 "overlap": false,
 "clips": [
 {
-"f": "woq-04/e027-0.mp3",
-"kind": "par",
-"dur": 1.735
-},
-{
 "f": "woq-04/e027-1.mp3",
 "kind": "line",
 "dur": 3.385,
@@ -462,11 +452,6 @@
 "trail": true
 },
 {
-"f": "woq-04/e031-1.mp3",
-"kind": "par",
-"dur": 2.67
-},
-{
 "f": "woq-04/e031-2.mp3",
 "kind": "line",
 "dur": 1.625,
@@ -511,11 +496,6 @@
 "who": "JAMES",
 "overlap": false,
 "clips": [
-{
-"f": "woq-04/e034-0.mp3",
-"kind": "par",
-"dur": 0.8
-},
 {
 "f": "woq-04/e034-1.mp3",
 "kind": "line",
@@ -619,11 +599,6 @@
 "who": "JAMES",
 "overlap": false,
 "clips": [
-{
-"f": "woq-04/e041-0.mp3",
-"kind": "par",
-"dur": 1.46
-},
 {
 "f": "woq-04/e041-1.mp3",
 "kind": "line",
@@ -756,11 +731,6 @@
 "overlap": false,
 "clips": [
 {
-"f": "woq-04/e050-0.mp3",
-"kind": "par",
-"dur": 1.075
-},
-{
 "f": "woq-04/e050-1.mp3",
 "kind": "line",
 "dur": 1.02,
@@ -816,11 +786,6 @@
 "who": "MAYA",
 "overlap": false,
 "clips": [
-{
-"f": "woq-04/e054-0.mp3",
-"kind": "par",
-"dur": 1.075
-},
 {
 "f": "woq-04/e054-1.mp3",
 "kind": "line",
@@ -921,11 +886,6 @@
 "overlap": false,
 "clips": [
 {
-"f": "woq-04/e061-0.mp3",
-"kind": "par",
-"dur": 1.57
-},
-{
 "f": "woq-04/e061-1.mp3",
 "kind": "line",
 "dur": 3.055,
@@ -940,11 +900,6 @@
 "who": "MAYA",
 "overlap": false,
 "clips": [
-{
-"f": "woq-04/e062-0.mp3",
-"kind": "par",
-"dur": 1.515
-},
 {
 "f": "woq-04/e062-1.mp3",
 "kind": "line",
@@ -1017,11 +972,6 @@
 "overlap": false,
 "clips": [
 {
-"f": "woq-04/e067-0.mp3",
-"kind": "par",
-"dur": 1.515
-},
-{
 "f": "woq-04/e067-1.mp3",
 "kind": "line",
 "dur": 1.9,
@@ -1089,11 +1039,6 @@
 "overlap": false,
 "clips": [
 {
-"f": "woq-04/e072-0.mp3",
-"kind": "par",
-"dur": 0.635
-},
-{
 "f": "woq-04/e072-1.mp3",
 "kind": "line",
 "dur": 0.415,
@@ -1121,11 +1066,6 @@
 "who": "MAYA",
 "overlap": false,
 "clips": [
-{
-"f": "woq-04/e074-0.mp3",
-"kind": "par",
-"dur": 1.075
-},
 {
 "f": "woq-04/e074-1.mp3",
 "kind": "line",
@@ -1155,11 +1095,6 @@
 "overlap": false,
 "clips": [
 {
-"f": "woq-04/e076-0.mp3",
-"kind": "par",
-"dur": 2.285
-},
-{
 "f": "woq-04/e076-1.mp3",
 "kind": "line",
 "dur": 1.625,
@@ -1175,11 +1110,6 @@
 "overlap": false,
 "clips": [
 {
-"f": "woq-04/e077-0.mp3",
-"kind": "par",
-"dur": 1.185
-},
-{
 "f": "woq-04/e077-1.mp3",
 "kind": "line",
 "dur": 1.515,
@@ -1194,11 +1124,6 @@
 "who": "JAMES",
 "overlap": false,
 "clips": [
-{
-"f": "woq-04/e078-0.mp3",
-"kind": "par",
-"dur": 2.12
-},
 {
 "f": "woq-04/e078-1.mp3",
 "kind": "line",
