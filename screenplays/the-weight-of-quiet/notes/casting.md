@@ -1,0 +1,10 @@
+# Casting: voices for the table read
+
+## Draft 04 table read (designed voices)
+Designed with ElevenLabs Voice Design from the actor notes, mid twenties, English. Picked by dice roll (option 2 each).
+- **Maya** `sRnMcG81PRhIOUiEKkbV`: fast, precise, sarcastic.
+- **James** `bPb4ok6wxjmfwhcpMsma`: soft, low, sideways.
+- **Director** `PwJ4cBV49of7bZDw99vG`: the plain table-read voice shared with Life After Alice.
+
+Recorded in passes per character per beat of the argument, cut on ElevenLabs word timings. Direction (the tags per line) is in `audio/woq-04.direction.json`.
+Note: draft 04's action lines say "thirties"; the voices are mid twenties.

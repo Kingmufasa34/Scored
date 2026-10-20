@@ -1,0 +1,1355 @@
+{
+"version": 1,
+"elements": [
+{
+"i": 0,
+"t": "trans",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e000-0.mp3",
+"kind": "narr",
+"dur": 0.69
+}
+]
+},
+{
+"i": 1,
+"t": "scene",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e001-0.mp3",
+"kind": "narr",
+"dur": 2.78
+}
+]
+},
+{
+"i": 2,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e002-0.mp3",
+"kind": "narr",
+"dur": 3.495
+}
+]
+},
+{
+"i": 3,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e003-0.mp3",
+"kind": "narr",
+"dur": 4.815
+}
+]
+},
+{
+"i": 4,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e004-0.mp3",
+"kind": "narr",
+"dur": 7.29
+}
+]
+},
+{
+"i": 5,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e005-0.mp3",
+"kind": "narr",
+"dur": 4.65
+}
+]
+},
+{
+"i": 6,
+"t": "scene",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e006-0.mp3",
+"kind": "narr",
+"dur": 2.615
+}
+]
+},
+{
+"i": 7,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e007-0.mp3",
+"kind": "narr",
+"dur": 1.46
+}
+]
+},
+{
+"i": 8,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e008-0.mp3",
+"kind": "narr",
+"dur": 8.39
+}
+]
+},
+{
+"i": 9,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e009-0.mp3",
+"kind": "narr",
+"dur": 9.16
+}
+]
+},
+{
+"i": 10,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e010-0.mp3",
+"kind": "narr",
+"dur": 7.4
+}
+]
+},
+{
+"i": 11,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e011-0.mp3",
+"kind": "narr",
+"dur": 8.72
+}
+]
+},
+{
+"i": 12,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e012-0.mp3",
+"kind": "line",
+"dur": 3.055,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 13,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e013-0.mp3",
+"kind": "line",
+"dur": 1.955,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 14,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e014-0.mp3",
+"kind": "line",
+"dur": 2.505,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 15,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e015-0.mp3",
+"kind": "line",
+"dur": 1.165,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 16,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e016-0.mp3",
+"kind": "line",
+"dur": 5.475,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 17,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e017-0.mp3",
+"kind": "par",
+"dur": 1.68
+},
+{
+"f": "woq-04/e017-1.mp3",
+"kind": "line",
+"dur": 0.855,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 18,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e018-0.mp3",
+"kind": "line",
+"dur": 2.89,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 19,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e019-0.mp3",
+"kind": "narr",
+"dur": 4.21
+}
+]
+},
+{
+"i": 20,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e020-0.mp3",
+"kind": "line",
+"dur": 1.13,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 21,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e021-0.mp3",
+"kind": "line",
+"dur": 1.185,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 22,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e022-0.mp3",
+"kind": "line",
+"dur": 5.145,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 23,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e023-0.mp3",
+"kind": "line",
+"dur": 1.24,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 24,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e024-0.mp3",
+"kind": "line",
+"dur": 6.96,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 25,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e025-0.mp3",
+"kind": "narr",
+"dur": 2.835
+}
+]
+},
+{
+"i": 26,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e026-0.mp3",
+"kind": "line",
+"dur": 0.965,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 27,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e027-0.mp3",
+"kind": "par",
+"dur": 1.735
+},
+{
+"f": "woq-04/e027-1.mp3",
+"kind": "line",
+"dur": 3.385,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 28,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e028-0.mp3",
+"kind": "line",
+"dur": 3.825,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 29,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e029-0.mp3",
+"kind": "line",
+"dur": 1.625,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 30,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e030-0.mp3",
+"kind": "line",
+"dur": 1.35,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 31,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e031-0.mp3",
+"kind": "line",
+"dur": 3.385,
+"cut": false,
+"trail": true
+},
+{
+"f": "woq-04/e031-1.mp3",
+"kind": "par",
+"dur": 2.67
+},
+{
+"f": "woq-04/e031-2.mp3",
+"kind": "line",
+"dur": 1.625,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 32,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e032-0.mp3",
+"kind": "line",
+"dur": 3.44,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 33,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e033-0.mp3",
+"kind": "line",
+"dur": 2.12,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 34,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e034-0.mp3",
+"kind": "par",
+"dur": 0.8
+},
+{
+"f": "woq-04/e034-1.mp3",
+"kind": "line",
+"dur": 0.8,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 35,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e035-0.mp3",
+"kind": "line",
+"dur": 1.295,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 36,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e036-0.mp3",
+"kind": "line",
+"dur": 2.175,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 37,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e037-0.mp3",
+"kind": "line",
+"dur": 7.33,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 38,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e038-0.mp3",
+"kind": "line",
+"dur": 1.067,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 39,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e039-0.mp3",
+"kind": "line",
+"dur": 6.465,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 40,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e040-0.mp3",
+"kind": "narr",
+"dur": 3.825
+}
+]
+},
+{
+"i": 41,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e041-0.mp3",
+"kind": "par",
+"dur": 1.46
+},
+{
+"f": "woq-04/e041-1.mp3",
+"kind": "line",
+"dur": 10.52,
+"cut": true,
+"trail": false
+}
+]
+},
+{
+"i": 42,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e042-0.mp3",
+"kind": "line",
+"dur": 1.625,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 43,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e043-0.mp3",
+"kind": "line",
+"dur": 1.46,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 44,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e044-0.mp3",
+"kind": "line",
+"dur": 6.19,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 45,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e045-0.mp3",
+"kind": "line",
+"dur": 1.185,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 46,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e046-0.mp3",
+"kind": "line",
+"dur": 1.13,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 47,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e047-0.mp3",
+"kind": "narr",
+"dur": 4.32
+}
+]
+},
+{
+"i": 48,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e048-0.mp3",
+"kind": "line",
+"dur": 3.0,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 49,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e049-0.mp3",
+"kind": "narr",
+"dur": 2.175
+}
+]
+},
+{
+"i": 50,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e050-0.mp3",
+"kind": "par",
+"dur": 1.075
+},
+{
+"f": "woq-04/e050-1.mp3",
+"kind": "line",
+"dur": 1.02,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 51,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e051-0.mp3",
+"kind": "line",
+"dur": 6.135,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 52,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e052-0.mp3",
+"kind": "narr",
+"dur": 6.74
+}
+]
+},
+{
+"i": 53,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e053-0.mp3",
+"kind": "narr",
+"dur": 6.025
+}
+]
+},
+{
+"i": 54,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e054-0.mp3",
+"kind": "par",
+"dur": 1.075
+},
+{
+"f": "woq-04/e054-1.mp3",
+"kind": "line",
+"dur": 6.355,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 55,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e055-0.mp3",
+"kind": "narr",
+"dur": 3.825
+}
+]
+},
+{
+"i": 56,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e056-0.mp3",
+"kind": "line",
+"dur": 0.91,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 57,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e057-0.mp3",
+"kind": "line",
+"dur": 0.635,
+"cut": false,
+"trail": true
+}
+]
+},
+{
+"i": 58,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e058-0.mp3",
+"kind": "line",
+"dur": 4.54,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 59,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e059-0.mp3",
+"kind": "narr",
+"dur": 10.15
+}
+]
+},
+{
+"i": 60,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e060-0.mp3",
+"kind": "narr",
+"dur": 8.72
+}
+]
+},
+{
+"i": 61,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e061-0.mp3",
+"kind": "par",
+"dur": 1.57
+},
+{
+"f": "woq-04/e061-1.mp3",
+"kind": "line",
+"dur": 3.055,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 62,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e062-0.mp3",
+"kind": "par",
+"dur": 1.515
+},
+{
+"f": "woq-04/e062-1.mp3",
+"kind": "line",
+"dur": 2.89,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 63,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e063-0.mp3",
+"kind": "narr",
+"dur": 4.98
+}
+]
+},
+{
+"i": 64,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e064-0.mp3",
+"kind": "narr",
+"dur": 1.9
+}
+]
+},
+{
+"i": 65,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e065-0.mp3",
+"kind": "line",
+"dur": 1.185,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 66,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e066-0.mp3",
+"kind": "line",
+"dur": 0.415,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 67,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e067-0.mp3",
+"kind": "par",
+"dur": 1.515
+},
+{
+"f": "woq-04/e067-1.mp3",
+"kind": "line",
+"dur": 1.9,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 68,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e068-0.mp3",
+"kind": "narr",
+"dur": 10.975
+}
+]
+},
+{
+"i": 69,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e069-0.mp3",
+"kind": "narr",
+"dur": 2.12
+}
+]
+},
+{
+"i": 70,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e070-0.mp3",
+"kind": "narr",
+"dur": 9.765
+}
+]
+},
+{
+"i": 71,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e071-0.mp3",
+"kind": "narr",
+"dur": 1.405
+}
+]
+},
+{
+"i": 72,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e072-0.mp3",
+"kind": "par",
+"dur": 0.635
+},
+{
+"f": "woq-04/e072-1.mp3",
+"kind": "line",
+"dur": 0.415,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 73,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e073-0.mp3",
+"kind": "narr",
+"dur": 4.155
+}
+]
+},
+{
+"i": 74,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e074-0.mp3",
+"kind": "par",
+"dur": 1.075
+},
+{
+"f": "woq-04/e074-1.mp3",
+"kind": "line",
+"dur": 0.58,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 75,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e075-0.mp3",
+"kind": "narr",
+"dur": 7.675
+}
+]
+},
+{
+"i": 76,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e076-0.mp3",
+"kind": "par",
+"dur": 2.285
+},
+{
+"f": "woq-04/e076-1.mp3",
+"kind": "line",
+"dur": 1.625,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 77,
+"t": "dlg",
+"who": "MAYA",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e077-0.mp3",
+"kind": "par",
+"dur": 1.185
+},
+{
+"f": "woq-04/e077-1.mp3",
+"kind": "line",
+"dur": 1.515,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 78,
+"t": "dlg",
+"who": "JAMES",
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e078-0.mp3",
+"kind": "par",
+"dur": 2.12
+},
+{
+"f": "woq-04/e078-1.mp3",
+"kind": "line",
+"dur": 0.745,
+"cut": false,
+"trail": false
+}
+]
+},
+{
+"i": 79,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e079-0.mp3",
+"kind": "narr",
+"dur": 1.35
+}
+]
+},
+{
+"i": 80,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e080-0.mp3",
+"kind": "narr",
+"dur": 6.85
+}
+]
+},
+{
+"i": 81,
+"t": "scene",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e081-0.mp3",
+"kind": "narr",
+"dur": 2.34
+}
+]
+},
+{
+"i": 82,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e082-0.mp3",
+"kind": "narr",
+"dur": 4.87
+}
+]
+},
+{
+"i": 83,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e083-0.mp3",
+"kind": "narr",
+"dur": 2.89
+}
+]
+},
+{
+"i": 84,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e084-0.mp3",
+"kind": "narr",
+"dur": 2.56
+}
+]
+},
+{
+"i": 85,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e085-0.mp3",
+"kind": "narr",
+"dur": 6.63
+}
+]
+},
+{
+"i": 86,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e086-0.mp3",
+"kind": "narr",
+"dur": 8.335
+}
+]
+},
+{
+"i": 87,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e087-0.mp3",
+"kind": "narr",
+"dur": 6.245
+}
+]
+},
+{
+"i": 88,
+"t": "action",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e088-0.mp3",
+"kind": "narr",
+"dur": 2.285
+}
+]
+},
+{
+"i": 89,
+"t": "trans",
+"who": null,
+"overlap": false,
+"clips": [
+{
+"f": "woq-04/e089-0.mp3",
+"kind": "narr",
+"dur": 0.745
+}
+]
+}
+]
+}

@@ -55,7 +55,7 @@ tools/fountain_pdf.py              renders a .fountain to an industry-format PDF
 `tools/table-read.html` reads a script aloud in the browser, with a voice per
 character and the option to read a part yourself. It is published at
 https://claude.ai/artifact/8pHSUj9PUxLsSoDJmn8xim. `tools/table-read.template.html`
-is the source: the `__DRAFT03__` / `__DRAFT02__` placeholders are filled with
+is the source: the `__DRAFT03__` / `__DRAFT02__` / `__WOQ04__` (The Weight of Quiet draft-04) placeholders are filled with
 draft text. Any `.fountain` file can also be opened from the page itself. After a
 new draft, rebuild the page with the newest drafts embedded and republish to the
 same link.
