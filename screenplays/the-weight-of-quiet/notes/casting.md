@@ -8,3 +8,7 @@ Designed with ElevenLabs Voice Design from the actor notes, mid twenties, Englis
 
 Recorded in passes per character per beat of the argument, cut on ElevenLabs word timings. Direction (the tags per line) is in `audio/woq-04.direction.json`.
 Note: draft 04's action lines say "thirties"; the voices are mid twenties.
+
+## Draft 10 read (designed voices, directed from the notes)
+
+Same three designed voices, re-recorded on draft 10 (the package version). One pass per character per beat, tags taken from the actor notes, parentheticals not read, interruption timing set per line (`gap` in `audio/woq-10.cast.json`). Role ids `WQ10-*`. The draft-04 read stays in the menu.
