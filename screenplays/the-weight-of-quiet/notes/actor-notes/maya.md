@@ -50,3 +50,19 @@ You are watching the man you love scream at an empty room. Play pure incomprehen
 ## Wardrobe / prop life
 
 The coat is his, and too big in the sleeves: she is wearing him and hasn't taken it off. The phone is her exit and her weapon: the train times are on it the whole time. The two mugs are his, not yours. You never touch the cold one.
+
+## For the voice (table read)
+
+**Voice:** the designed Maya voice (`sRnMcG81PRhIOUiEKkbV`).
+
+**Baseline:** quick, dry, sarcastic, half on her phone. Unless a moment says otherwise, she's needling someone she loves and is fed up with. Let the restarts and repeats in the lines do the work; don't tag them.
+
+**Where she breaks (and nowhere else):**
+- "IT IS NOT A CUP OF COFFEE": the shout.
+- "At least if she was alive I could hate her prop--": too fast, then stops dead.
+- "Haven't I?": very still and quiet.
+- "Then let me in!": shouting.
+- "Who are you talking to.": a frightened whisper.
+
+**Tags she gets:** `[sarcastic]` `[angry]` `[shouting]` `[quietly]` `[whispers]` `[laughs]`
+**Tags she never gets:** `[sad]`, `[crying]`, `[softly]` as a baseline, stacked tags, a tag on every line.

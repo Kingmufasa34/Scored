@@ -10,3 +10,4 @@
 - **draft-08** (2026-09-23): Lead-writer draft of "The Weight of Quiet"
 - **draft-09** (2026-09-23): Make the argument burn in "The Weight of Quiet"
 - **draft-10** (2026-09-23): Drop the marriage framing from "The Weight of Quiet"
+- **draft-11** (2026-10-20): Roughen the dialogue for the table read (restarts, mishearing, dead lines, broken quotable lines) and tighten some action

@@ -62,3 +62,19 @@ Hands over your face, undone. Not weeping for effect. A man who has just been sh
 ## Prop life
 
 The two mugs are your ritual, not clutter: you make the second one without thinking. The window is your exit valve. Keep every one of these acts automatic, never performed. The audience should notice them before you do.
+
+## For the voice (table read)
+
+**Voice:** the designed James voice (`bPb4ok6wxjmfwhcpMsma`).
+
+**Baseline:** easy, dry, deflecting, a bit stubborn. Not meek: he talks back. Unfinished sentences carry his evasions; don't play them nervous.
+
+**Where he breaks (and nowhere else):**
+- "Shove up": warm, under his breath. The one tender line.
+- "Say that again": cold.
+- "It IS happening to me!": shouting.
+- "Not now. Not tonight.": pleading, to no one.
+- "FUCK OFF!": the roar.
+
+**Tags he gets:** `[warmly]` `[coldly]` `[shouting]` `[sighs]` `[quietly]`
+**Tags he never gets:** `[nervous]`, `[whispers]`, `[sad]`, stacked tags, a tag on every line.
