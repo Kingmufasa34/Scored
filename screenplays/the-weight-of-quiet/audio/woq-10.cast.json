@@ -415,6 +415,327 @@
   ],
   "JAMES": [
    {
+    "id": "WQ10B-JAMES",
+    "role": "JAMES",
+    "label": "James (firmer take)",
+    "credit": {
+     "corpus": "ElevenLabs Voice Design",
+     "speaker": "James"
+    },
+    "clips": {
+     "14": [
+      {
+       "f": "woq-10-el/JAMES2/e014-0.mp3",
+       "kind": "line",
+       "dur": 0.76,
+       "cut": false,
+       "trail": false,
+       "gap": 0.2
+      }
+     ],
+     "16": [
+      {
+       "f": "woq-10-el/JAMES2/e016-0.mp3",
+       "kind": "line",
+       "dur": 1.31,
+       "cut": false,
+       "trail": false,
+       "gap": 0.15
+      }
+     ],
+     "19": [
+      {
+       "f": "woq-10-el/JAMES2/e019-0.mp3",
+       "kind": "line",
+       "dur": 1.99,
+       "cut": false,
+       "trail": false,
+       "gap": 0.4
+      }
+     ],
+     "21": [
+      {
+       "f": "woq-10-el/JAMES2/e021-0.mp3",
+       "kind": "line",
+       "dur": 1.49,
+       "cut": false,
+       "trail": false,
+       "gap": 0.2
+      }
+     ],
+     "23": [
+      {
+       "f": "woq-10-el/JAMES2/e023-0.mp3",
+       "kind": "line",
+       "dur": 1.36,
+       "cut": false,
+       "trail": false,
+       "gap": 0.2
+      }
+     ],
+     "27": [
+      {
+       "f": "woq-10-el/JAMES2/e027-0.mp3",
+       "kind": "line",
+       "dur": 0.99,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "29": [
+      {
+       "f": "woq-10-el/JAMES2/e029-0.mp3",
+       "kind": "line",
+       "dur": 1.15,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "31": [
+      {
+       "f": "woq-10-el/JAMES2/e031-0.mp3",
+       "kind": "line",
+       "dur": 1.2,
+       "cut": false,
+       "trail": false,
+       "gap": 0.3
+      }
+     ],
+     "34": [
+      {
+       "f": "woq-10-el/JAMES2/e034-0.mp3",
+       "kind": "line",
+       "dur": 1.23,
+       "cut": true,
+       "trail": false,
+       "gap": 0.0
+      }
+     ],
+     "37": [
+      {
+       "f": "woq-10-el/JAMES2/e037-0.mp3",
+       "kind": "line",
+       "dur": 0.78,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "41": [
+      {
+       "f": "woq-10-el/JAMES2/e041-0.mp3",
+       "kind": "line",
+       "dur": 0.94,
+       "cut": false,
+       "trail": false,
+       "gap": 0.6
+      }
+     ],
+     "45": [
+      {
+       "f": "woq-10-el/JAMES2/e045-0.mp3",
+       "kind": "line",
+       "dur": 0.81,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "47": [
+      {
+       "f": "woq-10-el/JAMES2/e047-0.mp3",
+       "kind": "line",
+       "dur": 1.65,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "52": [
+      {
+       "f": "woq-10-el/JAMES2/e052-0.mp3",
+       "kind": "line",
+       "dur": 2.09,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "54": [
+      {
+       "f": "woq-10-el/JAMES2/e054-0.mp3",
+       "kind": "line",
+       "dur": 1.62,
+       "cut": false,
+       "trail": false,
+       "gap": -0.3
+      }
+     ],
+     "58": [
+      {
+       "f": "woq-10-el/JAMES2/e058-0.mp3",
+       "kind": "line",
+       "dur": 1.52,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "62": [
+      {
+       "f": "woq-10-el/JAMES2/e062-0.mp3",
+       "kind": "line",
+       "dur": 0.76,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "65": [
+      {
+       "f": "woq-10-el/JAMES2/e065-0.mp3",
+       "kind": "line",
+       "dur": 0.99,
+       "cut": false,
+       "trail": false,
+       "gap": 0.6
+      }
+     ],
+     "67": [
+      {
+       "f": "woq-10-el/JAMES2/e067-0.mp3",
+       "kind": "line",
+       "dur": 1.59,
+       "cut": false,
+       "trail": false,
+       "gap": -0.2
+      }
+     ],
+     "69": [
+      {
+       "f": "woq-10-el/JAMES2/e069-0.mp3",
+       "kind": "line",
+       "dur": 7.29,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "75": [
+      {
+       "f": "woq-10-el/JAMES2/e075-0.mp3",
+       "kind": "line",
+       "dur": 1.28,
+       "cut": true,
+       "trail": false,
+       "gap": 0.0
+      }
+     ],
+     "83": [
+      {
+       "f": "woq-10-el/JAMES2/e083-0.mp3",
+       "kind": "line",
+       "dur": 3.84,
+       "cut": false,
+       "trail": false,
+       "gap": 0.2
+      }
+     ],
+     "85": [
+      {
+       "f": "woq-10-el/JAMES2/e085-0.mp3",
+       "kind": "line",
+       "dur": 3.06,
+       "cut": true,
+       "trail": false,
+       "gap": -0.1
+      }
+     ],
+     "87": [
+      {
+       "f": "woq-10-el/JAMES2/e087-0.mp3",
+       "kind": "line",
+       "dur": 1.04,
+       "cut": true,
+       "trail": false,
+       "gap": 0.0
+      }
+     ],
+     "89": [
+      {
+       "f": "woq-10-el/JAMES2/e089-0.mp3",
+       "kind": "line",
+       "dur": 1.83,
+       "cut": false,
+       "trail": false,
+       "gap": -0.1
+      }
+     ],
+     "91": [
+      {
+       "f": "woq-10-el/JAMES2/e091-0.mp3",
+       "kind": "line",
+       "dur": 1.41,
+       "cut": true,
+       "trail": false,
+       "gap": -0.3
+      }
+     ],
+     "96": [
+      {
+       "f": "woq-10-el/JAMES2/e096-0.mp3",
+       "kind": "line",
+       "dur": 0.97,
+       "cut": false,
+       "trail": false,
+       "gap": 0.5
+      }
+     ],
+     "108": [
+      {
+       "f": "woq-10-el/JAMES2/e108-0.mp3",
+       "kind": "line",
+       "dur": 1.7,
+       "cut": true,
+       "trail": false,
+       "gap": 0.3
+      }
+     ],
+     "116": [
+      {
+       "f": "woq-10-el/JAMES2/e116-0.mp3",
+       "kind": "line",
+       "dur": 0.73,
+       "cut": false,
+       "trail": false,
+       "gap": 0.4
+      }
+     ],
+     "120": [
+      {
+       "f": "woq-10-el/JAMES2/e120-0.mp3",
+       "kind": "line",
+       "dur": 4.31,
+       "cut": false,
+       "trail": false,
+       "gap": 0.3
+      }
+     ],
+     "123": [
+      {
+       "f": "woq-10-el/JAMES2/e123-0.mp3",
+       "kind": "line",
+       "dur": 1.18,
+       "cut": false,
+       "trail": false,
+       "gap": 0.3
+      }
+     ]
+    }
+   },
+   {
     "id": "WQ10-JAMES",
     "role": "JAMES",
     "label": "James (designed voice, draft 10)",
@@ -737,6 +1058,465 @@
    }
   ],
   "DIRECTOR": [
+   {
+    "id": "WQ10B-DIRECTOR",
+    "role": "DIRECTOR",
+    "label": "Director (phone moments pointed)",
+    "credit": {
+     "corpus": "ElevenLabs Voice Design",
+     "speaker": "Director"
+    },
+    "clips": {
+     "0": [
+      {
+       "f": "woq-10-el/DIRECTOR/e000-0.mp3",
+       "kind": "narr",
+       "dur": 0.84
+      }
+     ],
+     "1": [
+      {
+       "f": "woq-10-el/DIRECTOR/e001-0.mp3",
+       "kind": "narr",
+       "dur": 4.52
+      }
+     ],
+     "2": [
+      {
+       "f": "woq-10-el/DIRECTOR/e002-0.mp3",
+       "kind": "narr",
+       "dur": 4.55
+      }
+     ],
+     "3": [
+      {
+       "f": "woq-10-el/DIRECTOR/e003-0.mp3",
+       "kind": "narr",
+       "dur": 5.8
+      }
+     ],
+     "4": [
+      {
+       "f": "woq-10-el/DIRECTOR/e004-0.mp3",
+       "kind": "narr",
+       "dur": 9.43
+      }
+     ],
+     "5": [
+      {
+       "f": "woq-10-el/DIRECTOR/e005-0.mp3",
+       "kind": "narr",
+       "dur": 6.01
+      }
+     ],
+     "6": [
+      {
+       "f": "woq-10-el/DIRECTOR/e006-0.mp3",
+       "kind": "narr",
+       "dur": 3.68
+      }
+     ],
+     "7": [
+      {
+       "f": "woq-10-el/DIRECTOR/e007-0.mp3",
+       "kind": "narr",
+       "dur": 4.31
+      }
+     ],
+     "8": [
+      {
+       "f": "woq-10-el/DIRECTOR/e008-0.mp3",
+       "kind": "narr",
+       "dur": 7.13
+      }
+     ],
+     "9": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e009-0.mp3",
+       "kind": "narr",
+       "dur": 14.63
+      }
+     ],
+     "10": [
+      {
+       "f": "woq-10-el/DIRECTOR/e010-0.mp3",
+       "kind": "narr",
+       "dur": 4.86
+      }
+     ],
+     "11": [
+      {
+       "f": "woq-10-el/DIRECTOR/e011-0.mp3",
+       "kind": "narr",
+       "dur": 8.7
+      }
+     ],
+     "12": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e012-0.mp3",
+       "kind": "narr",
+       "dur": 3.76
+      }
+     ],
+     "18": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e018-0.mp3",
+       "kind": "narr",
+       "dur": 4.62
+      }
+     ],
+     "25": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e025-0.mp3",
+       "kind": "narr",
+       "dur": 5.2
+      }
+     ],
+     "32": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e032-0.mp3",
+       "kind": "narr",
+       "dur": 7.73
+      }
+     ],
+     "36": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e036-0.mp3",
+       "kind": "narr",
+       "dur": 3.87
+      }
+     ],
+     "39": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e039-0.mp3",
+       "kind": "narr",
+       "dur": 8.25
+      }
+     ],
+     "40": [
+      {
+       "f": "woq-10-el/DIRECTOR/e040-0.mp3",
+       "kind": "narr",
+       "dur": 7.92
+      }
+     ],
+     "42": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e042-0.mp3",
+       "kind": "narr",
+       "dur": 1.38
+      }
+     ],
+     "43": [
+      {
+       "f": "woq-10-el/DIRECTOR/e043-0.mp3",
+       "kind": "narr",
+       "dur": 2.74
+      }
+     ],
+     "49": [
+      {
+       "f": "woq-10-el/DIRECTOR/e049-0.mp3",
+       "kind": "narr",
+       "dur": 5.04
+      }
+     ],
+     "50": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e050-0.mp3",
+       "kind": "narr",
+       "dur": 3.79
+      }
+     ],
+     "56": [
+      {
+       "f": "woq-10-el/DIRECTOR/e056-0.mp3",
+       "kind": "narr",
+       "dur": 10.21
+      }
+     ],
+     "60": [
+      {
+       "f": "woq-10-el/DIRECTOR/e060-0.mp3",
+       "kind": "narr",
+       "dur": 12.33
+      }
+     ],
+     "64": [
+      {
+       "f": "woq-10-el/DIRECTOR/e064-0.mp3",
+       "kind": "narr",
+       "dur": 5.56
+      }
+     ],
+     "70": [
+      {
+       "f": "woq-10-el/DIRECTOR/e070-0.mp3",
+       "kind": "narr",
+       "dur": 4.05
+      }
+     ],
+     "72": [
+      {
+       "f": "woq-10-el/DIRECTOR/e072-0.mp3",
+       "kind": "narr",
+       "dur": 1.15
+      }
+     ],
+     "73": [
+      {
+       "f": "woq-10-el/DIRECTOR/e073-0.mp3",
+       "kind": "narr",
+       "dur": 4.41
+      }
+     ],
+     "77": [
+      {
+       "f": "woq-10-el/DIRECTOR/e077-0.mp3",
+       "kind": "narr",
+       "dur": 5.3
+      }
+     ],
+     "79": [
+      {
+       "f": "woq-10-el/DIRECTOR/e079-0.mp3",
+       "kind": "narr",
+       "dur": 7.31
+      }
+     ],
+     "80": [
+      {
+       "f": "woq-10-el/DIRECTOR/e080-0.mp3",
+       "kind": "narr",
+       "dur": 8.75
+      }
+     ],
+     "81": [
+      {
+       "f": "woq-10-el/DIRECTOR/e081-0.mp3",
+       "kind": "narr",
+       "dur": 2.3
+      }
+     ],
+     "93": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e093-0.mp3",
+       "kind": "narr",
+       "dur": 7.44
+      }
+     ],
+     "95": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e095-0.mp3",
+       "kind": "narr",
+       "dur": 2.32
+      }
+     ],
+     "97": [
+      {
+       "f": "woq-10-el/DIRECTOR/e097-0.mp3",
+       "kind": "narr",
+       "dur": 7.76
+      }
+     ],
+     "99": [
+      {
+       "f": "woq-10-el/DIRECTOR/e099-0.mp3",
+       "kind": "narr",
+       "dur": 1.59
+      }
+     ],
+     "100": [
+      {
+       "f": "woq-10-el/DIRECTOR/e100-0.mp3",
+       "kind": "narr",
+       "dur": 26.17
+      }
+     ],
+     "101": [
+      {
+       "f": "woq-10-el/DIRECTOR/e101-0.mp3",
+       "kind": "narr",
+       "dur": 2.14
+      }
+     ],
+     "102": [
+      {
+       "f": "woq-10-el/DIRECTOR/e102-0.mp3",
+       "kind": "narr",
+       "dur": 6.58
+      }
+     ],
+     "103": [
+      {
+       "f": "woq-10-el/DIRECTOR/e103-0.mp3",
+       "kind": "narr",
+       "dur": 6.24
+      }
+     ],
+     "104": [
+      {
+       "f": "woq-10-el/DIRECTOR/e104-0.mp3",
+       "kind": "narr",
+       "dur": 1.28
+      }
+     ],
+     "106": [
+      {
+       "f": "woq-10-el/DIRECTOR/e106-0.mp3",
+       "kind": "narr",
+       "dur": 2.38
+      }
+     ],
+     "107": [
+      {
+       "f": "woq-10-el/DIRECTOR/e107-0.mp3",
+       "kind": "narr",
+       "dur": 2.87
+      }
+     ],
+     "109": [
+      {
+       "f": "woq-10-el/DIRECTOR/e109-0.mp3",
+       "kind": "narr",
+       "dur": 5.33
+      }
+     ],
+     "110": [
+      {
+       "f": "woq-10-el/DIRECTOR/e110-0.mp3",
+       "kind": "narr",
+       "dur": 6.24
+      }
+     ],
+     "112": [
+      {
+       "f": "woq-10-el/DIRECTOR/e112-0.mp3",
+       "kind": "narr",
+       "dur": 9.98
+      }
+     ],
+     "113": [
+      {
+       "f": "woq-10-el/DIRECTOR/e113-0.mp3",
+       "kind": "narr",
+       "dur": 2.3
+      }
+     ],
+     "114": [
+      {
+       "f": "woq-10-el/DIRECTOR/e114-0.mp3",
+       "kind": "narr",
+       "dur": 14.84
+      }
+     ],
+     "115": [
+      {
+       "f": "woq-10-el/DIRECTOR/e115-0.mp3",
+       "kind": "narr",
+       "dur": 1.57
+      }
+     ],
+     "117": [
+      {
+       "f": "woq-10-el/DIRECTOR/e117-0.mp3",
+       "kind": "narr",
+       "dur": 4.94
+      }
+     ],
+     "119": [
+      {
+       "f": "woq-10-el/DIRECTOR/e119-0.mp3",
+       "kind": "narr",
+       "dur": 9.14
+      }
+     ],
+     "122": [
+      {
+       "f": "woq-10-el/DIRECTOR/e122-0.mp3",
+       "kind": "narr",
+       "dur": 4.83
+      }
+     ],
+     "124": [
+      {
+       "f": "woq-10-el/DIRECTOR/e124-0.mp3",
+       "kind": "narr",
+       "dur": 1.41
+      }
+     ],
+     "125": [
+      {
+       "f": "woq-10-el/DIRECTOR/e125-0.mp3",
+       "kind": "narr",
+       "dur": 7.76
+      }
+     ],
+     "126": [
+      {
+       "f": "woq-10-el/DIRECTOR/e126-0.mp3",
+       "kind": "narr",
+       "dur": 4.18
+      }
+     ],
+     "127": [
+      {
+       "f": "woq-10-el/DIRECTOR/e127-0.mp3",
+       "kind": "narr",
+       "dur": 6.79
+      }
+     ],
+     "128": [
+      {
+       "f": "woq-10-el/DIRECTOR/e128-0.mp3",
+       "kind": "narr",
+       "dur": 4.26
+      }
+     ],
+     "129": [
+      {
+       "f": "woq-10-el/DIRECTOR/e129-0.mp3",
+       "kind": "narr",
+       "dur": 3.47
+      }
+     ],
+     "130": [
+      {
+       "f": "woq-10-el/DIRECTOR/e130-0.mp3",
+       "kind": "narr",
+       "dur": 8.31
+      }
+     ],
+     "131": [
+      {
+       "f": "woq-10-el/DIRECTOR2/e131-0.mp3",
+       "kind": "narr",
+       "dur": 14.68
+      }
+     ],
+     "132": [
+      {
+       "f": "woq-10-el/DIRECTOR/e132-0.mp3",
+       "kind": "narr",
+       "dur": 6.24
+      }
+     ],
+     "133": [
+      {
+       "f": "woq-10-el/DIRECTOR/e133-0.mp3",
+       "kind": "narr",
+       "dur": 2.14
+      }
+     ],
+     "134": [
+      {
+       "f": "woq-10-el/DIRECTOR/e134-0.mp3",
+       "kind": "narr",
+       "dur": 0.89
+      }
+     ]
+    }
+   },
    {
     "id": "WQ10-DIRECTOR",
     "role": "DIRECTOR",
