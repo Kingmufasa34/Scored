@@ -27,3 +27,11 @@ Picked by Tendai from library auditions (the designed South African voices were 
 - **Director**: De Villiers `L9YfwBz6PMs8GipTR591`
 
 Role ids `WQ11SA-*`, clips in `audio/woq-11-sa/`. The table read has one Weight of Quiet entry (latest draft); older casts stay as alternates in the voice menus.
+
+### Matching the Life After Alice method (what made LAA work)
+
+Compared against LAA take 4 and matched it:
+- **Short passes:** about 5 lines per take (LAA average), not 10–20. Long takes flatten into one tone.
+- **A tag on most lines:** about 0.8 per line in LAA's vocabulary ([sarcastic], [dry], [laughs], [sighs], [interrupting], [jumping in]...). The "tags only at the breaks" approach was wrong; LAA was never that sparse.
+- **Room between lines:** every line has an explicit gap, averaging about 0.3s (LAA 0.2–0.5s), with -0.2s on cut-offs and long holds on "Haven't I?", "Then get it" and "Who are you talking to". Previously it averaged 0.07s.
+- The Director stays untagged apart from the phone moments (LAA's narrator had no tags).

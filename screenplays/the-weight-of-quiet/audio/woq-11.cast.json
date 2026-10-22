@@ -14,292 +14,300 @@
       {
        "f": "woq-11-sa/MAYA/e013-0.mp3",
        "kind": "line",
-       "dur": 1.96,
+       "dur": 1.99,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "15": [
       {
        "f": "woq-11-sa/MAYA/e015-0.mp3",
        "kind": "line",
-       "dur": 4.28,
+       "dur": 3.97,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "17": [
       {
        "f": "woq-11-sa/MAYA/e017-0.mp3",
        "kind": "line",
-       "dur": 1.52,
+       "dur": 1.38,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "20": [
       {
        "f": "woq-11-sa/MAYA/e020-0.mp3",
        "kind": "line",
-       "dur": 0.94,
+       "dur": 0.76,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "22": [
       {
        "f": "woq-11-sa/MAYA/e022-0.mp3",
        "kind": "line",
-       "dur": 2.14,
+       "dur": 2.22,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "24": [
       {
        "f": "woq-11-sa/MAYA/e024-0.mp3",
        "kind": "line",
-       "dur": 6.9,
+       "dur": 6.79,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "26": [
       {
        "f": "woq-11-sa/MAYA/e026-0.mp3",
        "kind": "line",
-       "dur": 3.58,
+       "dur": 4.44,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "28": [
       {
        "f": "woq-11-sa/MAYA/e028-0.mp3",
        "kind": "line",
-       "dur": 3.37,
+       "dur": 3.81,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "30": [
       {
        "f": "woq-11-sa/MAYA/e030-0.mp3",
        "kind": "line",
-       "dur": 1.12,
+       "dur": 1.1,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "32": [
       {
        "f": "woq-11-sa/MAYA/e032-0.mp3",
        "kind": "line",
-       "dur": 1.41,
+       "dur": 1.65,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "34": [
       {
        "f": "woq-11-sa/MAYA/e034-0.mp3",
        "kind": "line",
-       "dur": 0.78,
+       "dur": 0.76,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "36": [
       {
        "f": "woq-11-sa/MAYA/e036-0.mp3",
        "kind": "line",
-       "dur": 1.52,
+       "dur": 1.54,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "38": [
       {
        "f": "woq-11-sa/MAYA/e038-0.mp3",
        "kind": "line",
-       "dur": 2.04,
+       "dur": 2.43,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "40": [
       {
        "f": "woq-11-sa/MAYA/e040-0.mp3",
        "kind": "line",
-       "dur": 5.02,
+       "dur": 5.25,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "43": [
       {
        "f": "woq-11-sa/MAYA/e043-0.mp3",
        "kind": "line",
-       "dur": 0.86,
+       "dur": 1.28,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "45": [
       {
        "f": "woq-11-sa/MAYA/e045-0.mp3",
        "kind": "line",
-       "dur": 6.48,
+       "dur": 6.95,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "47": [
       {
        "f": "woq-11-sa/MAYA/e047-0.mp3",
        "kind": "line",
-       "dur": 2.98,
+       "dur": 3.11,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "50": [
       {
        "f": "woq-11-sa/MAYA/e050-0.mp3",
        "kind": "line",
-       "dur": 2.17,
+       "dur": 2.06,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "56": [
       {
        "f": "woq-11-sa/MAYA/e056-0.mp3",
        "kind": "line",
-       "dur": 0.89,
+       "dur": 1.07,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.6
       }
      ],
      "58": [
       {
        "f": "woq-11-sa/MAYA/e058-0.mp3",
        "kind": "line",
-       "dur": 1.57,
+       "dur": 2.48,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "60": [
       {
        "f": "woq-11-sa/MAYA/e060-0.mp3",
        "kind": "line",
-       "dur": 4.7,
+       "dur": 4.75,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "63": [
       {
        "f": "woq-11-sa/MAYA/e063-0.mp3",
        "kind": "line",
-       "dur": 1.99,
+       "dur": 2.06,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "65": [
       {
        "f": "woq-11-sa/MAYA/e065-0.mp3",
        "kind": "line",
-       "dur": 12.75,
+       "dur": 12.98,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "67": [
       {
        "f": "woq-11-sa/MAYA/e067-0.mp3",
        "kind": "line",
-       "dur": 2.32,
+       "dur": 2.38,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.0
       }
      ],
      "69": [
       {
        "f": "woq-11-sa/MAYA/e069-0.mp3",
        "kind": "line",
-       "dur": 8.8,
+       "dur": 8.46,
        "cut": true,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "71": [
       {
        "f": "woq-11-sa/MAYA/e071-0.mp3",
        "kind": "line",
-       "dur": 5.09,
+       "dur": 5.28,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "73": [
       {
        "f": "woq-11-sa/MAYA/e073-0.mp3",
        "kind": "line",
-       "dur": 20.72,
+       "dur": 20.9,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "75": [
       {
        "f": "woq-11-sa/MAYA/e075-0.mp3",
        "kind": "line",
-       "dur": 2.48,
+       "dur": 2.8,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "78": [
       {
        "f": "woq-11-sa/MAYA/e078-0.mp3",
        "kind": "line",
-       "dur": 0.73,
+       "dur": 1.33,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "80": [
       {
        "f": "woq-11-sa/MAYA/e080-0.mp3",
        "kind": "line",
-       "dur": 3.97,
+       "dur": 4.36,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "83": [
@@ -309,151 +317,157 @@
        "dur": 0.81,
        "cut": false,
        "trail": false,
-       "gap": 0.8
+       "gap": 1.0
       }
      ],
      "86": [
       {
        "f": "woq-11-sa/MAYA/e086-0.mp3",
        "kind": "line",
-       "dur": 0.71,
+       "dur": 0.78,
        "cut": false,
        "trail": false,
-       "gap": 0.5
+       "gap": 0.6
       }
      ],
      "88": [
       {
        "f": "woq-11-sa/MAYA/e088-0.mp3",
        "kind": "line",
-       "dur": 2.66,
+       "dur": 3.03,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "90": [
       {
        "f": "woq-11-sa/MAYA/e090-0.mp3",
        "kind": "line",
-       "dur": 7.39,
+       "dur": 7.71,
        "cut": true,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "94": [
       {
        "f": "woq-11-sa/MAYA/e094-0.mp3",
        "kind": "line",
-       "dur": 6.97,
+       "dur": 7.13,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "96": [
       {
        "f": "woq-11-sa/MAYA/e096-0.mp3",
        "kind": "line",
-       "dur": 1.93,
+       "dur": 1.67,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "98": [
       {
        "f": "woq-11-sa/MAYA/e098-0.mp3",
        "kind": "line",
-       "dur": 8.18,
+       "dur": 8.31,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "100": [
       {
        "f": "woq-11-sa/MAYA/e100-0.mp3",
        "kind": "line",
-       "dur": 12.3,
+       "dur": 11.86,
        "cut": true,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "102": [
       {
        "f": "woq-11-sa/MAYA/e102-0.mp3",
        "kind": "line",
-       "dur": 5.93,
+       "dur": 6.53,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "104": [
       {
        "f": "woq-11-sa/MAYA/e104-0.mp3",
        "kind": "line",
-       "dur": 7.29,
+       "dur": 7.21,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "106": [
       {
        "f": "woq-11-sa/MAYA/e106-0.mp3",
        "kind": "line",
-       "dur": 4.99,
+       "dur": 5.15,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "110": [
       {
        "f": "woq-11-sa/MAYA/e110-0.mp3",
        "kind": "line",
-       "dur": 1.54,
+       "dur": 1.46,
        "cut": false,
        "trail": false,
-       "gap": 0.4
+       "gap": 0.6
       }
      ],
      "117": [
       {
        "f": "woq-11-sa/MAYA/e117-0.mp3",
        "kind": "line",
-       "dur": 6.4,
+       "dur": 6.77,
        "cut": true,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "123": [
       {
        "f": "woq-11-sa/MAYA/e123-0.mp3",
        "kind": "line",
-       "dur": 4.02,
+       "dur": 4.13,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "130": [
       {
        "f": "woq-11-sa/MAYA/e130-0.mp3",
        "kind": "line",
-       "dur": 0.99,
+       "dur": 0.91,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "133": [
       {
        "f": "woq-11-sa/MAYA/e133-0.mp3",
        "kind": "line",
-       "dur": 1.41,
+       "dur": 1.52,
        "cut": false,
        "trail": false,
-       "gap": 0.4
+       "gap": 0.7
       }
      ]
     }
@@ -930,10 +944,10 @@
       {
        "f": "woq-11-sa/JAMES/e014-0.mp3",
        "kind": "line",
-       "dur": 1.49,
+       "dur": 1.15,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "16": [
@@ -943,165 +957,167 @@
        "dur": 1.31,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "19": [
       {
        "f": "woq-11-sa/JAMES/e019-0.mp3",
        "kind": "line",
-       "dur": 1.96,
+       "dur": 2.01,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "21": [
       {
        "f": "woq-11-sa/JAMES/e021-0.mp3",
        "kind": "line",
-       "dur": 3.63,
+       "dur": 3.84,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "23": [
       {
        "f": "woq-11-sa/JAMES/e023-0.mp3",
        "kind": "line",
-       "dur": 2.82,
+       "dur": 2.74,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "25": [
       {
        "f": "woq-11-sa/JAMES/e025-0.mp3",
        "kind": "line",
-       "dur": 1.04,
+       "dur": 1.52,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "27": [
       {
        "f": "woq-11-sa/JAMES/e027-0.mp3",
        "kind": "line",
-       "dur": 1.18,
+       "dur": 1.7,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "31": [
       {
        "f": "woq-11-sa/JAMES/e031-0.mp3",
        "kind": "line",
-       "dur": 0.76,
+       "dur": 0.68,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "33": [
       {
        "f": "woq-11-sa/JAMES/e033-0.mp3",
        "kind": "line",
-       "dur": 3.34,
+       "dur": 3.84,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "37": [
       {
        "f": "woq-11-sa/JAMES/e037-0.mp3",
        "kind": "line",
-       "dur": 0.84,
+       "dur": 0.99,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "39": [
       {
        "f": "woq-11-sa/JAMES/e039-0.mp3",
        "kind": "line",
-       "dur": 0.99,
+       "dur": 1.33,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "41": [
       {
        "f": "woq-11-sa/JAMES/e041-0.mp3",
        "kind": "line",
-       "dur": 1.04,
+       "dur": 1.54,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "44": [
       {
        "f": "woq-11-sa/JAMES/e044-0.mp3",
        "kind": "line",
-       "dur": 1.1,
+       "dur": 0.86,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "46": [
       {
        "f": "woq-11-sa/JAMES/e046-0.mp3",
        "kind": "line",
-       "dur": 1.44,
+       "dur": 1.75,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "49": [
       {
        "f": "woq-11-sa/JAMES/e049-0.mp3",
        "kind": "line",
-       "dur": 1.38,
+       "dur": 1.36,
        "cut": true,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "53": [
       {
        "f": "woq-11-sa/JAMES/e053-0.mp3",
        "kind": "line",
-       "dur": 1.12,
+       "dur": 1.25,
        "cut": false,
        "trail": false,
-       "gap": 0.3
+       "gap": 0.5
       }
      ],
      "57": [
       {
        "f": "woq-11-sa/JAMES/e057-0.mp3",
        "kind": "line",
-       "dur": 0.65,
+       "dur": 0.68,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "59": [
       {
        "f": "woq-11-sa/JAMES/e059-0.mp3",
        "kind": "line",
-       "dur": 4.7,
+       "dur": 5.9,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "64": [
@@ -1111,172 +1127,177 @@
        "dur": 2.53,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "66": [
       {
        "f": "woq-11-sa/JAMES/e066-0.mp3",
        "kind": "line",
-       "dur": 1.72,
+       "dur": 1.88,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "70": [
       {
        "f": "woq-11-sa/JAMES/e070-0.mp3",
        "kind": "line",
-       "dur": 1.12,
+       "dur": 1.25,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "74": [
       {
        "f": "woq-11-sa/JAMES/e074-0.mp3",
        "kind": "line",
-       "dur": 0.81,
+       "dur": 0.78,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "77": [
       {
        "f": "woq-11-sa/JAMES/e077-0.mp3",
        "kind": "line",
-       "dur": 1.04,
+       "dur": 1.78,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.5
       }
      ],
      "79": [
       {
        "f": "woq-11-sa/JAMES/e079-0.mp3",
        "kind": "line",
-       "dur": 2.17,
+       "dur": 2.27,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "81": [
       {
        "f": "woq-11-sa/JAMES/e081-0.mp3",
        "kind": "line",
-       "dur": 9.2,
+       "dur": 9.06,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "87": [
       {
        "f": "woq-11-sa/JAMES/e087-0.mp3",
        "kind": "line",
-       "dur": 1.15,
+       "dur": 1.46,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "95": [
       {
        "f": "woq-11-sa/JAMES/e095-0.mp3",
        "kind": "line",
-       "dur": 4.62,
+       "dur": 4.36,
        "cut": false,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "97": [
       {
        "f": "woq-11-sa/JAMES/e097-0.mp3",
        "kind": "line",
-       "dur": 3.5,
+       "dur": 3.42,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "99": [
       {
        "f": "woq-11-sa/JAMES/e099-0.mp3",
        "kind": "line",
-       "dur": 1.25,
+       "dur": 1.36,
        "cut": true,
        "trail": false,
-       "gap": 0.1
+       "gap": 0.4
       }
      ],
      "101": [
       {
        "f": "woq-11-sa/JAMES/e101-0.mp3",
        "kind": "line",
-       "dur": 1.75,
+       "dur": 1.8,
        "cut": false,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "103": [
       {
        "f": "woq-11-sa/JAMES/e103-0.mp3",
        "kind": "line",
-       "dur": 1.49,
+       "dur": 1.57,
        "cut": true,
        "trail": false,
-       "gap": -0.25
+       "gap": -0.2
       }
      ],
      "108": [
       {
        "f": "woq-11-sa/JAMES/e108-0.mp3",
        "kind": "line",
-       "dur": 1.07,
+       "dur": 1.04,
        "cut": false,
        "trail": false,
-       "gap": 0.6
+       "gap": 0.8
       }
      ],
      "120": [
       {
        "f": "woq-11-sa/JAMES/e120-0.mp3",
        "kind": "line",
-       "dur": 1.54,
+       "dur": 1.72,
        "cut": true,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "128": [
       {
        "f": "woq-11-sa/JAMES/e128-0.mp3",
        "kind": "line",
-       "dur": 0.81,
+       "dur": 0.94,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "132": [
       {
        "f": "woq-11-sa/JAMES/e132-0.mp3",
        "kind": "line",
-       "dur": 5.46,
+       "dur": 5.2,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ],
      "135": [
       {
        "f": "woq-11-sa/JAMES/e135-0.mp3",
        "kind": "line",
-       "dur": 1.15,
+       "dur": 1.18,
        "cut": false,
-       "trail": false
+       "trail": false,
+       "gap": 0.3
       }
      ]
     }
