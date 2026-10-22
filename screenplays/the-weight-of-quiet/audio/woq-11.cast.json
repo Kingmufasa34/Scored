@@ -2,6 +2,463 @@
  "roles": {
   "MAYA": [
    {
+    "id": "WQ11SA-MAYA",
+    "role": "MAYA",
+    "label": "Maya: Thandi (South African)",
+    "credit": {
+     "corpus": "ElevenLabs voice library",
+     "speaker": "Thandi"
+    },
+    "clips": {
+     "13": [
+      {
+       "f": "woq-11-sa/MAYA/e013-0.mp3",
+       "kind": "line",
+       "dur": 1.96,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "15": [
+      {
+       "f": "woq-11-sa/MAYA/e015-0.mp3",
+       "kind": "line",
+       "dur": 4.28,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "17": [
+      {
+       "f": "woq-11-sa/MAYA/e017-0.mp3",
+       "kind": "line",
+       "dur": 1.52,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "20": [
+      {
+       "f": "woq-11-sa/MAYA/e020-0.mp3",
+       "kind": "line",
+       "dur": 0.94,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "22": [
+      {
+       "f": "woq-11-sa/MAYA/e022-0.mp3",
+       "kind": "line",
+       "dur": 2.14,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "24": [
+      {
+       "f": "woq-11-sa/MAYA/e024-0.mp3",
+       "kind": "line",
+       "dur": 6.9,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "26": [
+      {
+       "f": "woq-11-sa/MAYA/e026-0.mp3",
+       "kind": "line",
+       "dur": 3.58,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "28": [
+      {
+       "f": "woq-11-sa/MAYA/e028-0.mp3",
+       "kind": "line",
+       "dur": 3.37,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "30": [
+      {
+       "f": "woq-11-sa/MAYA/e030-0.mp3",
+       "kind": "line",
+       "dur": 1.12,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "32": [
+      {
+       "f": "woq-11-sa/MAYA/e032-0.mp3",
+       "kind": "line",
+       "dur": 1.41,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "34": [
+      {
+       "f": "woq-11-sa/MAYA/e034-0.mp3",
+       "kind": "line",
+       "dur": 0.78,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "36": [
+      {
+       "f": "woq-11-sa/MAYA/e036-0.mp3",
+       "kind": "line",
+       "dur": 1.52,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "38": [
+      {
+       "f": "woq-11-sa/MAYA/e038-0.mp3",
+       "kind": "line",
+       "dur": 2.04,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "40": [
+      {
+       "f": "woq-11-sa/MAYA/e040-0.mp3",
+       "kind": "line",
+       "dur": 5.02,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "43": [
+      {
+       "f": "woq-11-sa/MAYA/e043-0.mp3",
+       "kind": "line",
+       "dur": 0.86,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "45": [
+      {
+       "f": "woq-11-sa/MAYA/e045-0.mp3",
+       "kind": "line",
+       "dur": 6.48,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "47": [
+      {
+       "f": "woq-11-sa/MAYA/e047-0.mp3",
+       "kind": "line",
+       "dur": 2.98,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "50": [
+      {
+       "f": "woq-11-sa/MAYA/e050-0.mp3",
+       "kind": "line",
+       "dur": 2.17,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "56": [
+      {
+       "f": "woq-11-sa/MAYA/e056-0.mp3",
+       "kind": "line",
+       "dur": 0.89,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "58": [
+      {
+       "f": "woq-11-sa/MAYA/e058-0.mp3",
+       "kind": "line",
+       "dur": 1.57,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "60": [
+      {
+       "f": "woq-11-sa/MAYA/e060-0.mp3",
+       "kind": "line",
+       "dur": 4.7,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "63": [
+      {
+       "f": "woq-11-sa/MAYA/e063-0.mp3",
+       "kind": "line",
+       "dur": 1.99,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "65": [
+      {
+       "f": "woq-11-sa/MAYA/e065-0.mp3",
+       "kind": "line",
+       "dur": 12.75,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "67": [
+      {
+       "f": "woq-11-sa/MAYA/e067-0.mp3",
+       "kind": "line",
+       "dur": 2.32,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "69": [
+      {
+       "f": "woq-11-sa/MAYA/e069-0.mp3",
+       "kind": "line",
+       "dur": 8.8,
+       "cut": true,
+       "trail": false
+      }
+     ],
+     "71": [
+      {
+       "f": "woq-11-sa/MAYA/e071-0.mp3",
+       "kind": "line",
+       "dur": 5.09,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "73": [
+      {
+       "f": "woq-11-sa/MAYA/e073-0.mp3",
+       "kind": "line",
+       "dur": 20.72,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "75": [
+      {
+       "f": "woq-11-sa/MAYA/e075-0.mp3",
+       "kind": "line",
+       "dur": 2.48,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "78": [
+      {
+       "f": "woq-11-sa/MAYA/e078-0.mp3",
+       "kind": "line",
+       "dur": 0.73,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "80": [
+      {
+       "f": "woq-11-sa/MAYA/e080-0.mp3",
+       "kind": "line",
+       "dur": 3.97,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "83": [
+      {
+       "f": "woq-11-sa/MAYA/e083-0.mp3",
+       "kind": "line",
+       "dur": 0.81,
+       "cut": false,
+       "trail": false,
+       "gap": 0.8
+      }
+     ],
+     "86": [
+      {
+       "f": "woq-11-sa/MAYA/e086-0.mp3",
+       "kind": "line",
+       "dur": 0.71,
+       "cut": false,
+       "trail": false,
+       "gap": 0.5
+      }
+     ],
+     "88": [
+      {
+       "f": "woq-11-sa/MAYA/e088-0.mp3",
+       "kind": "line",
+       "dur": 2.66,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "90": [
+      {
+       "f": "woq-11-sa/MAYA/e090-0.mp3",
+       "kind": "line",
+       "dur": 7.39,
+       "cut": true,
+       "trail": false
+      }
+     ],
+     "94": [
+      {
+       "f": "woq-11-sa/MAYA/e094-0.mp3",
+       "kind": "line",
+       "dur": 6.97,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "96": [
+      {
+       "f": "woq-11-sa/MAYA/e096-0.mp3",
+       "kind": "line",
+       "dur": 1.93,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "98": [
+      {
+       "f": "woq-11-sa/MAYA/e098-0.mp3",
+       "kind": "line",
+       "dur": 8.18,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "100": [
+      {
+       "f": "woq-11-sa/MAYA/e100-0.mp3",
+       "kind": "line",
+       "dur": 12.3,
+       "cut": true,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "102": [
+      {
+       "f": "woq-11-sa/MAYA/e102-0.mp3",
+       "kind": "line",
+       "dur": 5.93,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "104": [
+      {
+       "f": "woq-11-sa/MAYA/e104-0.mp3",
+       "kind": "line",
+       "dur": 7.29,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "106": [
+      {
+       "f": "woq-11-sa/MAYA/e106-0.mp3",
+       "kind": "line",
+       "dur": 4.99,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "110": [
+      {
+       "f": "woq-11-sa/MAYA/e110-0.mp3",
+       "kind": "line",
+       "dur": 1.54,
+       "cut": false,
+       "trail": false,
+       "gap": 0.4
+      }
+     ],
+     "117": [
+      {
+       "f": "woq-11-sa/MAYA/e117-0.mp3",
+       "kind": "line",
+       "dur": 6.4,
+       "cut": true,
+       "trail": false
+      }
+     ],
+     "123": [
+      {
+       "f": "woq-11-sa/MAYA/e123-0.mp3",
+       "kind": "line",
+       "dur": 4.02,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "130": [
+      {
+       "f": "woq-11-sa/MAYA/e130-0.mp3",
+       "kind": "line",
+       "dur": 0.99,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "133": [
+      {
+       "f": "woq-11-sa/MAYA/e133-0.mp3",
+       "kind": "line",
+       "dur": 1.41,
+       "cut": false,
+       "trail": false,
+       "gap": 0.4
+      }
+     ]
+    }
+   },
+   {
     "id": "WQ11-MAYA",
     "role": "MAYA",
     "label": "Maya (draft 11)",
@@ -461,6 +918,370 @@
   ],
   "JAMES": [
    {
+    "id": "WQ11SA-JAMES",
+    "role": "JAMES",
+    "label": "James: Josh (South African)",
+    "credit": {
+     "corpus": "ElevenLabs voice library",
+     "speaker": "Josh"
+    },
+    "clips": {
+     "14": [
+      {
+       "f": "woq-11-sa/JAMES/e014-0.mp3",
+       "kind": "line",
+       "dur": 1.49,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "16": [
+      {
+       "f": "woq-11-sa/JAMES/e016-0.mp3",
+       "kind": "line",
+       "dur": 1.31,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "19": [
+      {
+       "f": "woq-11-sa/JAMES/e019-0.mp3",
+       "kind": "line",
+       "dur": 1.96,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "21": [
+      {
+       "f": "woq-11-sa/JAMES/e021-0.mp3",
+       "kind": "line",
+       "dur": 3.63,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "23": [
+      {
+       "f": "woq-11-sa/JAMES/e023-0.mp3",
+       "kind": "line",
+       "dur": 2.82,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "25": [
+      {
+       "f": "woq-11-sa/JAMES/e025-0.mp3",
+       "kind": "line",
+       "dur": 1.04,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "27": [
+      {
+       "f": "woq-11-sa/JAMES/e027-0.mp3",
+       "kind": "line",
+       "dur": 1.18,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "31": [
+      {
+       "f": "woq-11-sa/JAMES/e031-0.mp3",
+       "kind": "line",
+       "dur": 0.76,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "33": [
+      {
+       "f": "woq-11-sa/JAMES/e033-0.mp3",
+       "kind": "line",
+       "dur": 3.34,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "37": [
+      {
+       "f": "woq-11-sa/JAMES/e037-0.mp3",
+       "kind": "line",
+       "dur": 0.84,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "39": [
+      {
+       "f": "woq-11-sa/JAMES/e039-0.mp3",
+       "kind": "line",
+       "dur": 0.99,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "41": [
+      {
+       "f": "woq-11-sa/JAMES/e041-0.mp3",
+       "kind": "line",
+       "dur": 1.04,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "44": [
+      {
+       "f": "woq-11-sa/JAMES/e044-0.mp3",
+       "kind": "line",
+       "dur": 1.1,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "46": [
+      {
+       "f": "woq-11-sa/JAMES/e046-0.mp3",
+       "kind": "line",
+       "dur": 1.44,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "49": [
+      {
+       "f": "woq-11-sa/JAMES/e049-0.mp3",
+       "kind": "line",
+       "dur": 1.38,
+       "cut": true,
+       "trail": false
+      }
+     ],
+     "53": [
+      {
+       "f": "woq-11-sa/JAMES/e053-0.mp3",
+       "kind": "line",
+       "dur": 1.12,
+       "cut": false,
+       "trail": false,
+       "gap": 0.3
+      }
+     ],
+     "57": [
+      {
+       "f": "woq-11-sa/JAMES/e057-0.mp3",
+       "kind": "line",
+       "dur": 0.65,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "59": [
+      {
+       "f": "woq-11-sa/JAMES/e059-0.mp3",
+       "kind": "line",
+       "dur": 4.7,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "64": [
+      {
+       "f": "woq-11-sa/JAMES/e064-0.mp3",
+       "kind": "line",
+       "dur": 2.53,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "66": [
+      {
+       "f": "woq-11-sa/JAMES/e066-0.mp3",
+       "kind": "line",
+       "dur": 1.72,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "70": [
+      {
+       "f": "woq-11-sa/JAMES/e070-0.mp3",
+       "kind": "line",
+       "dur": 1.12,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "74": [
+      {
+       "f": "woq-11-sa/JAMES/e074-0.mp3",
+       "kind": "line",
+       "dur": 0.81,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "77": [
+      {
+       "f": "woq-11-sa/JAMES/e077-0.mp3",
+       "kind": "line",
+       "dur": 1.04,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "79": [
+      {
+       "f": "woq-11-sa/JAMES/e079-0.mp3",
+       "kind": "line",
+       "dur": 2.17,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "81": [
+      {
+       "f": "woq-11-sa/JAMES/e081-0.mp3",
+       "kind": "line",
+       "dur": 9.2,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "87": [
+      {
+       "f": "woq-11-sa/JAMES/e087-0.mp3",
+       "kind": "line",
+       "dur": 1.15,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "95": [
+      {
+       "f": "woq-11-sa/JAMES/e095-0.mp3",
+       "kind": "line",
+       "dur": 4.62,
+       "cut": false,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "97": [
+      {
+       "f": "woq-11-sa/JAMES/e097-0.mp3",
+       "kind": "line",
+       "dur": 3.5,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "99": [
+      {
+       "f": "woq-11-sa/JAMES/e099-0.mp3",
+       "kind": "line",
+       "dur": 1.25,
+       "cut": true,
+       "trail": false,
+       "gap": 0.1
+      }
+     ],
+     "101": [
+      {
+       "f": "woq-11-sa/JAMES/e101-0.mp3",
+       "kind": "line",
+       "dur": 1.75,
+       "cut": false,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "103": [
+      {
+       "f": "woq-11-sa/JAMES/e103-0.mp3",
+       "kind": "line",
+       "dur": 1.49,
+       "cut": true,
+       "trail": false,
+       "gap": -0.25
+      }
+     ],
+     "108": [
+      {
+       "f": "woq-11-sa/JAMES/e108-0.mp3",
+       "kind": "line",
+       "dur": 1.07,
+       "cut": false,
+       "trail": false,
+       "gap": 0.6
+      }
+     ],
+     "120": [
+      {
+       "f": "woq-11-sa/JAMES/e120-0.mp3",
+       "kind": "line",
+       "dur": 1.54,
+       "cut": true,
+       "trail": false
+      }
+     ],
+     "128": [
+      {
+       "f": "woq-11-sa/JAMES/e128-0.mp3",
+       "kind": "line",
+       "dur": 0.81,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "132": [
+      {
+       "f": "woq-11-sa/JAMES/e132-0.mp3",
+       "kind": "line",
+       "dur": 5.46,
+       "cut": false,
+       "trail": false
+      }
+     ],
+     "135": [
+      {
+       "f": "woq-11-sa/JAMES/e135-0.mp3",
+       "kind": "line",
+       "dur": 1.15,
+       "cut": false,
+       "trail": false
+      }
+     ]
+    }
+   },
+   {
     "id": "WQ11-JAMES",
     "role": "JAMES",
     "label": "James (draft 11)",
@@ -826,6 +1647,472 @@
    }
   ],
   "DIRECTOR": [
+   {
+    "id": "WQ11SA-DIRECTOR",
+    "role": "DIRECTOR",
+    "label": "Director: De Villiers (South African)",
+    "credit": {
+     "corpus": "ElevenLabs voice library",
+     "speaker": "De Villiers"
+    },
+    "clips": {
+     "0": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e000-0.mp3",
+       "kind": "narr",
+       "dur": 1.02
+      }
+     ],
+     "1": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e001-0.mp3",
+       "kind": "narr",
+       "dur": 4.83
+      }
+     ],
+     "2": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e002-0.mp3",
+       "kind": "narr",
+       "dur": 4.68
+      }
+     ],
+     "3": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e003-0.mp3",
+       "kind": "narr",
+       "dur": 6.09
+      }
+     ],
+     "4": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e004-0.mp3",
+       "kind": "narr",
+       "dur": 8.93
+      }
+     ],
+     "5": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e005-0.mp3",
+       "kind": "narr",
+       "dur": 5.02
+      }
+     ],
+     "6": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e006-0.mp3",
+       "kind": "narr",
+       "dur": 3.89
+      }
+     ],
+     "7": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e007-0.mp3",
+       "kind": "narr",
+       "dur": 4.6
+      }
+     ],
+     "8": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e008-0.mp3",
+       "kind": "narr",
+       "dur": 7.31
+      }
+     ],
+     "9": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e009-0.mp3",
+       "kind": "narr",
+       "dur": 13.09
+      }
+     ],
+     "10": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e010-0.mp3",
+       "kind": "narr",
+       "dur": 5.04
+      }
+     ],
+     "11": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e011-0.mp3",
+       "kind": "narr",
+       "dur": 5.9
+      }
+     ],
+     "12": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e012-0.mp3",
+       "kind": "narr",
+       "dur": 3.76
+      }
+     ],
+     "18": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e018-0.mp3",
+       "kind": "narr",
+       "dur": 3.5
+      }
+     ],
+     "29": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e029-0.mp3",
+       "kind": "narr",
+       "dur": 5.04
+      }
+     ],
+     "35": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e035-0.mp3",
+       "kind": "narr",
+       "dur": 1.1
+      }
+     ],
+     "42": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e042-0.mp3",
+       "kind": "narr",
+       "dur": 6.03
+      }
+     ],
+     "48": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e048-0.mp3",
+       "kind": "narr",
+       "dur": 3.16
+      }
+     ],
+     "51": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e051-0.mp3",
+       "kind": "narr",
+       "dur": 10.24
+      }
+     ],
+     "52": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e052-0.mp3",
+       "kind": "narr",
+       "dur": 8.12
+      }
+     ],
+     "54": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e054-0.mp3",
+       "kind": "narr",
+       "dur": 1.49
+      }
+     ],
+     "55": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e055-0.mp3",
+       "kind": "narr",
+       "dur": 2.87
+      }
+     ],
+     "61": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e061-0.mp3",
+       "kind": "narr",
+       "dur": 5.2
+      }
+     ],
+     "62": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e062-0.mp3",
+       "kind": "narr",
+       "dur": 4.21
+      }
+     ],
+     "68": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e068-0.mp3",
+       "kind": "narr",
+       "dur": 3.68
+      }
+     ],
+     "72": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e072-0.mp3",
+       "kind": "narr",
+       "dur": 12.75
+      }
+     ],
+     "76": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e076-0.mp3",
+       "kind": "narr",
+       "dur": 3.24
+      }
+     ],
+     "82": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e082-0.mp3",
+       "kind": "narr",
+       "dur": 4.39
+      }
+     ],
+     "84": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e084-0.mp3",
+       "kind": "narr",
+       "dur": 1.18
+      }
+     ],
+     "85": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e085-0.mp3",
+       "kind": "narr",
+       "dur": 4.34
+      }
+     ],
+     "89": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e089-0.mp3",
+       "kind": "narr",
+       "dur": 5.17
+      }
+     ],
+     "91": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e091-0.mp3",
+       "kind": "narr",
+       "dur": 7.31
+      }
+     ],
+     "92": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e092-0.mp3",
+       "kind": "narr",
+       "dur": 8.41
+      }
+     ],
+     "93": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e093-0.mp3",
+       "kind": "narr",
+       "dur": 2.35
+      }
+     ],
+     "105": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e105-0.mp3",
+       "kind": "narr",
+       "dur": 8.33
+      }
+     ],
+     "107": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e107-0.mp3",
+       "kind": "narr",
+       "dur": 2.74
+      }
+     ],
+     "109": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e109-0.mp3",
+       "kind": "narr",
+       "dur": 4.47
+      }
+     ],
+     "111": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e111-0.mp3",
+       "kind": "narr",
+       "dur": 1.7
+      }
+     ],
+     "112": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e112-0.mp3",
+       "kind": "narr",
+       "dur": 24.06
+      }
+     ],
+     "113": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e113-0.mp3",
+       "kind": "narr",
+       "dur": 2.4
+      }
+     ],
+     "114": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e114-0.mp3",
+       "kind": "narr",
+       "dur": 6.61
+      }
+     ],
+     "115": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e115-0.mp3",
+       "kind": "narr",
+       "dur": 6.03
+      }
+     ],
+     "116": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e116-0.mp3",
+       "kind": "narr",
+       "dur": 1.31
+      }
+     ],
+     "118": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e118-0.mp3",
+       "kind": "narr",
+       "dur": 2.46
+      }
+     ],
+     "119": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e119-0.mp3",
+       "kind": "narr",
+       "dur": 3.0
+      }
+     ],
+     "121": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e121-0.mp3",
+       "kind": "narr",
+       "dur": 1.44
+      }
+     ],
+     "122": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e122-0.mp3",
+       "kind": "narr",
+       "dur": 6.03
+      }
+     ],
+     "124": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e124-0.mp3",
+       "kind": "narr",
+       "dur": 9.64
+      }
+     ],
+     "125": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e125-0.mp3",
+       "kind": "narr",
+       "dur": 2.3
+      }
+     ],
+     "126": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e126-0.mp3",
+       "kind": "narr",
+       "dur": 12.88
+      }
+     ],
+     "127": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e127-0.mp3",
+       "kind": "narr",
+       "dur": 1.65
+      }
+     ],
+     "129": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e129-0.mp3",
+       "kind": "narr",
+       "dur": 4.96
+      }
+     ],
+     "131": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e131-0.mp3",
+       "kind": "narr",
+       "dur": 8.75
+      }
+     ],
+     "134": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e134-0.mp3",
+       "kind": "narr",
+       "dur": 3.76
+      }
+     ],
+     "136": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e136-0.mp3",
+       "kind": "narr",
+       "dur": 1.49
+      }
+     ],
+     "137": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e137-0.mp3",
+       "kind": "narr",
+       "dur": 6.35
+      }
+     ],
+     "138": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e138-0.mp3",
+       "kind": "narr",
+       "dur": 4.55
+      }
+     ],
+     "139": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e139-0.mp3",
+       "kind": "narr",
+       "dur": 5.93
+      }
+     ],
+     "140": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e140-0.mp3",
+       "kind": "narr",
+       "dur": 4.34
+      }
+     ],
+     "141": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e141-0.mp3",
+       "kind": "narr",
+       "dur": 3.58
+      }
+     ],
+     "142": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e142-0.mp3",
+       "kind": "narr",
+       "dur": 8.52
+      }
+     ],
+     "143": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e143-0.mp3",
+       "kind": "narr",
+       "dur": 13.53
+      }
+     ],
+     "144": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e144-0.mp3",
+       "kind": "narr",
+       "dur": 6.22
+      }
+     ],
+     "145": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e145-0.mp3",
+       "kind": "narr",
+       "dur": 2.22
+      }
+     ],
+     "146": [
+      {
+       "f": "woq-11-sa/DIRECTOR/e146-0.mp3",
+       "kind": "narr",
+       "dur": 0.86
+      }
+     ]
+    }
+   },
    {
     "id": "WQ11-DIRECTOR",
     "role": "DIRECTOR",

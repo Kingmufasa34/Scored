@@ -18,3 +18,12 @@ Take 2 options (default): **James (firmer take)** `WQ10B-JAMES` re-records all h
 ## Draft 11 read
 
 Recorded from draft 11 (roughened dialogue) using the "For the voice" sections in the actor notes: plain baseline, tags only at the breaks. Director keeps `[pointedly]` on the phone moments. Role ids `WQ11-*`; files `audio/woq-11.*`.
+
+## Current cast (South African, ElevenLabs voice library)
+
+Picked by Tendai from library auditions (the designed South African voices were rejected):
+- **Maya**: Thandi `BcpjRWrYhDBHmOnetmBl`
+- **James**: Josh `3TjmPnYoHIxExxqTpara`
+- **Director**: De Villiers `L9YfwBz6PMs8GipTR591`
+
+Role ids `WQ11SA-*`, clips in `audio/woq-11-sa/`. The table read has one Weight of Quiet entry (latest draft); older casts stay as alternates in the voice menus.
