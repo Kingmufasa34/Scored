@@ -1,5 +1,5 @@
 {
-"duration": 238.69,
+"duration": 242.22,
 "cues": [
 {
 "i": 0,
@@ -34,781 +34,781 @@
 {
 "i": 5,
 "start": 5.47,
-"end": 6.46,
+"end": 6.48,
 "who": "ALICE"
 },
 {
 "i": 6,
-"start": 6.76,
-"end": 8.37,
+"start": 6.78,
+"end": 8.42,
 "who": "DANIEL"
 },
 {
 "i": 7,
-"start": 8.67,
-"end": 10.23,
+"start": 8.72,
+"end": 10.32,
 "who": "ALICE"
 },
 {
 "i": 8,
-"start": 10.53,
-"end": 11.3,
+"start": 10.62,
+"end": 11.51,
 "who": "DANIEL"
 },
 {
 "i": 9,
-"start": 11.6,
-"end": 12.67,
+"start": 11.81,
+"end": 12.88,
 "who": null
 },
 {
 "i": 10,
-"start": 12.67,
-"end": 13.37,
+"start": 12.88,
+"end": 13.58,
 "who": null
 },
 {
 "i": 11,
-"start": 13.37,
-"end": 15.25,
+"start": 13.58,
+"end": 15.67,
 "who": "DANIEL"
 },
 {
 "i": 12,
-"start": 15.55,
-"end": 16.41,
+"start": 15.97,
+"end": 16.82,
 "who": null
 },
 {
 "i": 13,
-"start": 16.41,
-"end": 22.7,
+"start": 16.82,
+"end": 22.99,
 "who": "RUTH"
 },
 {
 "i": 14,
-"start": 23.0,
-"end": 23.42,
+"start": 23.29,
+"end": 23.75,
 "who": "DANIEL"
 },
 {
 "i": 15,
-"start": 23.72,
-"end": 24.24,
+"start": 24.05,
+"end": 24.44,
 "who": "ALICE"
 },
 {
 "i": 16,
-"start": 24.54,
-"end": 25.14,
+"start": 24.74,
+"end": 25.34,
 "who": null
 },
 {
 "i": 17,
-"start": 25.14,
-"end": 26.59,
+"start": 25.34,
+"end": 26.78,
 "who": null
 },
 {
 "i": 18,
-"start": 26.59,
-"end": 27.4,
+"start": 26.78,
+"end": 27.59,
 "who": null
 },
 {
 "i": 19,
-"start": 27.4,
-"end": 29.49,
+"start": 27.59,
+"end": 29.62,
 "who": "RUTH"
 },
 {
 "i": 20,
-"start": 29.37,
-"end": 30.64,
+"start": 29.5,
+"end": 30.77,
 "who": null
 },
 {
 "i": 21,
-"start": 30.64,
-"end": 39.26,
+"start": 30.77,
+"end": 40.54,
 "who": "ALICE"
 },
 {
 "i": 22,
-"start": 39.14,
-"end": 39.56,
+"start": 40.42,
+"end": 40.9,
 "who": "DANIEL"
 },
 {
 "i": 23,
-"start": 39.86,
-"end": 41.82,
+"start": 41.2,
+"end": 43.11,
 "who": "ALICE"
 },
 {
 "i": 24,
-"start": 41.7,
-"end": 43.78,
+"start": 42.99,
+"end": 45.32,
 "who": "DANIEL"
 },
 {
 "i": 25,
-"start": 44.08,
-"end": 48.57,
+"start": 45.62,
+"end": 50.73,
 "who": "ALICE"
 },
 {
 "i": 26,
-"start": 48.87,
-"end": 51.07,
+"start": 51.03,
+"end": 53.23,
 "who": null
 },
 {
 "i": 27,
-"start": 51.07,
-"end": 54.82,
+"start": 53.23,
+"end": 56.86,
 "who": "RUTH"
 },
 {
 "i": 28,
-"start": 55.12,
-"end": 57.61,
+"start": 57.16,
+"end": 59.25,
 "who": "DANIEL"
 },
 {
 "i": 29,
-"start": 57.91,
-"end": 59.33,
+"start": 59.55,
+"end": 60.8,
 "who": "RUTH"
 },
 {
 "i": 30,
-"start": 59.21,
-"end": 59.84,
+"start": 60.68,
+"end": 61.47,
 "who": "DANIEL"
 },
 {
 "i": 31,
-"start": 60.14,
-"end": 60.64,
+"start": 61.77,
+"end": 62.27,
 "who": null
 },
 {
 "i": 32,
-"start": 60.64,
-"end": 65.0,
+"start": 62.27,
+"end": 66.73,
 "who": "DANIEL"
 },
 {
 "i": 33,
-"start": 65.3,
-"end": 66.6,
+"start": 67.03,
+"end": 68.36,
 "who": "ALICE"
 },
 {
 "i": 34,
-"start": 66.9,
-"end": 67.89,
+"start": 68.66,
+"end": 69.64,
 "who": null
 },
 {
 "i": 35,
-"start": 67.89,
-"end": 68.56,
+"start": 69.64,
+"end": 70.31,
 "who": null
 },
 {
 "i": 36,
-"start": 68.56,
-"end": 69.96,
+"start": 70.31,
+"end": 71.71,
 "who": null
 },
 {
 "i": 37,
-"start": 69.96,
-"end": 70.56,
+"start": 71.71,
+"end": 72.31,
 "who": null
 },
 {
 "i": 38,
-"start": 70.56,
-"end": 71.23,
+"start": 72.31,
+"end": 72.98,
 "who": null
 },
 {
 "i": 39,
-"start": 71.23,
-"end": 72.47,
+"start": 72.98,
+"end": 74.23,
 "who": null
 },
 {
 "i": 40,
-"start": 72.47,
-"end": 73.09,
+"start": 74.23,
+"end": 74.84,
 "who": null
 },
 {
 "i": 41,
-"start": 73.09,
-"end": 74.06,
+"start": 74.84,
+"end": 75.79,
 "who": "DANIEL"
 },
 {
 "i": 42,
-"start": 74.36,
-"end": 75.15,
+"start": 76.09,
+"end": 76.82,
 "who": "ALICE"
 },
 {
 "i": 43,
-"start": 75.45,
-"end": 77.3,
+"start": 77.12,
+"end": 79.41,
 "who": "DANIEL"
 },
 {
 "i": 44,
-"start": 77.18,
-"end": 78.3,
+"start": 79.29,
+"end": 80.5,
 "who": "ALICE"
 },
 {
 "i": 45,
-"start": 78.6,
-"end": 79.39,
+"start": 80.8,
+"end": 81.59,
 "who": null
 },
 {
 "i": 46,
-"start": 79.39,
-"end": 80.47,
+"start": 81.59,
+"end": 82.27,
 "who": "DANIEL"
 },
 {
 "i": 47,
-"start": 80.77,
-"end": 81.74,
+"start": 82.57,
+"end": 83.45,
 "who": "ALICE"
 },
 {
 "i": 48,
-"start": 82.04,
-"end": 82.47,
+"start": 83.75,
+"end": 84.23,
 "who": "DANIEL"
 },
 {
 "i": 49,
-"start": 82.77,
-"end": 85.62,
+"start": 84.53,
+"end": 87.63,
 "who": "ALICE"
 },
 {
 "i": 50,
-"start": 85.92,
-"end": 87.24,
+"start": 87.93,
+"end": 89.26,
 "who": null
 },
 {
 "i": 51,
-"start": 87.24,
-"end": 88.12,
+"start": 89.26,
+"end": 90.36,
 "who": "ALICE"
 },
 {
 "i": 52,
-"start": 88.42,
-"end": 90.62,
+"start": 90.66,
+"end": 92.86,
 "who": null
 },
 {
 "i": 53,
-"start": 90.62,
-"end": 91.34,
+"start": 92.86,
+"end": 93.58,
 "who": null
 },
 {
 "i": 54,
-"start": 91.34,
-"end": 92.74,
+"start": 93.58,
+"end": 94.98,
 "who": null
 },
 {
 "i": 55,
-"start": 92.74,
-"end": 93.34,
+"start": 94.98,
+"end": 95.58,
 "who": null
 },
 {
 "i": 56,
-"start": 93.34,
-"end": 95.14,
+"start": 95.58,
+"end": 97.38,
 "who": null
 },
 {
 "i": 57,
-"start": 95.14,
-"end": 96.54,
+"start": 97.38,
+"end": 99.15,
 "who": "RUTH"
 },
 {
 "i": 58,
-"start": 97.44,
-"end": 101.31,
+"start": 100.05,
+"end": 103.87,
 "who": "ALICE"
 },
 {
 "i": 59,
-"start": 101.61,
-"end": 103.17,
+"start": 104.17,
+"end": 106.11,
 "who": "DANIEL"
 },
 {
 "i": 60,
-"start": 103.05,
-"end": 105.25,
+"start": 105.99,
+"end": 108.19,
 "who": null
 },
 {
 "i": 61,
-"start": 105.25,
-"end": 106.5,
+"start": 108.19,
+"end": 109.43,
 "who": "DANIEL"
 },
 {
 "i": 62,
-"start": 105.6,
-"end": 106.5,
+"start": 108.53,
+"end": 109.52,
 "who": "ALICE"
 },
 {
 "i": 63,
-"start": 106.8,
-"end": 108.2,
+"start": 109.82,
+"end": 110.87,
 "who": "RUTH"
 },
 {
 "i": 64,
-"start": 108.08,
-"end": 109.83,
+"start": 110.75,
+"end": 112.45,
 "who": "ALICE"
 },
 {
 "i": 65,
-"start": 110.13,
-"end": 110.59,
+"start": 112.75,
+"end": 113.21,
 "who": null
 },
 {
 "i": 66,
-"start": 110.59,
-"end": 113.04,
+"start": 113.21,
+"end": 116.0,
 "who": "RUTH"
 },
 {
 "i": 67,
-"start": 113.34,
-"end": 114.44,
+"start": 116.3,
+"end": 117.2,
 "who": "DANIEL"
 },
 {
 "i": 68,
-"start": 114.74,
-"end": 117.22,
+"start": 117.5,
+"end": 120.07,
 "who": "ALICE"
 },
 {
 "i": 69,
-"start": 117.52,
-"end": 119.75,
+"start": 120.37,
+"end": 122.6,
 "who": "DANIEL"
 },
 {
 "i": 70,
-"start": 120.05,
-"end": 121.67,
+"start": 122.9,
+"end": 124.82,
 "who": "ALICE"
 },
 {
 "i": 71,
-"start": 121.55,
-"end": 123.46,
+"start": 124.7,
+"end": 126.89,
 "who": "DANIEL"
 },
 {
 "i": 72,
-"start": 123.76,
-"end": 124.31,
+"start": 127.19,
+"end": 127.72,
 "who": "ALICE"
 },
 {
 "i": 73,
-"start": 124.61,
-"end": 126.81,
+"start": 128.02,
+"end": 130.22,
 "who": null
 },
 {
 "i": 74,
-"start": 126.81,
-"end": 128.48,
+"start": 130.22,
+"end": 131.89,
 "who": "ALICE"
 },
 {
 "i": 75,
-"start": 128.78,
-"end": 129.65,
+"start": 132.19,
+"end": 133.06,
 "who": null
 },
 {
 "i": 76,
-"start": 129.65,
-"end": 131.05,
+"start": 133.06,
+"end": 134.46,
 "who": null
 },
 {
 "i": 77,
-"start": 131.05,
-"end": 131.65,
+"start": 134.46,
+"end": 135.06,
 "who": null
 },
 {
 "i": 78,
-"start": 131.65,
-"end": 132.29,
+"start": 135.06,
+"end": 135.71,
 "who": null
 },
 {
 "i": 79,
-"start": 132.29,
-"end": 133.5,
+"start": 135.71,
+"end": 136.92,
 "who": null
 },
 {
 "i": 80,
-"start": 133.5,
-"end": 140.28,
+"start": 136.92,
+"end": 143.01,
 "who": "DANIEL"
 },
 {
 "i": 81,
-"start": 140.16,
-"end": 141.37,
+"start": 142.89,
+"end": 144.15,
 "who": "ALICE"
 },
 {
 "i": 82,
-"start": 141.67,
-"end": 142.15,
+"start": 144.45,
+"end": 144.83,
 "who": "DANIEL"
 },
 {
 "i": 83,
-"start": 142.45,
-"end": 143.07,
+"start": 145.13,
+"end": 145.75,
 "who": "ALICE"
 },
 {
 "i": 84,
-"start": 143.37,
-"end": 144.14,
+"start": 146.05,
+"end": 146.82,
 "who": null
 },
 {
 "i": 85,
-"start": 144.14,
-"end": 145.1,
+"start": 146.82,
+"end": 147.78,
 "who": null
 },
 {
 "i": 86,
-"start": 145.1,
-"end": 145.93,
+"start": 147.78,
+"end": 148.61,
 "who": null
 },
 {
 "i": 87,
-"start": 145.93,
-"end": 146.86,
+"start": 148.61,
+"end": 149.54,
 "who": null
 },
 {
 "i": 88,
-"start": 146.86,
-"end": 147.62,
+"start": 149.54,
+"end": 150.31,
 "who": null
 },
 {
 "i": 89,
-"start": 147.62,
-"end": 149.04,
+"start": 150.31,
+"end": 151.74,
 "who": "DANIEL"
 },
 {
 "i": 90,
-"start": 149.34,
-"end": 150.64,
+"start": 152.04,
+"end": 153.67,
 "who": "ALICE"
 },
 {
 "i": 91,
-"start": 150.94,
-"end": 152.41,
+"start": 153.97,
+"end": 155.44,
 "who": null
 },
 {
 "i": 92,
-"start": 152.41,
-"end": 153.81,
+"start": 155.44,
+"end": 156.84,
 "who": null
 },
 {
 "i": 93,
-"start": 153.81,
-"end": 154.41,
+"start": 156.84,
+"end": 157.44,
 "who": null
 },
 {
 "i": 94,
-"start": 154.41,
-"end": 155.46,
+"start": 157.44,
+"end": 158.48,
 "who": null
 },
 {
 "i": 95,
-"start": 155.46,
-"end": 161.13,
+"start": 158.48,
+"end": 164.87,
 "who": "RUTH"
 },
 {
 "i": 96,
-"start": 161.43,
-"end": 161.91,
+"start": 165.17,
+"end": 165.54,
 "who": "DANIEL"
 },
 {
 "i": 97,
-"start": 162.21,
-"end": 163.61,
+"start": 165.84,
+"end": 167.13,
 "who": "RUTH"
 },
 {
 "i": 98,
-"start": 163.49,
-"end": 166.17,
+"start": 167.01,
+"end": 169.3,
 "who": "DANIEL"
 },
 {
 "i": 99,
-"start": 166.47,
-"end": 167.21,
+"start": 169.6,
+"end": 171.6,
 "who": "RUTH"
 },
 {
 "i": 100,
-"start": 167.51,
-"end": 169.71,
+"start": 171.9,
+"end": 174.1,
 "who": null
 },
 {
 "i": 101,
-"start": 169.71,
-"end": 172.06,
+"start": 174.1,
+"end": 176.04,
 "who": "DANIEL"
 },
 {
 "i": 102,
-"start": 171.94,
-"end": 173.49,
+"start": 175.92,
+"end": 177.71,
 "who": "RUTH"
 },
 {
 "i": 103,
-"start": 173.79,
-"end": 175.93,
+"start": 178.01,
+"end": 179.69,
 "who": "DANIEL"
 },
 {
 "i": 104,
-"start": 176.23,
-"end": 177.08,
+"start": 179.99,
+"end": 180.85,
 "who": "RUTH"
 },
 {
 "i": 105,
-"start": 177.38,
-"end": 179.58,
+"start": 181.15,
+"end": 183.35,
 "who": null
 },
 {
 "i": 106,
-"start": 179.58,
-"end": 188.21,
+"start": 183.35,
+"end": 192.86,
 "who": "ALICE"
 },
 {
 "i": 107,
-"start": 188.09,
-"end": 188.99,
+"start": 192.74,
+"end": 193.64,
 "who": null
 },
 {
 "i": 108,
-"start": 188.99,
-"end": 190.47,
+"start": 193.64,
+"end": 195.12,
 "who": null
 },
 {
 "i": 109,
-"start": 190.47,
-"end": 191.58,
+"start": 195.12,
+"end": 196.23,
 "who": null
 },
 {
 "i": 110,
-"start": 191.58,
-"end": 192.24,
+"start": 196.23,
+"end": 196.93,
 "who": "DANIEL"
 },
 {
 "i": 111,
-"start": 192.12,
-"end": 192.98,
+"start": 196.81,
+"end": 197.53,
 "who": "ALICE"
 },
 {
 "i": 112,
-"start": 193.28,
-"end": 194.23,
+"start": 197.83,
+"end": 198.94,
 "who": "DANIEL"
 },
 {
 "i": 113,
-"start": 194.53,
-"end": 195.1,
+"start": 199.24,
+"end": 199.81,
 "who": "ALICE"
 },
 {
 "i": 114,
-"start": 195.4,
-"end": 196.06,
+"start": 200.11,
+"end": 200.7,
 "who": "DANIEL"
 },
 {
 "i": 115,
-"start": 196.36,
-"end": 197.16,
+"start": 201.0,
+"end": 201.8,
 "who": null
 },
 {
 "i": 116,
-"start": 197.16,
-"end": 199.36,
+"start": 201.8,
+"end": 204.0,
 "who": null
 },
 {
 "i": 117,
-"start": 199.36,
-"end": 211.33,
+"start": 204.0,
+"end": 214.29,
 "who": "RUTH"
 },
 {
 "i": 118,
-"start": 211.63,
-"end": 213.83,
+"start": 214.59,
+"end": 216.79,
 "who": null
 },
 {
 "i": 119,
-"start": 213.83,
-"end": 214.29,
+"start": 216.79,
+"end": 217.24,
 "who": null
 },
 {
 "i": 120,
-"start": 214.29,
-"end": 216.05,
+"start": 217.24,
+"end": 219.45,
 "who": "ALICE"
 },
 {
 "i": 121,
-"start": 216.35,
-"end": 217.25,
+"start": 219.75,
+"end": 220.66,
 "who": null
 },
 {
 "i": 122,
-"start": 217.25,
-"end": 218.26,
+"start": 220.66,
+"end": 221.79,
 "who": "DANIEL"
 },
 {
 "i": 123,
-"start": 218.56,
-"end": 219.22,
+"start": 222.09,
+"end": 222.72,
 "who": "ALICE"
 },
 {
 "i": 124,
-"start": 219.52,
-"end": 220.31,
+"start": 223.02,
+"end": 223.81,
 "who": null
 },
 {
 "i": 125,
-"start": 220.31,
-"end": 223.38,
+"start": 223.81,
+"end": 226.97,
 "who": "ALICE"
 },
 {
 "i": 126,
-"start": 223.68,
-"end": 226.06,
+"start": 227.27,
+"end": 229.82,
 "who": "RUTH"
 },
 {
 "i": 127,
-"start": 226.36,
-"end": 227.1,
+"start": 230.12,
+"end": 230.86,
 "who": null
 },
 {
 "i": 128,
-"start": 227.1,
-"end": 228.06,
+"start": 230.86,
+"end": 231.39,
 "who": "DANIEL"
 },
 {
 "i": 129,
-"start": 227.94,
-"end": 230.14,
+"start": 231.27,
+"end": 233.47,
 "who": null
 },
 {
 "i": 130,
-"start": 230.14,
-"end": 233.73,
+"start": 233.47,
+"end": 237.26,
 "who": "RUTH"
 },
 {
 "i": 131,
-"start": 234.03,
-"end": 234.49,
+"start": 237.56,
+"end": 238.02,
 "who": null
 },
 {
 "i": 132,
-"start": 234.49,
-"end": 236.09,
+"start": 238.02,
+"end": 239.62,
 "who": null
 },
 {
 "i": 133,
-"start": 236.09,
-"end": 236.69,
+"start": 239.62,
+"end": 240.22,
 "who": null
 },
 {
 "i": 134,
-"start": 236.69,
-"end": 237.69,
+"start": 240.22,
+"end": 241.22,
 "who": null
 }
 ]
