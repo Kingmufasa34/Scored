@@ -421,6 +421,10 @@ body:not(.at-home) #npLeft { grid-column: 5; grid-row: 2; justify-self: end; }
 body:not(.at-home) .transport .lab { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 body:not(.at-home) #speed { min-height: 36px; padding: 0 10px; font-size: 0.85rem; }
 
+/* The room: soft voice lights in the player (pastels hold up on the dark card in both themes) */
+:root { --orb-n: #d9d4cc; --orb-1: #f1dc8a; --orb-2: #f2b8cc; --orb-3: #b7e3b0; --orb-4: #b3d4f0; --orb-5: #f3c99a; --orb-6: #cfc2f2; }
+#voices { display: block; width: 100%; height: 64px; margin: 0 0 4px; }
+body.at-home #voices { display: none; }
 /* Bearnie Button, default variant + size lg: bg-primary text-primary-foreground hover:bg-primary/90, h-10 px-6, pill */
 button.btn.btn-primary { background: var(--text); color: var(--bg); }
 button.btn.btn-primary:hover { background: color-mix(in srgb, var(--text) 90%, transparent); }
@@ -575,6 +579,7 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
     <canvas id="timeline" role="slider" aria-label="Position in the scene. Tap to jump." tabindex="0"></canvas>
     <div class="legend" id="legend"></div>
   </div>
+  <canvas id="voices" aria-hidden="true"></canvas>
   <div class="in">
     <button type="button" id="np" hidden aria-label="Open the script that is playing"><span class="mini" id="npMini"></span><span class="npt"><b id="npTitle"></b><span id="npSub">Ready</span></span></button>
     <span id="npLeft" aria-live="off"></span>
@@ -2175,7 +2180,50 @@ FADE OUT.
       lg.appendChild(s);
     });
   }
-  (function vizLoop(t) { if (real.noiseGain) real.noiseGain.gain.value = playing && !waitingForMe && !real.paused ? real.air : 0; drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
+  /* ---------- The room: each voice a soft light; the one speaking glows and breathes ----------
+     Calm by design: slow eased envelopes (no spikes), round soft-edged shapes, pastel colours,
+     crossfades between speakers, and stillness under prefers-reduced-motion. */
+  var room = $("voices"), roomState = {};
+  function roomVoices() { return doc ? [DIRECTOR].concat(castOrder) : []; }
+  function whoNow() {
+    if (!playing || waitingForMe) return null;
+    if (speaking) return speaking;
+    var e = doc && doc.els[idx]; return e ? (e.t === "dlg" ? e.who : DIRECTOR) : null;
+  }
+  function drawRoom(t) {
+    if (room.offsetParent === null) return;
+    var f = fit(room), g = f.g, w = f.w, h = f.h, vs = roomVoices(), now = whoNow(), still = reduceMotion;
+    g.clearRect(0, 0, w, h);
+    if (!vs.length) return;
+    var level = 0;
+    if (useReal && real.analyser && playing && !still) {
+      real.analyser.getByteTimeDomainData(wbuf); var sum = 0;
+      for (var k = 0; k < wbuf.length; k += 4) { var v = (wbuf[k] - 128) / 128; sum += v * v; }
+      level = Math.min(1, Math.sqrt(sum / (wbuf.length / 4)) * 4);
+    } else if (now && !still) level = 0.35 + 0.15 * Math.sin(t / 700);
+    var gap = Math.min(76, w / vs.length), x0 = w / 2 - gap * (vs.length - 1) / 2, cy = h / 2 - 7;
+    vs.forEach(function (who, n) {
+      var st = roomState[who] || (roomState[who] = { p: 0, env: 0 });
+      var on = who === now ? 1 : 0;
+      st.p += (on - st.p) * (still ? 1 : 0.05);                    // slow crossfade between speakers
+      var target = on ? level : 0;
+      st.env += (target - st.env) * (target > st.env ? 0.12 : 0.04); // gentle rise, slower fall
+      var col = cssVar("--orb-" + (cast[who] ? cast[who].hl.replace("--hl-", "") : "n")) || "#d9d4cc";
+      var x = x0 + gap * n, r = 6 + 3 * st.p + 6 * st.env;
+      var halo = g.createRadialGradient(x, cy, 0, x, cy, r * 3.8);
+      halo.addColorStop(0, col); halo.addColorStop(1, "rgba(0,0,0,0)");
+      g.globalAlpha = 0.12 + 0.42 * st.p; g.fillStyle = halo;
+      g.beginPath(); g.arc(x, cy, r * 3.8, 0, Math.PI * 2); g.fill();
+      g.globalAlpha = 0.35 + 0.65 * st.p; g.fillStyle = col;
+      g.beginPath(); g.arc(x, cy, r, 0, Math.PI * 2); g.fill();
+      g.globalAlpha = 0.45 + 0.5 * st.p; g.fillStyle = cssVar("--player-text");
+      g.font = "600 9px " + cssVar("--font-ui"); g.textAlign = "center";
+      var label = who === DIRECTOR ? "DIRECTOR" : who; if (label.length > 10) label = label.slice(0, 9) + "…";
+      g.fillText(label, x, h - 3);
+      g.globalAlpha = 1;
+    });
+  }
+  (function vizLoop(t) { drawRoom(t || 0); if (real.noiseGain) real.noiseGain.gain.value = playing && !waitingForMe && !real.paused ? real.air : 0; drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
   $("viz").addEventListener("click", function (ev) {
     if (!real.sched) return;
     var r = tl.getBoundingClientRect(), pos = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)) * real.sched.total;
