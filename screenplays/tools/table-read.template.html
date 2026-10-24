@@ -101,7 +101,7 @@ select { background: var(--surface-2); border: 0; border-radius: 999px; padding:
 .cardwrap .rm:hover { color: var(--accent); }
 
 .continue { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 96px 1fr; gap: 18px; align-items: center; width: 100%; max-width: 40rem; padding: 12px; border-radius: var(--r-lg); background: var(--surface); box-shadow: var(--shadow); }
-.continue .cover { box-shadow: none; border-radius: var(--r-sm); padding: 8px; }
+
 .continue .cover b { font-size: 0.7rem; }
 .continue .cover span { display: none; }
 .continue .t { font-size: 1.25rem; font-weight: 600; line-height: 1.2; }
@@ -204,7 +204,7 @@ details > summary { cursor: pointer; font-weight: 600; list-style: none; }
 #status { flex: 1 1 140px; min-width: 0; font-size: 0.85rem; color: var(--player-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #np { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 200px; border: 0; padding: 0 6px 0 0; text-align: left; background: transparent; border-radius: var(--r-sm); }
 #np:hover { background: transparent; }
-#np .mini { flex: none; width: 40px; height: 52px; border-radius: 8px; overflow: hidden; display: grid; align-content: end; padding: 4px; font-size: 0.4rem; font-weight: 700; color: #ffffff; line-height: 1.1; }
+#np .mini { flex: none; width: 40px; height: 52px; border-radius: 3px; overflow: hidden; display: grid; place-items: center; padding: 3px; background: #ffffff; color: #1b1b1b; font-family: var(--font-script); font-size: 3.6px; text-transform: uppercase; text-align: center; line-height: 1.2; }
 #np .npt { min-width: 0; display: grid; }
 #np .npt b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; font-size: 0.95rem; }
 #np .npt span { font-size: 0.78rem; color: var(--player-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -239,15 +239,22 @@ body:not(.at-home) .credit { display: none; }
 .tpages { list-style: none; margin: 0; padding: 4px 2px 12px; display: grid; grid-auto-flow: column; grid-auto-columns: min(78%, 20rem); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; }
 @media (min-width: 720px) { .tpages { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); overflow: visible; } }
 .tpages li { display: grid; gap: 10px; align-content: start; scroll-snap-align: start; min-width: 0; }
-.tp { all: unset; box-sizing: border-box; cursor: pointer; position: relative; display: block; aspect-ratio: 8.5 / 11; background: #ffffff; color: #1b1b1b; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 14px 30px -18px rgba(0,0,0,0.45); font-family: var(--font-script); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
-.tp:hover { transform: translateY(-3px); box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 20px 36px -18px rgba(0,0,0,0.5); }
+.tp { all: unset; box-sizing: border-box; cursor: pointer; position: relative; display: block; aspect-ratio: 8.5 / 11; width: 100%; background: #ffffff; color: #1b1b1b; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 14px 30px -18px rgba(0,0,0,0.45); font-family: var(--font-script); overflow: hidden; transition: transform 0.2s; font-size: clamp(9px, 2.6vw, 12.5px); }
+button.tp:hover { transform: translateY(-3px); }
 .tp:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-.tp .top { position: absolute; top: 7%; left: 11%; right: 11%; font-style: italic; font-size: clamp(0.5rem, 1.6vw, 0.62rem); line-height: 1.3; color: #3a3a3a; }
-.tp .mid { position: absolute; left: 8%; right: 8%; top: 31%; display: grid; justify-items: center; text-align: center; gap: 0.95em; font-size: clamp(0.62rem, 2vw, 0.78rem); line-height: 1.25; }
+.tp .mid { position: absolute; left: 8%; right: 8%; top: 34%; display: grid; justify-items: center; text-align: center; gap: 0.9em; line-height: 1.25; }
 .tp .mid .ttl { text-transform: uppercase; }
-.tp .mid .gap { height: 1.4em; }
-.tp .foot { position: absolute; left: 11%; right: 11%; bottom: 8%; font-size: clamp(0.5rem, 1.5vw, 0.6rem); line-height: 1.35; color: #3a3a3a; }
-.tp.own { background: #fbfaf7; }
+.tp .mid .gap { height: 1.1em; }
+.tp .foot { position: absolute; left: 11%; right: 11%; bottom: 8%; font-size: 0.78em; line-height: 1.35; color: #3a3a3a; }
+.tp.sm { border-radius: 3px; box-shadow: 0 1px 2px rgba(0,0,0,0.2); cursor: inherit; }
+.tp.sm .inner { position: absolute; top: 0; left: 0; width: 300%; height: 300%; transform: scale(0.3333); transform-origin: 0 0; font-size: 12px; }
+.srows { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.srow { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 96px 1fr; gap: 20px; align-items: center; width: 100%; max-width: 44rem; border-radius: var(--r-md); }
+.srow:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+.srow .nm { font-size: clamp(1.25rem, 4.6vw, 1.7rem); font-weight: 500; text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.15; }
+.srow:hover .nm { color: var(--accent); }
+.srow .sb { margin-top: 6px; color: var(--muted); font-size: 1rem; line-height: 1.35; }
+.srow .prog { margin-top: 10px; font-size: 0.95rem; }
 .tpages .below { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 0.9rem; color: var(--muted); padding-inline: 2px; }
 .tpages .rm { border: 0; background: transparent; padding: 0; color: var(--faint); font-size: 0.85rem; justify-self: start; }
 .tpages .rm:hover { color: var(--accent); }
@@ -331,9 +338,8 @@ body:not(.at-home) .credit { display: none; }
 <section class="home-sec" id="shelf-sec" aria-labelledby="h-shelf">
   <div class="wrapper">
     <div class="sec-head"><div><p class="meta n" id="n-shelf">02</p><p class="meta k">Scripts</p></div><p class="meta aside">Recorded with ElevenLabs</p></div>
-    <h2 id="h-shelf">Bookshelf</h2>
-    <div class="bookcase"><div class="books" id="shelf" role="list"></div><div class="plank" aria-hidden="true"></div></div>
-    <p class="shelf-cap">Pick a screenplay to see its episodes.</p>
+    <h2 id="h-shelf">Your screenplays</h2>
+    <ul class="srows" id="shelf" role="list"></ul>
   </div>
 </section>
 
@@ -1085,13 +1091,27 @@ body:not(.at-home) .credit { display: none; }
     return { title: title, credit: tp.credit || "Written by", author: tp.author || "", notes: tp.notes || "", sub: sub };
   }
   function cap(s) { return s.toLowerCase().replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); }).replace(/ (Of|The|And|A|An|In|On|To) /g, function (m) { return m.toLowerCase(); }); }
+  function pageFace(s, tag) {
+    var i = info(s), tp = titlePage(s.text), b = document.createElement(tag || "div");
+    function line(cls, txt) { var d = document.createElement("div"); if (cls) d.className = cls; d.textContent = txt; return d; }
+    b.className = "tp";
+    var mid = document.createElement("div"); mid.className = "mid";
+    mid.appendChild(line("ttl", i.title));
+    if (/^episode/i.test(tp.credit || "")) { mid.appendChild(line("", tp.credit)); mid.appendChild(line("", "Written by")); }
+    else mid.appendChild(line("", tp.credit || "Written by"));
+    if (tp.author) mid.appendChild(line("", tp.author));
+    mid.appendChild(line("gap", ""));
+    if (tp["draft date"]) mid.appendChild(line("", tp["draft date"]));
+    var dm = s.label.match(/draft\s*(\d+)/i) || i.sub.match(/draft\s*(\d+)/i);
+    if (dm) mid.appendChild(line("", "Draft #" + parseInt(dm[1], 10)));
+    b.appendChild(mid);
+    if (tp.notes) b.appendChild(line("foot", tp.notes));
+    return b;
+  }
   function coverEl(s) {
-    var i = info(s), c = document.createElement("div");
-    c.className = "cover cover-" + s.id + (s.own ? " own" : ""); c.setAttribute("aria-hidden", "true");
-    var b = document.createElement("b"); b.textContent = cap(i.title); c.appendChild(b);
-    var sp = document.createElement("span"); sp.textContent = i.author ? "by " + i.author : ""; sp.style.whiteSpace = "pre-line"; c.appendChild(sp);
-    if (i.notes) { var n = document.createElement("i"); n.textContent = i.notes; c.appendChild(n); }
-    return c;
+    var c = pageFace(s, "div"), inner = document.createElement("div"); inner.className = "inner";
+    while (c.firstChild) inner.appendChild(c.firstChild);
+    c.appendChild(inner); c.className = "tp sm"; c.setAttribute("aria-hidden", "true"); return c;
   }
   var prog = store.get("prog") || {};
   function estLeft(fromIdx) {
@@ -1126,15 +1146,22 @@ body:not(.at-home) .credit { display: none; }
   }
   function renderHome() {
     var shelf = $("shelf"); shelf.textContent = "";
-    seriesList().forEach(function (se, n) {
-      var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "listitem");
-      b.className = "book " + (se.id === "own" ? "own" : "cover-" + se.cover) + (n === 0 ? " tall" : n % 2 ? " short" : "") + (se.id === "own" ? " lean" : "");
-      b.setAttribute("aria-label", se.title + ", " + se.kind.toLowerCase() + ", " + se.eps.length + (se.eps.length === 1 ? " script" : " scripts"));
-      var bd = document.createElement("span"); bd.className = "bands"; b.appendChild(bd);
-      var bt = document.createElement("span"); bt.className = "bt"; bt.textContent = se.title; b.appendChild(bt);
-      var ba = document.createElement("span"); ba.className = "ba"; ba.textContent = se.id === "own" ? "yours" : "Tendai"; b.appendChild(ba);
+    seriesList().forEach(function (se) {
+      var first = byId(se.eps[0]); if (!first) return;
+      var li = document.createElement("li");
+      var b = document.createElement("button"); b.type = "button"; b.className = "srow";
+      b.setAttribute("aria-label", "Open " + se.title);
+      b.appendChild(coverEl(first));
+      var body = document.createElement("div");
+      var nm = document.createElement("div"); nm.className = "nm"; nm.textContent = se.title; body.appendChild(nm);
+      var sb = document.createElement("div"); sb.className = "sb";
+      var n = se.eps.length, unit = se.kind === "Series" ? (n === 1 ? "episode" : "episodes") : (n === 1 ? "script" : "scripts");
+      sb.textContent = (se.id === "own" ? "Your own" : se.kind) + " \u00b7 " + n + " " + unit + (titlePage(first.text).notes && se.id !== "own" ? " \u00b7 " + titlePage(first.text).notes : "");
+      body.appendChild(sb);
+      if (n === 1) body.appendChild(progEl(first));
+      b.appendChild(body);
       b.onclick = function () { openSeries(se.id); };
-      shelf.appendChild(b);
+      li.appendChild(b); shelf.appendChild(li);
     });
     var lp = store.get("lastPlayed"), ls = lp && byId(lp), cont = $("continue");
     cont.textContent = "";
@@ -1180,21 +1207,8 @@ body:not(.at-home) .credit { display: none; }
     se.eps.forEach(function (id) {
       var s = byId(id); if (!s) return;
       var li = document.createElement("li"), i = info(s), tp = titlePage(s.text);
-      var b = document.createElement("button"); b.type = "button"; b.className = "tp";
+      var b = pageFace(s, "button"); b.type = "button";
       b.setAttribute("aria-label", "Open " + epLabel(s));
-      function line(cls, txt) { var d = document.createElement("div"); if (cls) d.className = cls; d.textContent = txt; return d; }
-      b.appendChild(line("top", s.own ? "Your own script. Kept in this browser only." : "This screenplay is under full copyright of Tendai. All rights reserved."));
-      var mid = document.createElement("div"); mid.className = "mid";
-      mid.appendChild(line("ttl", i.title));
-      if (/^episode/i.test(tp.credit || "")) { mid.appendChild(line("", tp.credit)); mid.appendChild(line("", "Written by")); }
-      else mid.appendChild(line("", tp.credit || "Written by"));
-      if (tp.author) mid.appendChild(line("", tp.author));
-      mid.appendChild(line("gap", ""));
-      if (tp["draft date"]) mid.appendChild(line("", tp["draft date"]));
-      var dm = s.label.match(/draft\s*(\d+)/i) || i.sub.match(/draft\s*(\d+)/i);
-      if (dm) mid.appendChild(line("", "Draft #" + parseInt(dm[1], 10)));
-      b.appendChild(mid);
-      b.appendChild(line("foot", tp.notes || ""));
       b.onclick = function () { openScript(s.id, true); };
       li.appendChild(b);
       var below = document.createElement("div"); below.className = "below";
@@ -1220,7 +1234,7 @@ body:not(.at-home) .credit { display: none; }
     document.body.classList.toggle("no-script", !current);
     if (!current) { np.hidden = true; return; }
     var i = info(current);
-    np.hidden = false; $("npTitle").textContent = cap(i.title); $("npMini").textContent = cap(i.title); $("npMini").className = "mini cover-" + current.id + (current.own ? " own" : "");
+    np.hidden = false; $("npTitle").textContent = cap(i.title); $("npMini").textContent = i.title; $("npMini").className = "mini";
   }
   function load(text) {
     stop("Ready");
