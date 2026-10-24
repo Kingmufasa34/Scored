@@ -426,6 +426,41 @@ body:not(.at-home) #speed { min-height: 36px; padding: 0 10px; font-size: 0.85re
 #orb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.4s ease; pointer-events: none; }
 #orb video.on { opacity: 1; }
 body.at-home #orb, #orb[hidden] { display: none; }
+/* Word by word (ElevenLabs UI transcript viewer: spoken = foreground, unspoken = muted, current = primary pill) */
+#script .el.reading .w { opacity: .42; transition: opacity .2s ease, background-color .15s ease, color .15s ease; border-radius: 4px; }
+#script .el.reading .w.sp { opacity: 1; }
+#script .el.reading .w.cw { opacity: 1; background: var(--page-text); color: var(--page); box-shadow: 0 0 0 2px var(--page-text); }
+@media (prefers-reduced-motion: reduce) { #script .el.reading .w { transition: none; } }
+/* Voice picker (ElevenLabs UI voice-picker) */
+.vp { position: relative; display: grid; gap: 6px; }
+button.btn.vp-trigger { width: 100%; height: 44px; justify-content: space-between; padding: 0 12px; border-radius: 0.625rem; }
+.vp-tl { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.vp-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+button.btn svg.vp-chev { opacity: .5; }
+.vp-orb { display: block; width: 32px; height: 32px; border-radius: 50%; background-size: cover; background-position: center; flex: none; }
+.vp-orb.sm { width: 24px; height: 24px; }
+.vp-pop { position: absolute; z-index: 20; top: 50px; left: 0; right: 0; background: var(--surface); color: var(--text); border: 1px solid var(--b-input); border-radius: 0.75rem; box-shadow: 0 16px 40px -16px rgba(0,0,0,.35); overflow: hidden; }
+.vp-search { display: block; width: 100%; box-sizing: border-box; border: 0; border-bottom: 1px solid var(--b-input); background: transparent; color: var(--text); font: inherit; font-size: .9rem; padding: 12px 14px; outline: none; }
+.vp-list { list-style: none; margin: 0; padding: 4px; max-height: 320px; overflow-y: auto; }
+.vp-item { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 0.5rem; cursor: pointer; }
+.vp-item:hover, .vp-item:focus-visible { background: var(--b-accent); outline: none; }
+.vp-tx { flex: 1 1 auto; min-width: 0; display: grid; gap: 2px; }
+.vp-tx b { font-weight: 500; font-size: .92rem; }
+.vp-tx span { font-size: .75rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vp-check { width: 16px; height: 16px; flex: none; visibility: hidden; }
+.vp-item[aria-selected="true"] .vp-check { visibility: visible; }
+.vp-none { padding: 14px; text-align: center; color: var(--muted); font-size: .9rem; }
+.vp-play { all: unset; position: relative; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; flex: none; }
+.vp-play:focus-visible { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--b-ring); }
+.vp-ov { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 50%; background: rgba(0,0,0,.4); color: #fff; opacity: 0; transition: opacity .15s; }
+.vp-ov svg { width: 12px; height: 12px; }
+.vp-ov .s, .vp-play.playing .vp-ov .p { display: none; }
+.vp-play.playing .vp-ov .s { display: block; }
+.vp-item:hover .vp-ov, .vp-play:focus-visible .vp-ov, .vp-play.playing .vp-ov { opacity: 1; }
+@media (hover: none) { .vp-ov { opacity: .85; } }
+.vp-play.playing .vp-orb { animation: vpspin 6s linear infinite; }
+@keyframes vpspin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .vp-play.playing .vp-orb { animation: none; } }
 /* Bearnie Button, default variant + size lg: bg-primary text-primary-foreground hover:bg-primary/90, h-10 px-6, pill */
 button.btn.btn-primary { background: var(--text); color: var(--bg); }
 button.btn.btn-primary:hover { background: color-mix(in srgb, var(--text) 90%, transparent); }
@@ -697,14 +732,7 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
       row.appendChild(top);
       var opts = castOptions(who);
       if (opts.length) {
-        var sel = document.createElement("select"); sel.setAttribute("aria-label", "Voice for " + label(who));
-        opts.forEach(function (o) { var op = document.createElement("option"); op.value = o.id; op.textContent = o.label; sel.appendChild(op); });
-        var old = document.createElement("option"); old.value = "original"; old.textContent = "Original voice (first recording)"; sel.appendChild(old);
-        sel.value = chosen(who);
-        sel.onchange = function () { m.pick = sel.value; saveCast(); applyCast(); };
-        row.appendChild(sel);
-        var cr = opts.filter(function (o) { return o.id === sel.value; })[0];
-        if (cr && cr.credit) { var n = document.createElement("div"); n.className = "note"; n.textContent = "Accent reference: " + cr.credit.corpus + ", speaker " + cr.credit.speaker; row.appendChild(n); }
+        row.appendChild(voicePicker(who, opts));
       } else {
         var c = document.createElement("div"); c.className = "note";
         c.textContent = "Voice: " + (who === DIRECTOR ? "Director (recorded)" : (RECORDED[who] || who + " (recorded)"));
@@ -713,6 +741,84 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
       box.appendChild(row);
     });
   }
+  /* ---------- Voice picker ----------
+     After ElevenLabs UI's voice picker (github.com/elevenlabs/ui, MIT): a button showing the
+     chosen voice with its orb, opening a searchable list; each voice's orb plays a sample. */
+  var VP_LOOKS = [[1, 0], [3, 0], [2, 0], [1, -45], [3, 35], [2, 60], [1, 150], [3, -70]];
+  var preview = { audio: null, btn: null, timer: 0 };
+  function stopPreview() {
+    clearTimeout(preview.timer);
+    if (preview.audio) { try { preview.audio.pause(); } catch (e) {} }
+    if (preview.btn) { preview.btn.classList.remove("playing"); preview.btn.setAttribute("aria-label", preview.btn.dataset.label); }
+    preview.audio = null; preview.btn = null;
+  }
+  function sampleClip(who, o) {
+    var pool = [];
+    if (o) Object.keys(o.clips).sort(function (a, b) { return a - b; }).forEach(function (k) { o.clips[k].forEach(function (c) { if (c.kind === "line" || c.kind === "narr") pool.push(c); }); });
+    else if (real.baseManifest) real.baseManifest.elements.forEach(function (m) {
+      if ((who === DIRECTOR ? m.t !== "dlg" : m.who === who)) m.clips.forEach(function (c) { if (c.kind === "line" || c.kind === "narr") pool.push(c); });
+    });
+    return pool.filter(function (c) { return c.dur >= 2 && c.dur <= 6; })[0] || pool[0] || null;
+  }
+  function playPreview(who, o, btn) {
+    var same = preview.btn === btn; stopPreview(); if (same) return;
+    var c = sampleClip(who, o); if (!c) return;
+    var a = new Audio(real.base + (c.s || c.f)), from = c.o || 0;
+    preview.audio = a; preview.btn = btn; btn.classList.add("playing"); btn.setAttribute("aria-label", "Stop the sample");
+    a.addEventListener("loadedmetadata", function () { try { a.currentTime = from; } catch (e) {} });
+    a.addEventListener("ended", stopPreview);
+    var pr = a.play(); if (pr && pr.catch) pr.catch(stopPreview);
+    preview.timer = setTimeout(stopPreview, (c.dur + 0.4) * 1000 + 1500);
+  }
+  function orbFace(look, cls) {
+    var o = document.createElement("span"); o.className = "vp-orb " + (cls || "");
+    o.style.backgroundImage = "url(orbs/orb-" + look[0] + ".jpg)"; o.style.filter = "hue-rotate(" + look[1] + "deg)"; return o;
+  }
+  var ICON_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72a1 1 0 0 0 1.52.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z"/></svg>';
+  var ICON_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+  function voicePicker(who, opts) {
+    var m = cast[who], all = opts.map(function (o, k) { return { id: o.id, label: o.label, o: o, meta: o.credit ? o.credit.corpus + " \u00b7 " + o.credit.speaker : "", look: VP_LOOKS[k % VP_LOOKS.length] }; });
+    all.push({ id: "original", label: "Original voice", o: null, meta: "The first recording", look: [1, 200] });
+    var wrap = document.createElement("div"); wrap.className = "vp";
+    var cur = all.filter(function (v) { return v.id === chosen(who); })[0] || all[0];
+    var trig = document.createElement("button"); trig.type = "button"; trig.className = "btn btn-outline vp-trigger";
+    trig.setAttribute("aria-haspopup", "listbox"); trig.setAttribute("aria-expanded", "false"); trig.setAttribute("aria-label", "Voice for " + label(who) + ": " + cur.label);
+    var tl = document.createElement("span"); tl.className = "vp-tl"; tl.appendChild(orbFace(cur.look, "sm"));
+    var tn = document.createElement("span"); tn.className = "vp-name"; tn.textContent = cur.label; tl.appendChild(tn); trig.appendChild(tl);
+    trig.insertAdjacentHTML("beforeend", '<svg class="vp-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>');
+    var pop = document.createElement("div"); pop.className = "vp-pop"; pop.hidden = true;
+    var q = document.createElement("input"); q.type = "search"; q.className = "vp-search"; q.placeholder = "Search voices..."; q.setAttribute("aria-label", "Search voices");
+    var ul = document.createElement("ul"); ul.className = "vp-list"; ul.setAttribute("role", "listbox"); ul.setAttribute("aria-label", "Voices for " + label(who));
+    pop.appendChild(q); pop.appendChild(ul);
+    function fill() {
+      ul.textContent = ""; var term = q.value.trim().toLowerCase(), shown = 0;
+      all.forEach(function (v) {
+        if (term && (v.label + " " + v.meta).toLowerCase().indexOf(term) < 0) return; shown++;
+        var li = document.createElement("li"); li.className = "vp-item"; li.setAttribute("role", "option"); li.setAttribute("aria-selected", String(v.id === cur.id)); li.tabIndex = 0;
+        var pb = document.createElement("button"); pb.type = "button"; pb.className = "vp-play"; pb.dataset.label = "Play a sample of " + v.label; pb.setAttribute("aria-label", pb.dataset.label);
+        pb.appendChild(orbFace(v.look)); var ov = document.createElement("span"); ov.className = "vp-ov"; ov.innerHTML = '<i class="p">' + ICON_PLAY + '</i><i class="s">' + ICON_PAUSE + '</i>'; pb.appendChild(ov);
+        pb.onclick = function (ev) { ev.stopPropagation(); playPreview(who, v.o, pb); };
+        var tx = document.createElement("span"); tx.className = "vp-tx"; var b = document.createElement("b"); b.textContent = v.label; tx.appendChild(b);
+        if (v.meta) { var mt = document.createElement("span"); mt.textContent = v.meta; tx.appendChild(mt); }
+        li.appendChild(pb); li.appendChild(tx);
+        li.insertAdjacentHTML("beforeend", '<svg class="vp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>');
+        function pick() { stopPreview(); close(); if (v.id === chosen(who)) return; m.pick = v.id; saveCast(); applyCast(); }
+        li.onclick = pick; li.onkeydown = function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); pick(); } };
+        ul.appendChild(li);
+      });
+      if (!shown) { var none = document.createElement("li"); none.className = "vp-none"; none.textContent = "No voice found."; ul.appendChild(none); }
+    }
+    function onDoc(ev) { if (!wrap.contains(ev.target)) close(); }
+    function open() { fill(); pop.hidden = false; trig.setAttribute("aria-expanded", "true"); q.value = ""; setTimeout(function () { document.addEventListener("pointerdown", onDoc); }, 0); var sel = ul.querySelector('[aria-selected="true"]'); (sel || q).focus(); }
+    function close() { if (pop.hidden) return; pop.hidden = true; trig.setAttribute("aria-expanded", "false"); stopPreview(); document.removeEventListener("pointerdown", onDoc); }
+    trig.onclick = function () { pop.hidden ? open() : close(); };
+    q.oninput = fill;
+    pop.onkeydown = function (ev) { if (ev.key === "Escape") { ev.stopPropagation(); close(); trig.focus(); } };
+    wrap.appendChild(trig); wrap.appendChild(pop);
+    if (cur.meta) { var n = document.createElement("div"); n.className = "note"; n.textContent = cur.meta; wrap.appendChild(n); }
+    return wrap;
+  }
+
   /* ---------- Script rendering ---------- */
   var scriptEl = $("script");
   var nodes = [];
@@ -727,15 +833,26 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
         cue.appendChild(mk);
         if (e.overlap) cue.appendChild(document.createTextNode("  (overlapping)"));
         d.appendChild(cue);
-        e.lines.forEach(function (l) { var p = document.createElement("div"); p.className = l.par ? "par" : "ln"; p.textContent = l.par || l.text; d.appendChild(p); });
+        d._lines = e.lines.map(function (l) { var p = document.createElement("div"); p.className = l.par ? "par" : "ln"; var w = wrapWords(p, l.par || l.text); d.appendChild(p); return w; });
         var y = document.createElement("div"); y.className = "yours"; y.textContent = "Your line. Read it, then tap Next."; d.appendChild(y);
         if (cast[e.who] && cast[e.who].mode === "me") d.classList.add("mine");
       } else {
-        d.textContent = e.text;
+        d._lines = [wrapWords(d, e.text)];
       }
       d.onclick = function () { start(i); };
       scriptEl.appendChild(d); nodes.push(d);
     });
+  }
+
+  // Each word in its own span, so the word being spoken can be lit (ElevenLabs UI transcript viewer).
+  function wrapWords(into, text) {
+    var spans = [];
+    String(text).split(/(\s+)/).forEach(function (part) {
+      if (!part) return;
+      if (/^\s+$/.test(part)) { into.appendChild(document.createTextNode(part)); return; }
+      var w = document.createElement("span"); w.className = "w"; w.textContent = part; into.appendChild(w); spans.push(w);
+    });
+    return spans;
   }
 
   /* ---------- Text helpers ---------- */
@@ -963,19 +1080,19 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
         if (firstLine && typeof firstLine.gap === "number") t = Math.max(lastDlgStart + 0.3, lastEnd + firstLine.gap);
         var startAt = m.overlap ? Math.max(lastDlgStart + 0.3, prevEnd - 0.9) : t, last = null;
         it.start = startAt; it.who = m.who;
-        m.clips.forEach(function (c) {
+        m.clips.forEach(function (c, k) {
           if (c.kind === "par") {
             if (!opt("readPars")) return;
-            it.clips.push({ f: c.f, at: startAt, who: DIRECTOR }); startAt += c.dur + 0.15; return;
+            it.clips.push({ f: c.f, at: startAt, who: DIRECTOR, ln: k }); startAt += c.dur + 0.15; return;
           }
-          it.clips.push({ f: c.f, at: startAt, who: m.who });
+          it.clips.push({ f: c.f, at: startAt, who: m.who, ln: k });
           prevEnd = startAt + c.dur; startAt = prevEnd + 0.18; last = c;
         });
         it.end = prevEnd; lastDlgStart = it.start;
         t = last && last.cut ? prevEnd - 0.12 : last && last.trail ? prevEnd + 0.9 : prevEnd + 0.3;
       } else if (isRead(e) && m.clips[0]) {
         it.narr = true; it.who = DIRECTOR;
-        it.clips.push({ f: m.clips[0].f, at: t, who: DIRECTOR });
+        it.clips.push({ f: m.clips[0].f, at: t, who: DIRECTOR, ln: 0 });
         it.end = t + m.clips[0].dur; t = it.end + (m.t === "scene" ? 0.5 : 0.35);
       } else {
         var hold = m.t === "action" ? (opt("holdAction") ? holdFor(e) : 0.15)
@@ -1218,7 +1335,51 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
       });
     };
   })();
-  (function vizLoop(t) { orb(); if (real.noiseGain) real.noiseGain.gain.value = playing && !waitingForMe && !real.paused ? real.air : 0; drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
+  /* ---------- Word by word ----------
+     After ElevenLabs UI's transcript viewer: words already spoken in full, the word being spoken
+     lit, the rest of the line muted. The recordings carry no word timestamps, so each clip's
+     length is shared across its words by length, with a little extra after commas and stops. */
+  var wordNode = null, wordKey = "";
+  function wordWeights(spans) {
+    if (spans._wt) return spans._wt;
+    var acc = 0, cum = spans.map(function (w) {
+      var t = w.textContent, n = t.replace(/[^A-Za-z0-9\u00C0-\u024F']/g, "").length;
+      acc += Math.max(2, n) + (/[,;:]$/.test(t) ? 3 : 0) + (/[.?!\u2026]["\u201D)]?$/.test(t) ? 5 : 0) + (/(--|\u2014)$/.test(t) ? 3 : 0);
+      return acc;
+    });
+    spans._wt = { cum: cum, total: acc || 1 }; return spans._wt;
+  }
+  function clearWords() {
+    if (!wordNode) return;
+    wordNode.classList.remove("reading");
+    wordNode.querySelectorAll(".w.sp, .w.cw").forEach(function (w) { w.classList.remove("sp", "cw"); });
+    wordNode = null; wordKey = "";
+  }
+  function drawWords() {
+    if (!useReal || !real.sched || !playing || waitingForMe || !real.ctx) { clearWords(); return; }
+    var pos = position(), it = currentItem(pos), node = it && nodes[it.i];
+    if (!node || !node._lines || !it.clips.length) { clearWords(); return; }
+    var lineIdx = -1, frac = 1;
+    it.clips.forEach(function (c) {
+      if (c.extra || c.ln === undefined) return;
+      var b = real.buffers[c.f], dur = b ? b.duration : 0;
+      if (pos >= c.at) { lineIdx = c.ln; frac = pos >= c.at + dur ? 1 : Math.max(0, (pos - c.at - 0.08) / Math.max(0.2, dur - 0.22)); }
+    });
+    if (lineIdx < 0 || !node._lines[lineIdx]) { clearWords(); return; }
+    var spans = node._lines[lineIdx], cur = spans.length;
+    if (frac < 1) { var wt = wordWeights(spans), at = frac * wt.total; cur = 0; while (cur < spans.length - 1 && wt.cum[cur] < at) cur++; }
+    var key = it.i + ":" + lineIdx + ":" + cur;
+    if (key === wordKey) return;
+    if (wordNode !== node) { clearWords(); wordNode = node; node.classList.add("reading"); }
+    wordKey = key;
+    node._lines.forEach(function (ws, li) {
+      ws.forEach(function (w, wi) {
+        var spoken = li < lineIdx || (li === lineIdx && wi < cur);
+        w.classList.toggle("sp", spoken); w.classList.toggle("cw", li === lineIdx && wi === cur);
+      });
+    });
+  }
+  (function vizLoop(t) { orb(); drawWords(); if (real.noiseGain) real.noiseGain.gain.value = playing && !waitingForMe && !real.paused ? real.air : 0; drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
   $("viz").addEventListener("click", function (ev) {
     if (!real.sched) return;
     var r = tl.getBoundingClientRect(), pos = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)) * real.sched.total;
