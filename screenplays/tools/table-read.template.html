@@ -146,38 +146,154 @@ select:disabled { opacity: 0.6; }
 .credit { padding-block: 32px 220px; color: var(--ink-40); display: flex; flex-direction: column; gap: 8px; }
 @media (min-width: 640px) { .credit { flex-direction: row; justify-content: space-between; } }
 .credit a { color: inherit; }
+
+/* library: home shelf, covers, reader view, mini player */
+.hero .wordmark.small { font-size: clamp(3.6rem, 13vw, 9rem); margin-block: 40px; }
+@media (min-width: 768px) { .hero .wordmark.small { margin-block: 56px; } }
+.home-sec { padding-block: 56px; border-bottom: 1px solid var(--ink); }
+@media (min-width: 768px) { .home-sec { padding-block: 80px; } }
+.home-sec h2 { margin: 24px 0 32px; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.06em; line-height: 0.9; text-transform: uppercase; }
+.cover { position: relative; aspect-ratio: 8.5 / 11; max-width: 100%; background: #ffffff; color: var(--ink); border: 1px solid var(--ink-10); box-shadow: 0 1px 2px var(--ink-10), 0 12px 24px -16px var(--ink-40); font-family: var(--font-script); display: grid; align-content: center; justify-items: center; text-align: center; padding: 10%; overflow: hidden; }
+.cover b { font-size: clamp(0.6rem, 1.6vw, 0.95rem); text-decoration: underline; text-underline-offset: 2px; letter-spacing: 0.04em; }
+.cover span { font-size: clamp(0.45rem, 1.1vw, 0.7rem); margin-top: 0.8em; line-height: 1.5; }
+.cover i { position: absolute; left: 10%; bottom: 7%; right: 10%; font-style: normal; font-size: clamp(0.38rem, 0.9vw, 0.55rem); text-align: left; color: var(--ink-60); }
+.cover.own { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.cover.own i { color: var(--paper-60); }
+.shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 40px 24px; }
+@media (min-width: 768px) { .shelf { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); } }
+.card { all: unset; box-sizing: border-box; display: grid; gap: 12px; align-content: start; cursor: pointer; min-width: 0; }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+.card .t { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.04em; line-height: 1.05; text-transform: uppercase; overflow-wrap: anywhere; }
+.card:hover .t { color: var(--accent); }
+.card .s { font-size: 0.85rem; color: var(--ink-60); line-height: 1.35; }
+.prog { display: flex; gap: 8px; align-items: center; font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; color: var(--ink-60); }
+.prog svg { flex: none; }
+.prog .done { color: var(--accent); }
+.cardwrap { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.cardwrap .rm { justify-self: start; border: 0; padding: 4px 0; color: var(--ink-40); }
+.cardwrap .rm:hover { color: var(--accent); }
+.continue { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: minmax(96px, 150px) 1fr; gap: 24px; align-items: center; max-width: 44rem; }
+.continue:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+.continue .t { font-size: clamp(1.6rem, 4.5vw, 3rem); font-weight: 700; letter-spacing: -0.06em; line-height: 0.9; text-transform: uppercase; }
+.continue:hover .t { color: var(--accent); }
+.continue .s { margin-top: 12px; color: var(--ink-60); font-size: 0.95rem; }
+.continue .prog { margin-top: 16px; font-size: 0.8rem; }
+.byo { display: flex; flex-wrap: wrap; gap: 12px; }
+.byo .btn, .byo button { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 12px 20px; border: 1px solid var(--ink); background: transparent; font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; cursor: pointer; }
+.byo .btn:hover, .byo button:hover { background: var(--ink); color: var(--paper); }
+.byo .btn:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.byo input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.paste { display: grid; gap: 12px; margin-top: 24px; max-width: 46rem; }
+.paste textarea, .paste input { width: 100%; font-family: var(--font-script); font-size: 0.9rem; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); padding: 12px; border-radius: 0; }
+.paste textarea { min-height: 220px; resize: vertical; }
+.paste .row { display: flex; gap: 12px; flex-wrap: wrap; }
+.paste .go { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+.byo-note { margin-top: 16px; }
+.byo-msg { margin-top: 12px; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--accent); }
+
+.readerbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 4; background: var(--paper); border-bottom: 1px solid var(--ink); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.readerbar .wrapper { display: flex; align-items: center; gap: 12px; min-height: 64px; }
+.readerbar .rt { flex: 1 1 auto; min-width: 0; font-weight: 700; letter-spacing: -0.04em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.05rem; }
+.readerbar button { min-height: 44px; }
+.reader-top { padding-block: 40px 8px; display: grid; gap: 8px; }
+.reader-top h1 { margin: 0; font-size: clamp(2.6rem, 9vw, 6rem); font-weight: 700; text-transform: uppercase; letter-spacing: -0.07em; line-height: 0.8; text-wrap: balance; }
+.reader-top .s { color: var(--ink-60); }
+#settings .sec { padding-block: 56px; }
+#settings .sec .display { font-size: clamp(2.2rem, 6vw, 4.5rem); margin-block: 48px 32px; }
+.script-wrap { padding-block: 24px 64px; }
+
+#np { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 200px; max-width: 26rem; border: 0; padding: 0; text-align: left; background: transparent; color: var(--paper); border-radius: 0; text-transform: none; font-family: var(--font-sans); font-size: 0.95rem; }
+#np .mini { flex: none; width: 30px; height: 40px; background: #ffffff; border: 1px solid var(--paper-40); display: grid; place-items: center; font-family: var(--font-script); font-size: 0.32rem; color: var(--ink); overflow: hidden; padding: 2px; text-align: center; line-height: 1.2; }
+#np .npt { min-width: 0; display: grid; }
+#np .npt b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700; letter-spacing: -0.02em; text-transform: uppercase; }
+#np .npt span { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; color: var(--paper-60); }
+body.at-home .viz, body.at-home .transport .lab, body.at-home #speed, body.at-home #back, body.at-home #next { display: none; }
+body.no-script .transport { display: none; }
+body.no-script .credit { padding-bottom: 48px; }
+.readerbar button { white-space: nowrap; padding: 8px 12px; }
+@media (max-width: 480px) { .readerbar .rt { font-size: 0.9rem; } }
+body.at-home #status { display: none; }
+body:not(.at-home) #np .mini { display: none; }
+body:not(.at-home) #np { flex: 0 1 auto; max-width: 14rem; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
 </style>
 
+<div id="home">
 <header class="hero">
   <div class="wrapper">
     <div class="top">
-      <p class="meta" style="color:var(--paper-60)">Screenplays · read aloud</p>
+      <p class="meta" style="color:var(--paper-60)">Screenplays &middot; read aloud</p>
       <ul>
-        <li><a class="meta" href="#read">Settings</a></li>
-        <li><a class="meta" href="#cast-sec">Cast</a></li>
-        <li><a class="meta" href="#script-sec">Script</a></li>
+        <li><a class="meta" href="#shelf-sec">Scripts</a></li>
+        <li><a class="meta" href="#byo-sec">Bring your own</a></li>
       </ul>
     </div>
-    <h1 class="wordmark">Table<br>Read</h1>
+    <h1 class="wordmark small">Table<br>Read</h1>
     <div class="foot">
       <p class="meta">Written by Tendai</p>
-      <p class="meta">Tap any line to start from there</p>
+      <p class="meta">Tap a script to open it</p>
     </div>
   </div>
 </header>
 
-<section class="band" aria-label="Script">
+<section class="home-sec" id="continue-sec" aria-labelledby="h-cont" hidden>
   <div class="wrapper">
-    <p class="displayHero">Read it.<br>Hear it.<br>Fix it.</p>
-    <div class="side">
-      <p class="body">Pick a script. Choose what gets read and who reads it, then press play.</p>
-      <label class="meta" for="pick">Today's script</label>
-      <select id="pick"></select>
-    </div>
+    <div class="sec-head"><div><p class="meta n">01</p><p class="meta k">Continue listening</p></div></div>
+    <h2 id="h-cont">Pick up<br>where you left off.</h2>
+    <div id="continue"></div>
   </div>
 </section>
 
+<section class="home-sec" id="shelf-sec" aria-labelledby="h-shelf">
+  <div class="wrapper">
+    <div class="sec-head"><div><p class="meta n" id="n-shelf">02</p><p class="meta k">Scripts</p></div><p class="meta aside">Recorded with ElevenLabs</p></div>
+    <h2 id="h-shelf">Your<br>scripts.</h2>
+    <div class="shelf" id="shelf"></div>
+  </div>
+</section>
+
+<section class="home-sec" id="byo-sec" aria-labelledby="h-byo">
+  <div class="wrapper">
+    <div class="sec-head"><div><p class="meta n" id="n-byo">03</p><p class="meta k">Bring your own</p></div><p class="meta aside">Fountain screenplay format</p></div>
+    <h2 id="h-byo">Bring<br>your own.</h2>
+    <div class="byo">
+      <label class="btn" for="fileIn">Open a .fountain file<input type="file" id="fileIn" accept=".fountain,.txt,.md,text/plain"></label>
+      <button type="button" id="pasteBtn" aria-expanded="false" aria-controls="paste">Paste text</button>
+    </div>
+    <form class="paste" id="paste" hidden>
+      <label class="small" for="pasteName">Name (optional)</label>
+      <input id="pasteName" type="text" placeholder="Uses the Title: line if there is one">
+      <label class="small" for="pasteText">Script in Fountain format</label>
+      <textarea id="pasteText" placeholder="INT. KITCHEN - NIGHT&#10;&#10;She puts the kettle on.&#10;&#10;MAYA&#10;You're up."></textarea>
+      <div class="row"><button type="submit" class="go">Add to scripts</button><button type="button" id="pasteCancel">Cancel</button></div>
+    </form>
+    <p class="note byo-note">Your own scripts are read along on screen with you or the cast reading. They stay in this browser only and have no recorded voices.</p>
+    <p class="byo-msg" id="byoMsg" role="status"></p>
+  </div>
+</section>
+
+<footer class="wrapper credit">
+  <p class="meta">Design: Swissfolio by Lexington Themes (GPL-3.0)</p>
+  <p class="meta">Voices: ElevenLabs</p>
+</footer>
+</div>
+
+<div id="reader" hidden>
+  <div class="readerbar">
+    <div class="wrapper">
+      <button type="button" id="toHome" aria-label="Back to your scripts">&larr; Scripts</button>
+      <span class="rt" id="rTitle"></span>
+      <button type="button" id="setBtn" aria-expanded="false" aria-controls="settings">Settings</button>
+    </div>
+  </div>
+  <div class="wrapper reader-top">
+    <h1 id="rBig"></h1>
+    <p class="s" id="rSub"></p>
+    <p class="meta" style="color:var(--ink-40)">Tap any line to start from there</p>
+  </div>
+  <div id="settings" hidden>
+    <div hidden><label for="pick">Script</label><select id="pick"></select></div>
 <section class="sec" id="read" aria-labelledby="step1">
   <div class="wrapper">
     <div class="sec-head">
@@ -204,7 +320,6 @@ select:disabled { opacity: 0.6; }
     </div>
   </div>
 </section>
-
 <section class="sec inverse" id="cast-sec" aria-labelledby="step2">
   <div class="wrapper">
     <div class="sec-head">
@@ -230,22 +345,11 @@ select:disabled { opacity: 0.6; }
     <div class="cast" id="cast"></div>
   </div>
 </section>
-
-<section class="sec" id="script-sec" aria-labelledby="step3">
-  <div class="wrapper">
-    <div class="sec-head">
-      <div><p class="meta n">03</p><p class="meta k">Script</p></div>
-      <p class="meta aside">Highlighted by character</p>
-    </div>
-    <h2 class="display" id="step3">The<br>script.</h2>
+  </div>
+  <div class="wrapper script-wrap">
     <article class="script" id="script" aria-live="off"></article>
   </div>
-</section>
-
-<footer class="wrapper credit">
-  <p class="meta">Design: Swissfolio by Lexington Themes (GPL-3.0)</p>
-  <p class="meta">Voices: ElevenLabs</p>
-</footer>
+</div>
 
 <div class="transport" role="toolbar" aria-label="Playback">
   <div class="viz" id="viz">
@@ -254,6 +358,7 @@ select:disabled { opacity: 0.6; }
     <div class="legend" id="legend"></div>
   </div>
   <div class="in">
+    <button type="button" id="np" hidden aria-label="Open the script that is playing"><span class="mini" id="npMini"></span><span class="npt"><b id="npTitle"></b><span id="npSub">Ready</span></span></button>
     <button id="back" aria-label="Previous line" title="Previous line">&#9198;</button>
     <button id="play">Play</button>
     <button id="next" aria-label="Next line" title="Next line">&#9197;</button>
@@ -440,8 +545,9 @@ select:disabled { opacity: 0.6; }
   /* ---------- Shared playback state ---------- */
   var idx = 0, playing = false, waitingForMe = false, wakeLock = null, speaking = null;
   var statusEl = $("status"), playBtn = $("play");
-  function setStatus(s) { statusEl.textContent = s; }
+  function setStatus(s) { statusEl.textContent = s; var ns = $("npSub"); if (ns) ns.textContent = s; }
   function mark(i) {
+    saveProgress(i);
     nodes.forEach(function (n) { n.classList.remove("now"); });
     if (nodes[i]) { nodes[i].classList.add("now"); nodes[i].scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
   }
@@ -859,17 +965,188 @@ select:disabled { opacity: 0.6; }
     if (ev.key === "ArrowLeft") $("back").click();
   });
 
-  /* ---------- Loading scripts ---------- */
-  var pick = $("pick");
+  /* ---------- Library: home shelf, reader, bring your own ---------- */
+  var pick = $("pick"), current = null;
+  var SHELF = ["d03", "woq11"];  // one card per story; older drafts stay out of the shelf
+  var own = store.get("own") || [];
+  own.forEach(function (o) { SCRIPTS.push({ id: o.id, label: o.label, text: o.text, own: true }); });
   SCRIPTS.forEach(function (s) { var o = document.createElement("option"); o.value = s.id; o.textContent = s.label; pick.appendChild(o); });
+  function byId(id) { return SCRIPTS.filter(function (x) { return x.id === id; })[0]; }
+  function titlePage(text) {
+    var head = (text || "").replace(/\r\n/g, "\n").split(/\n\s*\n/)[0], tp = {};
+    head.split("\n").forEach(function (l) { var m = l.match(/^([A-Za-z ]+):\s*(.*)$/); if (m) tp[m[1].trim().toLowerCase()] = m[2].trim(); });
+    return tp;
+  }
+  function info(s) {
+    var tp = titlePage(s.text), title = tp.title || s.label;
+    var sub = s.own ? "Your script" : (s.id === "d03" ? "Episode 1: “Contingency” · draft 03" : s.id === "woq11" ? "Short film · draft 11" : s.label);
+    return { title: title, credit: tp.credit || "Written by", author: tp.author || "", notes: tp.notes || "", sub: sub };
+  }
+  function cap(s) { return s.toLowerCase().replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); }); }
+  function coverEl(s) {
+    var i = info(s), c = document.createElement("div");
+    c.className = "cover" + (s.own ? " own" : ""); c.setAttribute("aria-hidden", "true");
+    var b = document.createElement("b"); b.textContent = i.title.toUpperCase(); c.appendChild(b);
+    var sp = document.createElement("span"); sp.textContent = i.credit + (i.author ? "\n" + i.author : ""); sp.style.whiteSpace = "pre-line"; c.appendChild(sp);
+    if (i.notes) { var n = document.createElement("i"); n.textContent = i.notes; c.appendChild(n); }
+    return c;
+  }
+  var prog = store.get("prog") || {};
+  function estLeft(fromIdx) {
+    if (useReal && real.sched && real.sched.items.length) {
+      var it = real.sched.items.filter(function (x) { return x.i >= fromIdx; })[0];
+      return Math.max(0, real.sched.total - (it ? it.start : real.sched.total));
+    }
+    var chars = 0; (doc && doc.els || []).slice(fromIdx).forEach(function (e) { chars += (e.text || "").length + (e.lines || []).reduce(function (a, l) { return a + (l.text || "").length; }, 0); });
+    return chars / 14;
+  }
+  function saveProgress(i) {
+    if (!current || !doc || !doc.els) return;
+    prog[current.id] = { i: i, n: doc.els.length, left: Math.round(estLeft(i)), at: Date.now() };
+    store.set("prog", prog); store.set("lastPlayed", current.id);
+  }
+  function ring(pct) {
+    var r = 7, c = 2 * Math.PI * r, ns = "http://www.w3.org/2000/svg", svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("width", "18"); svg.setAttribute("height", "18"); svg.setAttribute("viewBox", "0 0 18 18"); svg.setAttribute("aria-hidden", "true");
+    var a = document.createElementNS(ns, "circle"); a.setAttribute("cx", 9); a.setAttribute("cy", 9); a.setAttribute("r", r); a.setAttribute("fill", "none"); a.setAttribute("stroke", "currentColor"); a.setAttribute("stroke-opacity", "0.25"); a.setAttribute("stroke-width", "2");
+    var b = document.createElementNS(ns, "circle"); b.setAttribute("cx", 9); b.setAttribute("cy", 9); b.setAttribute("r", r); b.setAttribute("fill", "none"); b.setAttribute("stroke", "var(--accent)"); b.setAttribute("stroke-width", "2");
+    b.setAttribute("stroke-dasharray", (c * pct).toFixed(2) + " " + c.toFixed(2)); b.setAttribute("transform", "rotate(-90 9 9)");
+    svg.appendChild(a); svg.appendChild(b); return svg;
+  }
+  function progEl(s) {
+    var p = prog[s.id], d = document.createElement("div"); d.className = "prog";
+    if (!p || !p.n) { d.appendChild(document.createTextNode(s.clips ? "Recorded · not started" : (s.own ? "Read along · not started" : "Not started"))); return d; }
+    var pct = Math.min(1, (p.i + 1) / p.n), mins = Math.max(1, Math.round(p.left / 60));
+    d.appendChild(ring(pct));
+    var tx = document.createElement("span");
+    if (pct >= 0.99) { tx.className = "done"; tx.textContent = "Finished"; } else tx.textContent = Math.round(pct * 100) + "% · " + mins + (mins === 1 ? " min left" : " mins left");
+    d.appendChild(tx); return d;
+  }
+  function renderHome() {
+    var shelf = $("shelf"); shelf.textContent = "";
+    SCRIPTS.filter(function (s) { return SHELF.indexOf(s.id) >= 0 || s.own; }).forEach(function (s) {
+      var w = document.createElement("div"); w.className = "cardwrap";
+      var b = document.createElement("button"); b.type = "button"; b.className = "card";
+      var i = info(s);
+      b.setAttribute("aria-label", "Open " + cap(i.title));
+      b.appendChild(coverEl(s));
+      var tt = document.createElement("div"); tt.className = "t"; tt.textContent = i.title; b.appendChild(tt);
+      var ss = document.createElement("div"); ss.className = "s"; ss.textContent = i.sub; b.appendChild(ss);
+      b.appendChild(progEl(s));
+      b.onclick = function () { openScript(s.id, true); };
+      w.appendChild(b);
+      if (s.own) {
+        var rm = document.createElement("button"); rm.type = "button"; rm.className = "rm"; rm.textContent = "Remove";
+        rm.setAttribute("aria-label", "Remove " + cap(i.title));
+        rm.onclick = function () { removeOwn(s.id); };
+        w.appendChild(rm);
+      }
+      shelf.appendChild(w);
+    });
+    var lp = store.get("lastPlayed"), ls = lp && byId(lp), cont = $("continue");
+    cont.textContent = "";
+    var show = !!(ls && prog[lp] && prog[lp].i > 0 && (prog[lp].i + 1) / prog[lp].n < 0.99);
+    $("continue-sec").hidden = !show;
+    $("n-shelf").textContent = show ? "02" : "01"; $("n-byo").textContent = show ? "03" : "02";
+    if (show) {
+      var i2 = info(ls), cb = document.createElement("button"); cb.type = "button"; cb.className = "continue";
+      cb.setAttribute("aria-label", "Continue " + cap(i2.title));
+      cb.appendChild(coverEl(ls));
+      var body = document.createElement("div");
+      var t2 = document.createElement("div"); t2.className = "t"; t2.textContent = i2.title; body.appendChild(t2);
+      var s2 = document.createElement("div"); s2.className = "s"; s2.textContent = i2.sub; body.appendChild(s2);
+      body.appendChild(progEl(ls));
+      cb.appendChild(body);
+      cb.onclick = function () { openScript(ls.id, true); };
+      cont.appendChild(cb);
+    }
+  }
+  function updateMini() {
+    var np = $("np");
+    document.body.classList.toggle("no-script", !current);
+    if (!current) { np.hidden = true; return; }
+    var i = info(current);
+    np.hidden = false; $("npTitle").textContent = i.title; $("npMini").textContent = i.title.toUpperCase();
+  }
   function load(text) {
     stop("Ready");
     doc = parse(text); idx = 0;
     setupCast(); paintScript();
   }
-  pick.onchange = function () { var s = SCRIPTS.filter(function (x) { return x.id === pick.value; })[0]; if (s) { store.set("script", s.id); load(s.text); loadReal(s); } };
-  var last = store.get("script");
-  if (last && SCRIPTS.some(function (s) { return s.id === last; })) pick.value = last;
-  pick.onchange();
+  function selectScript(id) {
+    var s = byId(id); if (!s) return;
+    if (current && current.id === id) return;
+    current = s; pick.value = id; store.set("script", id);
+    load(s.text);
+    $("noRec").textContent = s.own ? "This is your own script, so there are no recorded voices. Set parts to Me and read along, tapping Next as you go." : "This draft hasn't been recorded yet. You can still read along.";
+    loadReal(s);
+    var p = prog[id]; if (p && p.i > 0 && p.i < doc.els.length) { idx = p.i; mark(idx); }
+    updateMini();
+  }
+  function openScript(id, resume) {
+    selectScript(id);
+    var i = info(current);
+    $("rTitle").textContent = i.title; $("rBig").textContent = i.title; $("rSub").textContent = i.sub;
+    $("home").hidden = true; $("reader").hidden = false; document.body.classList.remove("at-home");
+    window.scrollTo(0, 0);
+    if (resume && nodes[idx] && idx > 0) setTimeout(function () { nodes[idx].scrollIntoView({ block: "center" }); }, 60);
+  }
+  function goHome() {
+    $("reader").hidden = true; $("home").hidden = false; document.body.classList.add("at-home");
+    renderHome(); window.scrollTo(0, 0);
+  }
+  $("toHome").onclick = goHome;
+  $("np").onclick = function () { if (current) openScript(current.id, true); };
+  $("setBtn").onclick = function () {
+    var open = $("settings").hidden; $("settings").hidden = !open; this.setAttribute("aria-expanded", String(open));
+    this.textContent = open ? "Close" : "Settings";
+    if (open) $("settings").scrollIntoView({ block: "start" });
+  };
+  pick.onchange = function () { openScript(pick.value); };
+
+  /* bring your own */
+  function addOwn(name, text) {
+    text = (text || "").replace(/\r\n/g, "\n");
+    if (!text.trim()) { $("byoMsg").textContent = "That script is empty. Paste or open a Fountain file with some lines in it."; return; }
+    var tp = titlePage(text), label = (name || tp.title || "Untitled script").trim();
+    var id = "own-" + Date.now().toString(36);
+    if (!/^title:/im.test(text.split(/\n\s*\n/)[0])) text = "Title: " + label + "\nCredit: Written by\n\n====\n\n" + text;
+    var rec = { id: id, label: label, text: text };
+    own.push(rec); store.set("own", own);
+    var s = { id: id, label: label, text: text, own: true }; SCRIPTS.push(s);
+    var o = document.createElement("option"); o.value = id; o.textContent = label; pick.appendChild(o);
+    $("byoMsg").textContent = "Added “" + label + "” to your scripts.";
+    renderHome();
+    openScript(id);
+  }
+  function removeOwn(id) {
+    own = own.filter(function (o) { return o.id !== id; }); store.set("own", own);
+    SCRIPTS = SCRIPTS.filter(function (s) { return s.id !== id; });
+    var o = pick.querySelector('option[value="' + id + '"]'); if (o) o.remove();
+    delete prog[id]; store.set("prog", prog);
+    if (current && current.id === id) { stop("Ready"); current = null; updateMini(); }
+    $("byoMsg").textContent = "Removed.";
+    renderHome();
+  }
+  $("fileIn").onchange = function () {
+    var f = this.files && this.files[0]; if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function () { addOwn("", String(rd.result)); };
+    rd.onerror = function () { $("byoMsg").textContent = "Couldn't read that file. Try saving it as plain text (.fountain or .txt)."; };
+    rd.readAsText(f); this.value = "";
+  };
+  $("pasteBtn").onclick = function () { var open = $("paste").hidden; $("paste").hidden = !open; this.setAttribute("aria-expanded", String(open)); if (open) $("pasteText").focus(); };
+  $("pasteCancel").onclick = function () { $("paste").hidden = true; $("pasteBtn").setAttribute("aria-expanded", "false"); };
+  $("paste").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    addOwn($("pasteName").value, $("pasteText").value);
+    if ($("pasteText").value.trim()) { $("pasteText").value = ""; $("pasteName").value = ""; $("paste").hidden = true; $("pasteBtn").setAttribute("aria-expanded", "false"); }
+  });
+
+  document.body.classList.add("at-home");
+  updateMini();
+  var last = store.get("lastPlayed") || store.get("script");
+  if (last && byId(last)) selectScript(last);
+  renderHome();
 })();
 </script>
