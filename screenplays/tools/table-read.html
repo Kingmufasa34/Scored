@@ -421,17 +421,11 @@ body:not(.at-home) #npLeft { grid-column: 5; grid-row: 2; justify-self: end; }
 body:not(.at-home) .transport .lab { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 body:not(.at-home) #speed { min-height: 36px; padding: 0 10px; font-size: 0.85rem; }
 
-/* Lamp colours per voice: soft pastels that hold up in both themes */
-:root { --orb-n: #d9d4cc; --orb-1: #f1dc8a; --orb-2: #f2b8cc; --orb-3: #b7e3b0; --orb-4: #b3d4f0; --orb-5: #f3c99a; --orb-6: #cfc2f2; }
-/* The lamp */
-:root { --lamp: rgb(217,212,204); --lamp-on: 0; --breath: 0; }
-#lamp { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: calc(var(--lamp-on) * (0.5 + 0.12 * var(--breath)));
-  background: radial-gradient(90% 45% at 50% 108%, var(--lamp) 0%, transparent 72%), radial-gradient(70% 40% at 0% 40%, var(--lamp) 0%, transparent 70%), radial-gradient(70% 40% at 100% 60%, var(--lamp) 0%, transparent 70%); }
-:root[data-theme="dark"] #lamp { opacity: calc(var(--lamp-on) * (0.22 + 0.08 * var(--breath))); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #lamp { opacity: calc(var(--lamp-on) * (0.22 + 0.08 * var(--breath))); } }
-#home, #series, #reader { position: relative; z-index: 1; }
-.el.now { transition: background-color 1.6s ease, box-shadow 1.6s ease; }
-body.is-playing .el.now { background: color-mix(in srgb, var(--lamp) calc(22% + 10% * var(--breath)), var(--page)); box-shadow: 0 0 calc(10px + 18px * var(--breath)) calc(1px + 3px * var(--breath)) color-mix(in srgb, var(--lamp) 45%, transparent); }
+/* Voice orb: ElevenLabs UI's own orb videos (github.com/elevenlabs/ui, MIT; see orbs/LICENSE-elevenlabs-ui.txt) */
+#orb { --swell: 0; flex: none; position: relative; width: 64px; height: 64px; border-radius: 50%; overflow: hidden; background: #e9eef5; transform: scale(calc(1 + 0.07 * var(--swell))); transition: filter 1.6s ease; }
+#orb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.4s ease; pointer-events: none; }
+#orb video.on { opacity: 1; }
+body.at-home #orb, #orb[hidden] { display: none; }
 /* Bearnie Button, default variant + size lg: bg-primary text-primary-foreground hover:bg-primary/90, h-10 px-6, pill */
 button.btn.btn-primary { background: var(--text); color: var(--bg); }
 button.btn.btn-primary:hover { background: color-mix(in srgb, var(--text) 90%, transparent); }
@@ -440,7 +434,6 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
 #eps .below .btn-primary { margin-top: 14px; }
 </style>
 
-<div id="lamp" aria-hidden="true"></div>
 <div id="home">
 <header class="hero">
   <div class="wrapper">
@@ -588,7 +581,7 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
     <div class="legend" id="legend"></div>
   </div>
   <div class="in">
-    <button type="button" id="np" hidden aria-label="Open the script that is playing"><span class="mini" id="npMini"></span><span class="npt"><b id="npTitle"></b><span id="npSub">Ready</span></span></button>
+    <button type="button" id="np" hidden aria-label="Open the script that is playing"><span id="orb" aria-hidden="true"><video muted loop playsinline preload="auto" class="on"><source src="orbs/orb-1.webm" type="video/webm"><source src="orbs/orb-1.mp4" type="video/mp4"></video><video muted loop playsinline preload="auto"><source src="orbs/orb-2.webm" type="video/webm"><source src="orbs/orb-2.mp4" type="video/mp4"></video><video muted loop playsinline preload="auto"><source src="orbs/orb-3.webm" type="video/webm"><source src="orbs/orb-3.mp4" type="video/mp4"></video></span><span class="mini" id="npMini"></span><span class="npt"><b id="npTitle"></b><span id="npSub">Ready</span></span></button>
     <span id="npLeft" aria-live="off"></span>
     <button type="button" class="btn btn-ghost btn-icon" id="back" aria-label="Previous line" title="Previous line"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 5.6a1 1 0 0 0-1.5-.86L8 9.9V6a1 1 0 0 0-2 0v12a1 1 0 0 0 2 0v-3.9l8 5.16a1 1 0 0 0 1.5-.86z"/></svg></button>
     <button type="button" class="btn" id="play" aria-label="Play" title="Play"><svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72a1 1 0 0 0 1.52.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z"/></svg><svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
@@ -2187,38 +2180,48 @@ FADE OUT.
       lg.appendChild(s);
     });
   }
-  /* ---------- The lamp: the voice as light in the room ----------
-     Whoever speaks tints the line being read and a low glow at the edges of the screen,
-     like a bedside lamp changing colour. Calm by design: colour drifts over ~2s, the
-     glow swells only slightly with the voice on slow envelopes, nothing flickers or
-     snaps, and it holds still under prefers-reduced-motion. */
-  var lampRGB = [217, 212, 204], lampOn = 0, breath = 0, lampLast = "";
+  /* ---------- Voice orb ----------
+     ElevenLabs UI's orb, as the videos they ship (github.com/elevenlabs/ui, MIT). Each voice
+     gets an orb (blue, purple, pink, then tinted versions of those); the speaker's fades in,
+     drifts a little faster and swells slightly with the voice on slow envelopes. Between
+     lines it drifts slowly; under reduced motion it holds still. */
   function whoNow() {
     if (!playing || waitingForMe) return null;
     if (speaking) return speaking;
     var e = doc && doc.els[idx]; return e ? (e.t === "dlg" ? e.who : DIRECTOR) : null;
   }
-  function hexRGB(h) { h = (h || "").replace("#", ""); if (h.length !== 6) return null; return [0, 2, 4].map(function (k) { return parseInt(h.substr(k, 2), 16); }); }
-  function drawRoom(t) {
-    var now = whoNow(), still = reduceMotion;
-    var tgt = now ? hexRGB(cssVar("--orb-" + (cast[now] ? cast[now].hl.replace("--hl-", "") : "n"))) : null;
-    if (tgt) for (var k = 0; k < 3; k++) lampRGB[k] += (tgt[k] - lampRGB[k]) * (still ? 1 : 0.03);
-    lampOn += ((now ? 1 : 0) - lampOn) * (still ? 1 : 0.02);
-    var level = 0;
-    if (now && !still) {
-      if (useReal && real.analyser) {
-        real.analyser.getByteTimeDomainData(wbuf); var sum = 0;
-        for (var n = 0; n < wbuf.length; n += 4) { var v = (wbuf[n] - 128) / 128; sum += v * v; }
-        level = Math.min(1, Math.sqrt(sum / (wbuf.length / 4)) * 4);
-      } else level = 0.4 + 0.2 * Math.sin(t / 900);
+  var ORB_LOOKS = [[0, 0], [2, 0], [1, 0], [0, -45], [2, 35], [1, 60], [0, 150]];  // [video, hue turn]
+  var orb = (function () {
+    var box = $("orb"), vids = Array.prototype.slice.call(box.querySelectorAll("video")), cur = -1, env = 0, rate = 0.5, lastSet = "", held = null;
+    function lookFor(who) {
+      if (!who || who === DIRECTOR) return ORB_LOOKS[0];
+      var k = castOrder.indexOf(who); return ORB_LOOKS[1 + ((k < 0 ? 0 : k) % (ORB_LOOKS.length - 1))];
     }
-    breath += (level - breath) * (level > breath ? 0.06 : 0.025);   // slow rise, slower fall
-    var css = "rgb(" + lampRGB.map(Math.round).join(",") + ")|" + lampOn.toFixed(2) + "|" + breath.toFixed(2);
-    if (css === lampLast) return; lampLast = css;
-    var r = document.documentElement.style, parts = css.split("|");
-    r.setProperty("--lamp", parts[0]); r.setProperty("--lamp-on", parts[1]); r.setProperty("--breath", parts[2]);
-  }
-  (function vizLoop(t) { drawRoom(t || 0); if (real.noiseGain) real.noiseGain.gain.value = playing && !waitingForMe && !real.paused ? real.air : 0; drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
+    return function frame() {
+      if (box.offsetParent === null) { vids.forEach(function (v) { if (!v.paused) v.pause(); }); return; }
+      var now = whoNow(); if (now) held = now; else if (!playing) held = null;
+      var look = lookFor(held), still = reduceMotion;
+      if (look[0] !== cur) { cur = look[0]; vids.forEach(function (v, i) { v.classList.toggle("on", i === cur); }); }
+      var f = "hue-rotate(" + look[1] + "deg)"; if (f !== lastSet) { box.style.filter = f; lastSet = f; }
+      var level = 0;
+      if (now && !still) {
+        if (useReal && real.analyser) {
+          real.analyser.getByteTimeDomainData(wbuf); var sum = 0;
+          for (var n = 0; n < wbuf.length; n += 4) { var v = (wbuf[n] - 128) / 128; sum += v * v; }
+          level = Math.min(1, Math.sqrt(sum / (wbuf.length / 4)) * 4);
+        } else level = 0.4;
+      }
+      env += (level - env) * (level > env ? 0.08 : 0.03);
+      box.style.setProperty("--swell", env.toFixed(3));
+      rate += ((now ? 1 : 0.45) - rate) * 0.03;
+      vids.forEach(function (v, i) {
+        if (still) { if (!v.paused) v.pause(); return; }
+        if (i === cur) { if (v.paused) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } if (Math.abs(v.playbackRate - rate) > 0.02) v.playbackRate = rate; }
+        else if (!v.paused && getComputedStyle(v).opacity === "0") v.pause();
+      });
+    };
+  })();
+  (function vizLoop(t) { orb(); if (real.noiseGain) real.noiseGain.gain.value = playing && !waitingForMe && !real.paused ? real.air : 0; drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
   $("viz").addEventListener("click", function (ev) {
     if (!real.sched) return;
     var r = tl.getBoundingClientRect(), pos = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)) * real.sched.total;
