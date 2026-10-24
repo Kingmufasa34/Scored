@@ -234,6 +234,78 @@ body:not(.at-home) .credit { display: none; }
 .themebtn:hover { background: var(--surface-3); }
 .themebtn svg { width: 22px; height: 22px; }
 .readerbar .themebtn { width: 44px; height: 44px; }
+
+/* title pages: each script shown as its own screenplay title page */
+.tpages { list-style: none; margin: 0; padding: 4px 2px 12px; display: grid; grid-auto-flow: column; grid-auto-columns: min(78%, 20rem); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; }
+@media (min-width: 720px) { .tpages { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); overflow: visible; } }
+.tpages li { display: grid; gap: 10px; align-content: start; scroll-snap-align: start; min-width: 0; }
+.tp { all: unset; box-sizing: border-box; cursor: pointer; position: relative; display: block; aspect-ratio: 8.5 / 11; background: #ffffff; color: #1b1b1b; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 14px 30px -18px rgba(0,0,0,0.45); font-family: var(--font-script); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+.tp:hover { transform: translateY(-3px); box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 20px 36px -18px rgba(0,0,0,0.5); }
+.tp:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.tp .top { position: absolute; top: 7%; left: 11%; right: 11%; font-style: italic; font-size: clamp(0.5rem, 1.6vw, 0.62rem); line-height: 1.3; color: #3a3a3a; }
+.tp .mid { position: absolute; left: 8%; right: 8%; top: 31%; display: grid; justify-items: center; text-align: center; gap: 0.95em; font-size: clamp(0.62rem, 2vw, 0.78rem); line-height: 1.25; }
+.tp .mid .ttl { text-transform: uppercase; }
+.tp .mid .gap { height: 1.4em; }
+.tp .foot { position: absolute; left: 11%; right: 11%; bottom: 8%; font-size: clamp(0.5rem, 1.5vw, 0.6rem); line-height: 1.35; color: #3a3a3a; }
+.tp.own { background: #fbfaf7; }
+.tpages .below { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 0.9rem; color: var(--muted); padding-inline: 2px; }
+.tpages .rm { border: 0; background: transparent; padding: 0; color: var(--faint); font-size: 0.85rem; justify-self: start; }
+.tpages .rm:hover { color: var(--accent); }
+
+.book.cover-d03 { background: linear-gradient(90deg, #255551 0%, #3f7f7a 45%, #2f6763 100%); }
+.book.cover-woq11 { background: linear-gradient(90deg, #232c38 0%, #43546b 50%, #2b3646 100%); }
+.book.cover-woq11::after { content: ""; position: absolute; left: 50%; bottom: 46px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: #f3c26b; box-shadow: 0 0 10px #f3c26b; }
+.book.cover-d03::after { content: ""; position: absolute; left: 50%; bottom: 44px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: #ffb25c; }
+.book::before { display: none; }
+.books { min-height: 300px; }
+.book { height: 280px; width: 64px; }
+.book.tall { height: 292px; width: 70px; }
+.book.short { height: 262px; width: 60px; }
+.book .bt { max-height: none; overflow: visible; text-overflow: clip; flex: none; font-size: 0.8rem; letter-spacing: 0.04em; }
+.book.cover-d03::after, .book.cover-woq11::after { display: none; }
+.book .ba { margin-top: 8px; }
+#np .mini { position: relative; }
+:root[data-theme="dark"] .tp { filter: brightness(0.92); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tp { filter: brightness(0.92); } }
+
+/* bookshelf -> screenplay (episodes as title pages) -> reader */
+.bookcase { display: grid; gap: 0; }
+.books { display: flex; align-items: flex-end; gap: 6px; min-height: 300px; padding: 0 14px; overflow-x: auto; }
+.book { all: unset; box-sizing: border-box; cursor: pointer; flex: none; position: relative; height: 280px; width: 64px; border-radius: 4px 6px 6px 4px; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 14px 0 12px; box-shadow: inset 4px 0 0 rgba(255,255,255,0.12), inset -3px 0 0 rgba(0,0,0,0.18), 0 10px 18px -12px rgba(0,0,0,0.6); transition: transform 0.2s; background: #6a6560; }
+.book:hover { transform: translateY(-8px); }
+.book:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.book .bt { writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; flex: none; text-shadow: 0 1px 6px rgba(0,0,0,0.3); }
+.book .ba { font-size: 0.62rem; opacity: 0.85; writing-mode: vertical-rl; transform: rotate(180deg); }
+.book .bands { position: absolute; left: 0; right: 0; top: 10px; height: 3px; background: rgba(255,255,255,0.35); box-shadow: 0 6px 0 rgba(255,255,255,0.2); }
+.book.tall { height: 292px; width: 70px; }
+.book.short { height: 262px; width: 60px; }
+.book.own { background: linear-gradient(90deg, #5b4d82, #6b5b95); }
+.book.lean { transform: rotate(-4deg); transform-origin: bottom left; margin-left: 10px; }
+.book.lean:hover { transform: rotate(-4deg) translateY(-8px); }
+.plank { height: 16px; border-radius: 4px; background: linear-gradient(180deg, var(--surface-3), var(--surface-2)); box-shadow: 0 10px 18px -10px rgba(0,0,0,0.45); }
+.shelf-cap { margin-top: 12px; color: var(--muted); font-size: 0.9rem; }
+
+#series { padding-bottom: 200px; }
+.series-top { padding-block: 8px 20px; display: grid; gap: 6px; }
+.series-top h1 { margin: 0; font-size: clamp(2.2rem, 8vw, 4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; text-wrap: balance; }
+.series-top .s { margin: 0; color: var(--muted); }
+.tpages { list-style: none; margin: 0; padding: 4px 2px 12px; display: grid; grid-auto-flow: column; grid-auto-columns: min(80%, 20rem); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; }
+@media (min-width: 720px) { .tpages { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); overflow: visible; } }
+.tpages li { display: grid; gap: 10px; align-content: start; scroll-snap-align: start; min-width: 0; }
+.tp { all: unset; box-sizing: border-box; cursor: pointer; position: relative; display: block; aspect-ratio: 8.5 / 11; background: #ffffff; color: #1b1b1b; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 14px 30px -18px rgba(0,0,0,0.45); font-family: var(--font-script); overflow: hidden; transition: transform 0.2s; }
+.tp:hover { transform: translateY(-3px); }
+.tp:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.tp .top { position: absolute; top: 7%; left: 11%; right: 11%; font-style: italic; font-size: clamp(0.5rem, 1.7vw, 0.64rem); line-height: 1.3; color: #3a3a3a; }
+.tp .mid { position: absolute; left: 8%; right: 8%; top: 32%; display: grid; justify-items: center; text-align: center; gap: 0.9em; font-size: clamp(0.62rem, 2.1vw, 0.8rem); line-height: 1.25; }
+.tp .mid .ttl { text-transform: uppercase; }
+.tp .mid .gap { height: 1.2em; }
+.tp .foot { position: absolute; left: 11%; right: 11%; bottom: 8%; font-size: clamp(0.5rem, 1.6vw, 0.62rem); line-height: 1.35; color: #3a3a3a; }
+.tpages .below { display: grid; gap: 2px; padding-inline: 2px; }
+.tpages .below b { font-weight: 600; }
+.tpages .rm { border: 0; background: transparent; padding: 0; color: var(--faint); font-size: 0.85rem; justify-self: start; }
+.tpages .rm:hover { color: var(--accent); }
+:root[data-theme="dark"] .tp { filter: brightness(0.92); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tp { filter: brightness(0.92); } }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
 </style>
 
@@ -259,8 +331,9 @@ body:not(.at-home) .credit { display: none; }
 <section class="home-sec" id="shelf-sec" aria-labelledby="h-shelf">
   <div class="wrapper">
     <div class="sec-head"><div><p class="meta n" id="n-shelf">02</p><p class="meta k">Scripts</p></div><p class="meta aside">Recorded with ElevenLabs</p></div>
-    <h2 id="h-shelf">Your scripts</h2>
-    <ul class="falls" id="shelf" role="list"></ul>
+    <h2 id="h-shelf">Bookshelf</h2>
+    <div class="bookcase"><div class="books" id="shelf" role="list"></div><div class="plank" aria-hidden="true"></div></div>
+    <p class="shelf-cap">Pick a screenplay to see its episodes.</p>
   </div>
 </section>
 
@@ -290,10 +363,27 @@ body:not(.at-home) .credit { display: none; }
 </footer>
 </div>
 
+<div id="series" hidden>
+  <div class="readerbar">
+    <div class="wrapper">
+      <button type="button" id="seriesBack" aria-label="Back to the bookshelf">&larr;</button>
+      <span class="rt" id="sTitleBar"></span>
+      <button type="button" class="themebtn" id="themeBtn3" aria-label="Switch to dark mode"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    </div>
+  </div>
+  <div class="wrapper series-top">
+    <h1 id="sTitle"></h1>
+    <p class="s" id="sSub"></p>
+  </div>
+  <div class="wrapper">
+    <ul class="tpages" id="eps" role="list"></ul>
+  </div>
+</div>
+
 <div id="reader" hidden>
   <div class="readerbar">
     <div class="wrapper">
-      <button type="button" id="toHome" aria-label="Back to your scripts">&larr;</button>
+      <button type="button" id="toHome" aria-label="Back to the episodes">&larr;</button>
       <span class="rt" id="rTitle"></span>
       <button type="button" class="themebtn" id="themeBtn2" aria-label="Switch to dark mode"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
       <button type="button" id="setBtn" aria-expanded="false" aria-controls="settings">Settings</button>
@@ -1036,25 +1126,15 @@ body:not(.at-home) .credit { display: none; }
   }
   function renderHome() {
     var shelf = $("shelf"); shelf.textContent = "";
-    SCRIPTS.filter(function (s) { return SHELF.indexOf(s.id) >= 0 || s.own; }).forEach(function (s) {
-      var li = document.createElement("li"), i = info(s);
-      var b = document.createElement("button"); b.type = "button"; b.className = "fall";
-      b.setAttribute("aria-label", "Open " + cap(i.title));
-      var big = document.createElement("span"); big.className = "big"; big.textContent = i.title; b.appendChild(big);
-      var inf = document.createElement("span"); inf.className = "info";
-      var dot = document.createElement("i"); dot.className = "dot cover-" + s.id; if (s.own) dot.style.background = "#6b5b95"; inf.appendChild(dot);
-      var sub = document.createElement("span"); sub.textContent = i.sub; inf.appendChild(sub);
-      inf.appendChild(progEl(s));
-      b.appendChild(inf);
-      b.onclick = function () { openScript(s.id, true); };
-      li.appendChild(b);
-      if (s.own) {
-        var rm = document.createElement("button"); rm.type = "button"; rm.className = "rm"; rm.textContent = "Remove";
-        rm.setAttribute("aria-label", "Remove " + cap(i.title));
-        rm.onclick = function () { removeOwn(s.id); };
-        li.appendChild(rm);
-      }
-      shelf.appendChild(li);
+    seriesList().forEach(function (se, n) {
+      var b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "listitem");
+      b.className = "book " + (se.id === "own" ? "own" : "cover-" + se.cover) + (n === 0 ? " tall" : n % 2 ? " short" : "") + (se.id === "own" ? " lean" : "");
+      b.setAttribute("aria-label", se.title + ", " + se.kind.toLowerCase() + ", " + se.eps.length + (se.eps.length === 1 ? " script" : " scripts"));
+      var bd = document.createElement("span"); bd.className = "bands"; b.appendChild(bd);
+      var bt = document.createElement("span"); bt.className = "bt"; bt.textContent = se.title; b.appendChild(bt);
+      var ba = document.createElement("span"); ba.className = "ba"; ba.textContent = se.id === "own" ? "yours" : "Tendai"; b.appendChild(ba);
+      b.onclick = function () { openSeries(se.id); };
+      shelf.appendChild(b);
     });
     var lp = store.get("lastPlayed"), ls = lp && byId(lp), cont = $("continue");
     cont.textContent = "";
@@ -1073,6 +1153,67 @@ body:not(.at-home) .credit { display: none; }
       cb.onclick = function () { openScript(ls.id, true); };
       cont.appendChild(cb);
     }
+  }
+  function seriesList() {
+    var out = [
+      { id: "laa", title: "Life After Alice", kind: "Series", cover: "d03", eps: ["d03"] },
+      { id: "woq", title: "The Weight of Quiet", kind: "Short film", cover: "woq11", eps: ["woq11"] }
+    ];
+    var mine = SCRIPTS.filter(function (s) { return s.own; }).map(function (s) { return s.id; });
+    if (mine.length) out.push({ id: "own", title: "Your scripts", kind: "Your own", cover: "", eps: mine });
+    return out;
+  }
+  function seriesOf(id) { return seriesList().filter(function (se) { return se.eps.indexOf(id) >= 0; })[0]; }
+  var curSeries = null;
+  function epLabel(s) {
+    var tp = titlePage(s.text);
+    if (s.own) return cap(tp.title || s.label);
+    if (/^episode/i.test(tp.credit || "")) return tp.credit.replace(/["\u201c\u201d]/g, "\u201c").replace(/\u201c([^\u201c]*)\u201c/, "\u201c$1\u201d");
+    return "The film";
+  }
+  function renderSeries() {
+    var se = seriesList().filter(function (x) { return x.id === curSeries; })[0];
+    if (!se) { goHome(); return; }
+    $("sTitle").textContent = se.title; $("sTitleBar").textContent = se.title;
+    $("sSub").textContent = se.kind + (se.id === "own" ? "" : " \u00b7 by Tendai") + " \u00b7 " + se.eps.length + (se.eps.length === 1 ? (se.kind === "Series" ? " episode" : " script") : (se.kind === "Series" ? " episodes" : " scripts"));
+    var ul = $("eps"); ul.textContent = "";
+    se.eps.forEach(function (id) {
+      var s = byId(id); if (!s) return;
+      var li = document.createElement("li"), i = info(s), tp = titlePage(s.text);
+      var b = document.createElement("button"); b.type = "button"; b.className = "tp";
+      b.setAttribute("aria-label", "Open " + epLabel(s));
+      function line(cls, txt) { var d = document.createElement("div"); if (cls) d.className = cls; d.textContent = txt; return d; }
+      b.appendChild(line("top", s.own ? "Your own script. Kept in this browser only." : "This screenplay is under full copyright of Tendai. All rights reserved."));
+      var mid = document.createElement("div"); mid.className = "mid";
+      mid.appendChild(line("ttl", i.title));
+      if (/^episode/i.test(tp.credit || "")) { mid.appendChild(line("", tp.credit)); mid.appendChild(line("", "Written by")); }
+      else mid.appendChild(line("", tp.credit || "Written by"));
+      if (tp.author) mid.appendChild(line("", tp.author));
+      mid.appendChild(line("gap", ""));
+      if (tp["draft date"]) mid.appendChild(line("", tp["draft date"]));
+      var dm = s.label.match(/draft\s*(\d+)/i) || i.sub.match(/draft\s*(\d+)/i);
+      if (dm) mid.appendChild(line("", "Draft #" + parseInt(dm[1], 10)));
+      b.appendChild(mid);
+      b.appendChild(line("foot", tp.notes || ""));
+      b.onclick = function () { openScript(s.id, true); };
+      li.appendChild(b);
+      var below = document.createElement("div"); below.className = "below";
+      var nm = document.createElement("b"); nm.textContent = epLabel(s); below.appendChild(nm);
+      below.appendChild(progEl(s));
+      li.appendChild(below);
+      if (s.own) {
+        var rm = document.createElement("button"); rm.type = "button"; rm.className = "rm"; rm.textContent = "Remove";
+        rm.setAttribute("aria-label", "Remove " + cap(i.title));
+        rm.onclick = function () { removeOwn(s.id); renderSeries(); };
+        li.appendChild(rm);
+      }
+      ul.appendChild(li);
+    });
+  }
+  function openSeries(sid) {
+    curSeries = sid; renderSeries();
+    $("home").hidden = true; $("reader").hidden = true; $("series").hidden = false; document.body.classList.add("at-home");
+    window.scrollTo(0, 0);
   }
   function updateMini() {
     var np = $("np");
@@ -1100,16 +1241,18 @@ body:not(.at-home) .credit { display: none; }
     selectScript(id);
     var i = info(current);
     $("rTitle").textContent = cap(i.title); $("rBig").textContent = cap(i.title); $("rSub").textContent = i.sub;
-    $("home").hidden = true; $("reader").hidden = false; document.body.classList.remove("at-home");
+    curSeries = (seriesOf(current.id) || {}).id || curSeries;
+    $("home").hidden = true; $("series").hidden = true; $("reader").hidden = false; document.body.classList.remove("at-home");
     window.scrollTo(0, 0);
     if (resume && nodes[idx] && idx > 0) setTimeout(function () { nodes[idx].scrollIntoView({ block: "center" }); }, 60);
   }
   function goHome() {
-    $("reader").hidden = true; $("home").hidden = false; document.body.classList.add("at-home");
+    $("reader").hidden = true; $("series").hidden = true; $("home").hidden = false; document.body.classList.add("at-home");
     renderHome(); window.scrollTo(0, 0);
   }
   window.addEventListener("scroll", function () { var rb = document.querySelector(".readerbar"); if (rb) rb.classList.toggle("scrolled", window.scrollY > 120); }, { passive: true });
-  $("toHome").onclick = goHome;
+  $("toHome").onclick = function () { if (curSeries) openSeries(curSeries); else goHome(); };
+  $("seriesBack").onclick = goHome;
   $("np").onclick = function () { if (current) openScript(current.id, true); };
   $("setBtn").onclick = function () {
     var open = $("settings").hidden; $("settings").hidden = !open; this.setAttribute("aria-expanded", String(open));
@@ -1161,11 +1304,11 @@ body:not(.at-home) .credit { display: none; }
   function isDark() { var a = document.documentElement.getAttribute("data-theme"); return a ? a === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
   function syncThemeBtns() {
     var d = isDark();
-    ["themeBtn", "themeBtn2"].forEach(function (id) { var b = $(id); if (!b) return; b.setAttribute("aria-label", d ? "Switch to light mode" : "Switch to dark mode"); b.querySelector(".i-sun").style.display = d ? "block" : "none"; b.querySelector(".i-moon").style.display = d ? "none" : "block"; });
+    ["themeBtn", "themeBtn2", "themeBtn3"].forEach(function (id) { var b = $(id); if (!b) return; b.setAttribute("aria-label", d ? "Switch to light mode" : "Switch to dark mode"); b.querySelector(".i-sun").style.display = d ? "block" : "none"; b.querySelector(".i-moon").style.display = d ? "none" : "block"; });
   }
   function setTheme(mode) { document.documentElement.setAttribute("data-theme", mode); store.set("theme", mode); syncThemeBtns(); }
   (function () { var m = store.get("theme"); if (m === "dark" || m === "light") document.documentElement.setAttribute("data-theme", m); syncThemeBtns(); })();
-  ["themeBtn", "themeBtn2"].forEach(function (id) { $(id).onclick = function () { setTheme(isDark() ? "light" : "dark"); }; });
+  ["themeBtn", "themeBtn2", "themeBtn3"].forEach(function (id) { $(id).onclick = function () { setTheme(isDark() ? "light" : "dark"); }; });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncThemeBtns);
 
   document.body.classList.add("at-home");
