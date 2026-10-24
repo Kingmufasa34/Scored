@@ -601,6 +601,7 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
     </div>
     <p class="note" id="castNote">Pick a voice for each part. Set a part to <b>Me</b> and the read stops on that character's lines until you tap <b>Next</b>, so you can read them yourself.</p>
     <div class="cast" id="cast"></div>
+    <button type="button" class="btn btn-outline" id="resetCast" style="margin-top:12px">Reset to the original cast</button>
   </div>
 </section>
   </div>
@@ -1996,6 +1997,15 @@ FADE OUT.
     var saved = store.get("perf5"); if (saved === "written" || saved === "rough" || saved === "eleven" || saved === "eleven2" || saved === "eleven3" || saved === "eleven4") $("perf").value = saved;
     $("perf").onchange = function () { store.set("perf5", $("perf").value); real.castIdx = currentCastIdx(); applyCast(); };
   })();
+  // Back to the cast as set up: every part on its first-listed voice, read by a voice, take 4, default room.
+  $("resetCast").onclick = function () {
+    store.set("cast", {}); store.set("perf5", "eleven4"); $("perf").value = "eleven4";
+    var rm = $("room"); Array.prototype.forEach.call(rm.options, function (o) { if (o.defaultSelected) rm.value = o.value; }); store.set("room2", rm.value);
+    if (real.ctx) applyRoom();
+    if (doc) { setupCast(); paintScript(); }
+    real.castIdx = currentCastIdx(); applyCast();
+    this.textContent = "Cast reset"; var b = this; setTimeout(function () { b.textContent = "Reset to the original cast"; }, 2000);
+  };
   function castOptions(who) { return (real.castIdx && real.castIdx.roles[who === DIRECTOR ? "DIRECTOR" : who]) || []; }
   function chosen(who) {
     var opts = castOptions(who), p = cast[who] && cast[who].pick;
