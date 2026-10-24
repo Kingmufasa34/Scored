@@ -461,6 +461,17 @@ button.btn svg.vp-chev { opacity: .5; }
 .vp-play.playing .vp-orb { animation: vpspin 6s linear infinite; }
 @keyframes vpspin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .vp-play.playing .vp-orb { animation: none; } }
+/* Opening screen, lower third: one quiet line instead of a section */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#byo-sec { margin-top: 8px; padding-top: 0; }
+#byo-sec .sec-head { display: none; }
+.byo2 { display: flex; justify-content: center; align-items: center; gap: 10px; }
+.byo2 label.btn, .byo2 button.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 500; color: var(--muted); border: 1px solid var(--b-input); background: transparent; cursor: pointer; transition: background-color .15s, color .15s; }
+.byo2 label.btn:hover, .byo2 button.btn:hover { color: var(--text); }
+.byo2 label.btn:hover { background: var(--b-accent); }
+.byo2 label.btn svg { width: 16px; height: 16px; }
+.byo2 label.btn:focus-within { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--b-ring); }
+.byo2 input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
 /* Bearnie Button, default variant + size lg: bg-primary text-primary-foreground hover:bg-primary/90, h-10 px-6, pill */
 button.btn.btn-primary { background: var(--text); color: var(--bg); }
 button.btn.btn-primary:hover { background: color-mix(in srgb, var(--text) 90%, transparent); }
@@ -501,10 +512,10 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
 <section class="home-sec" id="byo-sec" aria-labelledby="h-byo">
   <div class="wrapper">
     <div class="sec-head"><div><p class="meta n" id="n-byo">03</p><p class="meta k">Bring your own</p></div><p class="meta aside">Fountain screenplay format</p></div>
-    <h2 id="h-byo">Bring your own</h2>
-    <div class="byo">
-      <label class="btn" for="fileIn"><span class="ic" aria-hidden="true">&#128462;</span>Open a file<input type="file" id="fileIn" accept=".fountain,.txt,.md,text/plain"></label>
-      <button type="button" id="pasteBtn" aria-expanded="false" aria-controls="paste"><span class="ic" aria-hidden="true">T</span>Paste text</button>
+    <h2 id="h-byo" class="sr-only">Bring your own script</h2>
+    <div class="byo2">
+      <label class="btn btn-ghost btn-sm byo-b" for="fileIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Open a file<input type="file" id="fileIn" accept=".fountain,.txt,.md,text/plain"></label>
+      <button type="button" class="btn btn-ghost btn-sm byo-b" id="pasteBtn" aria-expanded="false" aria-controls="paste"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>Paste text</button>
     </div>
     <form class="paste" id="paste" hidden>
       <label class="small" for="pasteName">Name (optional)</label>
