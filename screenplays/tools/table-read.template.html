@@ -398,6 +398,28 @@ body.at-home #play.btn::before { content: none; }
 body.at-home #play.btn { width: 48px; height: 48px; min-width: 48px; }
 body.at-home #play.btn svg { width: 20px; height: 20px; }
 .themebtn.btn svg { width: 18px; height: 18px; }
+
+/* Player, after Readest's mini player and OpenReader's dock: a thin heard/unheard line on the card's top edge, time left, centred transport */
+.transport { overflow: hidden; padding-top: 16px; }
+.viz { position: absolute; left: 0; right: 0; top: 0; height: 14px; margin: 0; display: block; cursor: pointer; }
+.viz canvas#timeline { height: 4px; border-radius: 0; }
+.viz .legend { display: none; }
+#npLeft { flex: none; font-size: 0.78rem; color: var(--player-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+#npLeft:empty, body.at-home #npLeft { display: none; }
+#status { display: none; }
+/* Lyrics-style focus while it plays (Readest's TTS view): the spoken line lit, the rest stepped back */
+#script .el { transition: opacity .35s ease; }
+body.is-playing #script .el:not(.now) { opacity: .5; }
+@media (prefers-reduced-motion: reduce) { #script .el { transition: none; } }
+body:not(.at-home) .transport .in { display: grid; grid-template-columns: minmax(0,1fr) auto auto auto minmax(0,1fr); gap: 4px 12px; align-items: center; }
+body:not(.at-home) #np { grid-column: 1 / -1; max-width: none; }
+body:not(.at-home) .transport .check { grid-column: 1; grid-row: 2; justify-self: start; }
+body:not(.at-home) #back { grid-column: 2; grid-row: 2; }
+body:not(.at-home) #play { grid-column: 3; grid-row: 2; }
+body:not(.at-home) #next { grid-column: 4; grid-row: 2; }
+body:not(.at-home) #npLeft { grid-column: 5; grid-row: 2; justify-self: end; }
+body:not(.at-home) .transport .lab { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+body:not(.at-home) #speed { min-height: 36px; padding: 0 10px; font-size: 0.85rem; }
 </style>
 
 <div id="home">
@@ -548,6 +570,7 @@ body.at-home #play.btn svg { width: 20px; height: 20px; }
   </div>
   <div class="in">
     <button type="button" id="np" hidden aria-label="Open the script that is playing"><span class="mini" id="npMini"></span><span class="npt"><b id="npTitle"></b><span id="npSub">Ready</span></span></button>
+    <span id="npLeft" aria-live="off"></span>
     <button type="button" class="btn btn-ghost btn-icon" id="back" aria-label="Previous line" title="Previous line"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 5.6a1 1 0 0 0-1.5-.86L8 9.9V6a1 1 0 0 0-2 0v12a1 1 0 0 0 2 0v-3.9l8 5.16a1 1 0 0 0 1.5-.86z"/></svg></button>
     <button type="button" class="btn" id="play" aria-label="Play" title="Play"><svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72a1 1 0 0 0 1.52.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z"/></svg><svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
     <button type="button" class="btn btn-ghost btn-icon" id="next" aria-label="Next line" title="Next line"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.5 5.6a1 1 0 0 1 1.5-.86L16 9.9V6a1 1 0 0 1 2 0v12a1 1 0 0 1-2 0v-3.9l-8 5.16a1 1 0 0 1-1.5-.86z"/></svg></button>
@@ -734,13 +757,16 @@ body.at-home #play.btn svg { width: 20px; height: 20px; }
   /* ---------- Shared playback state ---------- */
   var idx = 0, playing = false, waitingForMe = false, wakeLock = null, speaking = null;
   var statusEl = $("status"), playBtn = $("play");
-  function setPlayIcon(on) { playBtn.classList.toggle("is-playing", on); playBtn.setAttribute("aria-label", on ? "Pause" : "Play"); playBtn.title = on ? "Pause" : "Play"; }
+  function setPlayIcon(on) { playBtn.classList.toggle("is-playing", on); document.body.classList.toggle("is-playing", on); if ("mediaSession" in navigator) navigator.mediaSession.playbackState = on ? "playing" : "paused"; playBtn.setAttribute("aria-label", on ? "Pause" : "Play"); playBtn.title = on ? "Pause" : "Play"; }
   function setStatus(s) { statusEl.textContent = s; var ns = $("npSub"); if (ns) ns.textContent = s; }
   function mark(i) {
     saveProgress(i);
     nodes.forEach(function (n) { n.classList.remove("now"); });
-    if (nodes[i]) { nodes[i].classList.add("now"); nodes[i].scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
+    if (nodes[i]) { nodes[i].classList.add("now"); if (Date.now() - handScrollAt > 4000) nodes[i].scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
   }
+  // Following, as in Readest's read-aloud sheet: a hand scroll parks the page; the next line after 4s brings it back.
+  var handScrollAt = 0;
+  ["wheel", "touchmove"].forEach(function (ev) { window.addEventListener(ev, function () { handScrollAt = Date.now(); }, { passive: true }); });
   function requestWake() { try { if (navigator.wakeLock) navigator.wakeLock.request("screen").then(function (l) { wakeLock = l; }).catch(function () {}); } catch (e) {} }
   function releaseWake() { try { if (wakeLock) wakeLock.release(); } catch (e) {} wakeLock = null; }
   function speed() { return parseFloat($("speed").value) || 1; }
@@ -1123,18 +1149,13 @@ body.at-home #play.btn svg { width: 20px; height: 20px; }
   function drawTimeline() {
     if (!useReal || !real.sched) { tl.hidden = true; return; }
     tl.hidden = false;
-    var f = fit(tl), g = f.g, w = f.w, h = f.h, total = real.sched.total, laneEnd = 0;
-    g.clearRect(0, 0, w, h);
-    real.sched.items.forEach(function (it) {
-      if (!it.clips.length) return;
-      var x = it.start / total * w, x2 = Math.max(x + 1, it.end / total * w);
-      var top = it.who !== DIRECTOR && it.start < laneEnd ? h / 2 : 0;
-      g.fillStyle = it.who === DIRECTOR ? cssVar("--hl-n") : colorFor(it.who);
-      g.fillRect(x, top, x2 - x, top ? h / 2 : h);
-      if (it.who !== DIRECTOR) laneEnd = Math.max(laneEnd, it.end);
-    });
+    var f = fit(tl), g = f.g, w = f.w, h = f.h, total = real.sched.total;
     var pos = real.ctx && (playing || real.paused) ? position() : (real.sched.items.filter(function (it) { return it.i >= idx; })[0] || { start: 0 }).start;
-    g.fillStyle = cssVar("--paper-60"); g.fillRect(pos / total * w - 1, 0, 2, h);
+    g.clearRect(0, 0, w, h);
+    g.fillStyle = cssVar("--player"); g.fillRect(0, 0, w, h);
+    g.fillStyle = "rgba(255,255,255,0.14)"; g.fillRect(0, 0, w, h);
+    g.fillStyle = cssVar("--accent"); g.fillRect(0, 0, Math.max(0, Math.min(1, pos / total)) * w, h);
+    var ml = $("npLeft"); if (ml) { var m = Math.max(0, Math.ceil((total - pos) / speed() / 60)); ml.textContent = m ? m + " min left" : "Done"; }
   }
   function renderLegend() {
     var lg = $("legend"); lg.textContent = "";
@@ -1145,7 +1166,7 @@ body.at-home #play.btn svg { width: 20px; height: 20px; }
     });
   }
   (function vizLoop(t) { if (real.noiseGain) real.noiseGain.gain.value = playing && !waitingForMe && !real.paused ? real.air : 0; drawWave(t || 0); drawTimeline(); requestAnimationFrame(vizLoop); })();
-  tl.addEventListener("click", function (ev) {
+  $("viz").addEventListener("click", function (ev) {
     if (!real.sched) return;
     var r = tl.getBoundingClientRect(), pos = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)) * real.sched.total;
     var it = currentItem(pos); if (it) start(it.i);
@@ -1317,7 +1338,20 @@ body.at-home #play.btn svg { width: 20px; height: 20px; }
     if (!current) { np.hidden = true; return; }
     var i = info(current);
     np.hidden = false; $("npTitle").textContent = cap(i.title); $("npMini").textContent = i.title; $("npMini").className = "mini";
+    if ("mediaSession" in navigator && window.MediaMetadata) navigator.mediaSession.metadata = new MediaMetadata({ title: cap(i.title), artist: "Tendai", album: "Table Read" });
   }
+  // Lock-screen and headphone controls, and Space / arrow keys, as in OpenReader and Readest.
+  if ("mediaSession" in navigator) [["play", "play"], ["pause", "play"], ["previoustrack", "back"], ["nexttrack", "next"]].forEach(function (a) {
+    try { navigator.mediaSession.setActionHandler(a[0], function () { if (a[0] === "play" && playBtn.classList.contains("is-playing")) return; if (a[0] === "pause" && !playBtn.classList.contains("is-playing")) return; $(a[1]).click(); }); } catch (e) {}
+  });
+  document.addEventListener("keydown", function (ev) {
+    if (!current || ev.altKey || ev.ctrlKey || ev.metaKey || $("reader").hidden) return;
+    var t = ev.target, tag = t && t.tagName;
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || (t && t.isContentEditable)) return;
+    if (ev.key === " " && !(tag === "BUTTON" && t.offsetParent)) { ev.preventDefault(); playBtn.click(); }
+    else if (ev.key === "ArrowRight" && t !== tl) { ev.preventDefault(); $("next").click(); }
+    else if (ev.key === "ArrowLeft" && t !== tl) { ev.preventDefault(); $("back").click(); }
+  });
   function load(text) {
     stop("Ready");
     doc = parse(text); idx = 0;
