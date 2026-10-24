@@ -1,125 +1,145 @@
 <title>Table Read</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;700&display=swap">
 <style>
-/* Layout: a script page down the middle, each character marked in highlighter
-   colour the way actors mark their lines; transport pinned to the bottom for thumbs. */
+/* Layout: a quiet print magazine (after Lexington's Hemingway theme). Masthead,
+   hairline-ruled sections instead of cards, the script set like a printed page,
+   and a dark podcast-style player pinned to the bottom. */
 :root {
-  --paper: #f3f4f1;
-  --sheet: #fdfdfb;
-  --ink: #1d211f;
-  --ink-soft: #5b625e;
-  --rule: #d9ddd8;
-  --accent: #23524a;
+  --paper: #fafaf8;
+  --sheet: #ffffff;
+  --ink: #161616;
+  --ink-soft: #6b6a66;
+  --rule: #e2e1dc;
+  --rule-strong: #161616;
+  --accent: #2c4a6e;
   --accent-ink: #ffffff;
+  --player: #161616;
+  --player-ink: #f4f3ef;
+  --player-soft: #9c9a94;
+  --player-rule: #2e2e2c;
   --hl-1: #ffe86b;  /* yellow highlighter */
   --hl-2: #ffb3cf;  /* pink */
   --hl-3: #a8eea0;  /* green */
   --hl-4: #a9d8ff;  /* blue */
   --hl-5: #ffc98a;  /* orange */
   --hl-6: #d6c2ff;  /* violet */
-  --hl-n: #e3e6e2;  /* narrator / action */
-  --now: rgba(35, 82, 74, 0.12);
+  --hl-n: #ecebe7;  /* narrator / action */
+  --now: rgba(44, 74, 110, 0.08);
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
   --font-script: "Courier Prime", "Courier New", Courier, monospace;
-  --font-ui: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #151917; --sheet: #1d2220; --ink: #e8ebe8; --ink-soft: #a3aba6; --rule: #343b38;
-    --accent: #7fc7b6; --accent-ink: #0f1513;
-    --hl-1: #8a7a1c; --hl-2: #8a3f5c; --hl-3: #3f7a3a; --hl-4: #2f5f86; --hl-5: #8a5a20; --hl-6: #5b4890; --hl-n: #2c3330;
-    --now: rgba(127, 199, 182, 0.14);
+    --paper: #121212; --sheet: #181818; --ink: #ecebe7; --ink-soft: #9c9a94; --rule: #2b2b29; --rule-strong: #ecebe7;
+    --accent: #9fbbe0; --accent-ink: #101418;
+    --player: #1e1e1d; --player-ink: #f4f3ef; --player-soft: #9c9a94; --player-rule: #333331;
+    --hl-1: #8a7a1c; --hl-2: #8a3f5c; --hl-3: #3f7a3a; --hl-4: #2f5f86; --hl-5: #8a5a20; --hl-6: #5b4890; --hl-n: #2a2a28;
+    --now: rgba(159, 187, 224, 0.10);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --paper: #151917; --sheet: #1d2220; --ink: #e8ebe8; --ink-soft: #a3aba6; --rule: #343b38;
-  --accent: #7fc7b6; --accent-ink: #0f1513;
-  --hl-1: #8a7a1c; --hl-2: #8a3f5c; --hl-3: #3f7a3a; --hl-4: #2f5f86; --hl-5: #8a5a20; --hl-6: #5b4890; --hl-n: #2c3330;
-  --now: rgba(127, 199, 182, 0.14);
+  --paper: #121212; --sheet: #181818; --ink: #ecebe7; --ink-soft: #9c9a94; --rule: #2b2b29; --rule-strong: #ecebe7;
+  --accent: #9fbbe0; --accent-ink: #101418;
+  --player: #1e1e1d; --player-ink: #f4f3ef; --player-soft: #9c9a94; --player-rule: #333331;
+  --hl-1: #8a7a1c; --hl-2: #8a3f5c; --hl-3: #3f7a3a; --hl-4: #2f5f86; --hl-5: #8a5a20; --hl-6: #5b4890; --hl-n: #2a2a28;
+  --now: rgba(159, 187, 224, 0.10);
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-body { background: var(--paper); color: var(--ink); font-family: var(--font-ui); font-size: 16px; line-height: 1.45; }
-.wrap { max-width: 760px; margin: 0 auto; padding: 20px 16px 220px; display: grid; gap: 16px; }
-header h1 { font-family: var(--font-script); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.04em; margin: 0; text-transform: uppercase; }
-header p { margin: 4px 0 0; color: var(--ink-soft); max-width: 60ch; }
-.panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
-.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-label.small, .lab { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); font-weight: 700; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-ui); font-size: 16px; line-height: 1.5; }
+.wrap { max-width: 800px; margin: 0 auto; padding-block: 40px 240px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 0; }
+
+/* masthead */
+header { display: grid; gap: 10px; padding-bottom: 28px; border-bottom: 2px solid var(--rule-strong); }
+header .eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-soft); font-weight: 500; margin: 0; }
+header h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.6rem, 9vw, 4.2rem); line-height: 1; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+header p { margin: 0; color: var(--ink-soft); max-width: 52ch; font-family: var(--font-display); font-size: 1.15rem; line-height: 1.45; }
+
+/* sections: hairline rules, no cards */
+.panel { background: transparent; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; padding-block: 24px; display: grid; gap: 14px; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+label.small, .lab { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-soft); font-weight: 500; }
 select, input[type=range], button { font: inherit; color: inherit; }
-select { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; max-width: 100%; min-width: 0; }
-button { cursor: pointer; border: 1px solid var(--rule); background: var(--paper); border-radius: 8px; padding: 8px 12px; }
-button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+select { background: var(--sheet); border: 1px solid var(--rule); border-radius: 2px; padding: 9px 12px; max-width: 100%; min-width: 0; }
+#pick { font-family: var(--font-display); font-size: 1.3rem; padding: 10px 12px; }
+button { cursor: pointer; border: 1px solid var(--rule); background: var(--sheet); border-radius: 2px; padding: 8px 12px; }
+button:focus-visible, select:focus-visible, input:focus-visible, canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .check { display: inline-flex; gap: 6px; align-items: center; }
 details > summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; align-items: center; }
 details > summary::-webkit-details-marker { display: none; }
 details > summary::after { content: "Show"; font-weight: 400; color: var(--ink-soft); font-size: 0.9rem; }
 details[open] > summary::after { content: "Hide"; }
-.cast { display: grid; gap: 10px; margin-top: 12px; }
-.member { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 10px; border-radius: 8px; border: 1px solid var(--rule); }
+.cast { display: grid; gap: 0; margin-top: 4px; border-top: 1px solid var(--rule); }
+.member { display: grid; grid-template-columns: 1fr; gap: 10px; padding-block: 14px; border-bottom: 1px solid var(--rule); }
 .member .who { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-.name { font-family: var(--font-script); font-weight: 700; padding: 1px 8px; border-radius: 4px; }
+.name { font-family: var(--font-script); font-weight: 700; padding: 1px 8px; border-radius: 2px; }
 .member .ctrls { display: grid; grid-template-columns: 1fr; gap: 8px; }
 @media (min-width: 620px) { .member .ctrls { grid-template-columns: 2fr 1fr 1fr; align-items: end; } }
 .member .ctrls > div { display: grid; gap: 4px; min-width: 0; }
-.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
-.seg button { border: 0; border-radius: 0; padding: 6px 10px; background: transparent; }
-.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
-.note { font-size: 0.9rem; color: var(--ink-soft); margin: 0; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; padding: 6px 12px; background: transparent; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.note { font-size: 0.92rem; color: var(--ink-soft); margin: 0; max-width: 62ch; }
 
-/* the script */
-.script { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 28px 18px; font-family: var(--font-script); font-size: 15px; line-height: 1.35; }
-@media (min-width: 620px) { .script { padding: 40px 56px; font-size: 16px; } }
-.el { padding: 4px 8px; margin: 0 -8px; border-radius: 6px; cursor: pointer; scroll-margin: 30vh; }
+/* the script: a printed page */
+.script { margin-top: 32px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 0; padding: 32px 18px; font-family: var(--font-script); font-size: 15px; line-height: 1.4; box-shadow: 0 1px 0 var(--rule), 0 18px 40px -28px rgba(0,0,0,0.25); }
+@media (min-width: 620px) { .script { padding: 56px 72px; font-size: 16px; } }
+.el { padding: 4px 8px; margin: 0 -8px; border-radius: 0; cursor: pointer; scroll-margin: 30vh; }
 .el:hover { background: var(--now); }
-.el.now { background: var(--now); box-shadow: inset 4px 0 0 var(--accent); }
+.el.now { background: var(--now); box-shadow: inset 3px 0 0 var(--accent); }
 .scene { font-weight: 700; margin-top: 22px; text-transform: uppercase; }
 .action { margin-top: 10px; }
 .trans { margin-top: 12px; text-align: right; }
 .center { margin-top: 18px; text-align: center; font-weight: 700; }
 .dlg { margin-top: 12px; }
 .dlg .cue { margin-left: 34%; text-transform: uppercase; }
-.dlg .cue mark { color: inherit; padding: 0 4px; border-radius: 3px; }
+.dlg .cue mark { color: inherit; padding: 0 4px; border-radius: 2px; }
 .dlg .par { margin-left: 24%; margin-right: 20%; }
 .dlg .ln { margin-left: 14%; margin-right: 12%; }
 @media (max-width: 480px) { .dlg .cue { margin-left: 22%; } .dlg .par { margin-left: 14%; margin-right: 6%; } .dlg .ln { margin-left: 6%; margin-right: 0; } }
 .yours { display: none; margin-left: 14%; margin-top: 4px; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; color: var(--accent); }
 .el.now.mine .yours { display: block; }
 
-/* transport */
-.transport { position: fixed; left: 0; right: 0; bottom: 0; background: var(--sheet); border-top: 1px solid var(--rule); padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 5; }
-.transport .in { max-width: 760px; margin: 0 auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.transport button { min-width: 48px; min-height: 44px; }
-#play { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; min-width: 96px; }
-.viz { max-width: 760px; margin: 0 auto 8px; display: grid; gap: 4px; }
-.viz canvas { display: block; width: 100%; height: 44px; border-radius: 6px; background: var(--paper); }
-.viz canvas#timeline { height: 14px; cursor: pointer; }
-.viz .legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.75rem; color: var(--ink-soft); }
-.viz .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
-#status { flex: 1 1 160px; min-width: 0; font-size: 0.9rem; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.warn { background: var(--hl-5); color: var(--ink); padding: 10px 12px; border-radius: 8px; }
+/* the player: dark, like an episode player */
+.transport { position: fixed; left: 0; right: 0; bottom: 0; background: var(--player); color: var(--player-ink); border-top: 1px solid var(--player-rule); padding-top: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); z-index: 5; }
+.transport .in { max-width: 800px; margin: 0 auto; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.transport button { min-width: 44px; min-height: 44px; background: transparent; color: var(--player-ink); border: 1px solid var(--player-rule); border-radius: 50%; padding: 0 12px; }
+.transport select { background: var(--player); color: var(--player-ink); border-color: var(--player-rule); }
+.transport .lab { color: var(--player-soft); }
+#play { background: var(--player-ink); color: var(--player); border-color: var(--player-ink); font-weight: 700; min-width: 104px; border-radius: 999px; letter-spacing: 0.02em; }
+.viz { max-width: 800px; margin: 0 auto 10px; display: grid; gap: 6px; }
+.viz canvas { display: block; width: 100%; height: 40px; border-radius: 0; background: transparent; }
+.viz canvas#timeline { height: 12px; cursor: pointer; background: var(--player-rule); }
+.viz .legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.72rem; color: var(--player-soft); letter-spacing: 0.04em; }
+.viz .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 1px; margin-right: 5px; vertical-align: -1px; }
+#status { flex: 1 1 160px; min-width: 0; font-size: 0.88rem; color: var(--player-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display); font-style: italic; }
+.warn { background: var(--hl-5); color: var(--ink); padding: 10px 12px; border-radius: 2px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
-</style>
-<style>
-.step { display: grid; gap: 12px; }
-.step h2 { margin: 0; font-size: 1rem; display: flex; gap: 10px; align-items: baseline; }
-.step h2 .num { font-family: var(--font-script); font-weight: 700; color: var(--accent); }
-.opts { display: grid; gap: 8px; }
-@media (min-width: 620px) { .opts { grid-template-columns: 1fr 1fr; } }
-.opt { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border: 1px solid var(--rule); border-radius: 8px; cursor: pointer; }
-.opt input { margin-top: 3px; }
-.opt b { display: block; }
+
+/* steps */
+.step { display: grid; gap: 14px; }
+.step h2 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; letter-spacing: -0.01em; display: flex; gap: 12px; align-items: baseline; }
+.step h2 .num { font-family: var(--font-ui); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em; color: var(--ink-soft); text-transform: uppercase; }
+.opts { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+@media (min-width: 620px) { .opts { grid-template-columns: 1fr 1fr; column-gap: 28px; } }
+.opt { display: flex; gap: 12px; align-items: flex-start; padding-block: 12px; border-bottom: 1px solid var(--rule); cursor: pointer; }
+.opt input { margin-top: 4px; accent-color: var(--accent); }
+.opt b { display: block; font-weight: 500; }
 .opt span { color: var(--ink-soft); font-size: 0.88rem; }
-.loadbar { height: 6px; border-radius: 3px; background: var(--paper); overflow: hidden; }
+.loadbar { height: 3px; background: var(--rule); overflow: hidden; }
 .loadbar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.2s; }
 select:disabled { opacity: 0.6; }
 </style>
 
 <div class="wrap">
   <header>
+    <p class="eyebrow">Tendai's screenplays &middot; read aloud</p>
     <h1>Table Read</h1>
     <p>Hear the script out loud. Choose what gets read, then who reads it. Tap any line to start from there.</p>
   </header>
@@ -134,7 +154,7 @@ select:disabled { opacity: 0.6; }
   </section>
 
   <section class="panel step" aria-labelledby="step1">
-    <h2 id="step1"><span class="num">1.</span> How to read it</h2>
+    <h2 id="step1"><span class="num">Step 1</span> How to read it</h2>
     <div class="opts">
       <label class="opt"><input type="checkbox" id="readScenes" checked><div><b>Scene headings</b><span>"Interior. Counselling practice. Waiting room. Morning."</span></div></label>
       <label class="opt"><input type="checkbox" id="readAction" checked><div><b>Directions</b><span>The action between lines: what people do, what we see.</span></div></label>
@@ -155,7 +175,7 @@ select:disabled { opacity: 0.6; }
   </section>
 
   <section class="panel step" aria-labelledby="step2">
-    <h2 id="step2"><span class="num">2.</span> Voices</h2>
+    <h2 id="step2"><span class="num">Step 2</span> Voices</h2>
     <p class="note" id="modeNote">Recorded with Chatterbox, an open-source voice model.</p>
     <p class="warn" id="noRec" hidden>This draft hasn't been recorded yet. It records automatically on GitHub when a draft is added to the screenplays folder. You can still read along.</p>
     <div id="loading" hidden><div class="note" id="loadingText">Loading voices...</div><div class="loadbar"><i id="loadingBar"></i></div></div>
@@ -1748,14 +1768,14 @@ FADE OUT.
     var f = fit(wave), g = f.g, w = f.w, h = f.h, mid = h / 2;
     g.clearRect(0, 0, w, h);
     g.lineWidth = 2; g.lineCap = "round";
-    g.strokeStyle = speaking ? (speaking === DIRECTOR ? cssVar("--ink-soft") : colorFor(speaking)) : cssVar("--rule");
+    g.strokeStyle = speaking ? (speaking === DIRECTOR ? cssVar("--player-soft") : colorFor(speaking)) : cssVar("--player-rule");
     g.beginPath();
     if (useReal && real.analyser && playing && !reduceMotion) {
       real.analyser.getByteTimeDomainData(wbuf);
       for (var x = 0; x < w; x++) { var v = (wbuf[Math.floor(x / w * wbuf.length)] - 128) / 128; var y = mid + v * mid * 1.6; x ? g.lineTo(x, y) : g.moveTo(x, y); }
     } else { g.moveTo(0, mid); g.lineTo(w, mid); }
     g.stroke();
-    if (speaking) { g.font = "700 12px " + cssVar("--font-script"); g.fillStyle = cssVar("--ink"); g.fillText(speaking === DIRECTOR ? "DIRECTOR" : speaking, 8, 14); }
+    if (speaking) { g.font = "700 12px " + cssVar("--font-script"); g.fillStyle = cssVar("--player-ink"); g.fillText(speaking === DIRECTOR ? "DIRECTOR" : speaking, 8, 14); }
   }
   function drawTimeline() {
     if (!useReal || !real.sched) { tl.hidden = true; return; }
@@ -1771,7 +1791,7 @@ FADE OUT.
       if (it.who !== DIRECTOR) laneEnd = Math.max(laneEnd, it.end);
     });
     var pos = real.ctx && (playing || real.paused) ? position() : (real.sched.items.filter(function (it) { return it.i >= idx; })[0] || { start: 0 }).start;
-    g.fillStyle = cssVar("--accent"); g.fillRect(pos / total * w - 1, 0, 2, h);
+    g.fillStyle = cssVar("--player-ink"); g.fillRect(pos / total * w - 1, 0, 2, h);
   }
   function renderLegend() {
     var lg = $("legend"); lg.textContent = "";
