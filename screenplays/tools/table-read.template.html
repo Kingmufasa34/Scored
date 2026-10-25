@@ -472,6 +472,7 @@ button.btn svg.vp-chev { opacity: .5; }
 .byo2 label.btn svg { width: 16px; height: 16px; }
 .byo2 label.btn:focus-within { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--b-ring); }
 .byo2 input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.byo-hint { margin: 8px 0 0; text-align: center; font-size: 0.78rem; color: var(--faint); }
 /* Bearnie Button, default variant + size lg: bg-primary text-primary-foreground hover:bg-primary/90, h-10 px-6, pill */
 button.btn.btn-primary { background: var(--text); color: var(--bg); }
 button.btn.btn-primary:hover { background: color-mix(in srgb, var(--text) 90%, transparent); }
@@ -514,16 +515,9 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
     <div class="sec-head"><div><p class="meta n" id="n-byo">03</p><p class="meta k">Bring your own</p></div><p class="meta aside">Fountain screenplay format</p></div>
     <h2 id="h-byo" class="sr-only">Bring your own script</h2>
     <div class="byo2">
-      <label class="btn btn-ghost btn-sm byo-b" for="fileIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>Open a file<input type="file" id="fileIn" accept=".fountain,.txt,.md,text/plain"></label>
-      <button type="button" class="btn btn-ghost btn-sm byo-b" id="pasteBtn" aria-expanded="false" aria-controls="paste"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>Paste text</button>
+      <label class="btn btn-ghost btn-sm byo-b" for="fileIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>Upload a script<input type="file" id="fileIn" accept=".pdf,.fdx,.docx,.fountain,.spmd,.txt,.md,application/pdf,text/plain"></label>
     </div>
-    <form class="paste" id="paste" hidden>
-      <label class="small" for="pasteName">Name (optional)</label>
-      <input id="pasteName" type="text" placeholder="Uses the Title: line if there is one">
-      <label class="small" for="pasteText">Script in Fountain format</label>
-      <textarea id="pasteText" placeholder="INT. KITCHEN - NIGHT&#10;&#10;She puts the kettle on.&#10;&#10;MAYA&#10;You're up."></textarea>
-      <div class="row"><button type="submit" class="go">Add to scripts</button><button type="button" id="pasteCancel">Cancel</button></div>
-    </form>
+    <p class="byo-hint">PDF, Final Draft, Word, Fountain or plain text</p>
     <p class="byo-msg" id="byoMsg" role="status"></p>
   </div>
 </section>
@@ -1635,7 +1629,7 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
   /* bring your own */
   function addOwn(name, text) {
     text = (text || "").replace(/\r\n/g, "\n");
-    if (!text.trim()) { $("byoMsg").textContent = "That script is empty. Paste or open a Fountain file with some lines in it."; return; }
+    if (!text.trim()) { $("byoMsg").textContent = "That file had no script in it."; return; }
     var tp = titlePage(text), label = (name || tp.title || "Untitled script").trim();
     var id = "own-" + Date.now().toString(36);
     if (!/^title:/im.test(text.split(/\n\s*\n/)[0])) text = "Title: " + label + "\nCredit: Written by\n\n====\n\n" + text;
@@ -1656,20 +1650,264 @@ button.btn.btn-lg svg { width: 18px; height: 18px; }
     $("byoMsg").textContent = "Removed.";
     renderHome();
   }
+  /* ---------- Upload: any screenplay file, turned into Fountain ----------
+     PDF (by where each line sits on the page), Final Draft .fdx (by paragraph type), Word .docx
+     (by paragraph style or indent), Fountain or plain text (by indent, or by the usual habits:
+     INT./EXT. headings, capitalised names over their lines). */
+  var PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+  function loadScript(src) {
+    return new Promise(function (res, rej) { var sc = document.createElement("script"); sc.src = src; sc.onload = res; sc.onerror = function () { rej(new Error("Couldn't load " + src)); }; document.head.appendChild(sc); });
+  }
+  var TRANS_ANY = /^(FADE (IN|OUT|TO BLACK)[.:]?|CUT TO( BLACK)?[.:]|[A-Z .]+ TO:|SMASH CUT:?|MATCH CUT:?|DISSOLVE:?|THE END\.?)$/;
+  var SCENE_ANY = /^\s*(\d+[A-Z]?\s+)?(INT|EXT|INT\.?\/EXT|I\/E|EST)[. ]/i;
+  function isCue(t) {
+    var b = t.replace(/\s*\((V\.O\.|O\.S\.|O\.C\.|CONT'D|CONT’D|CONTD|PRE-LAP|V\.O|O\.S)\)\s*/gi, " ").replace(/\^$/, "").trim();
+    return b.length > 0 && b.length <= 40 && /[A-Z]/.test(b) && b === b.toUpperCase() && !/[.!?]$/.test(b) && !SCENE_ANY.test(b) && !TRANS_ANY.test(b) && b.split(/\s+/).length <= 5;
+  }
+  function cleanCue(t) { return t.replace(/\s*\((CONT'D|CONT’D|CONTD)\)/gi, "").trim().toUpperCase(); }
+  function stripSceneNo(t) { return t.replace(/^\s*\d+[A-Z]?\s+/, "").replace(/\s+\d+[A-Z]?\s*$/, "").trim(); }
+  // blocks: {t: scene|action|char|paren|dlg|trans, text, br (starts a new paragraph)}
+  function blocksToFountain(blocks, tp) {
+    var out = [], prev = null;
+    function blank() { if (out.length && out[out.length - 1] !== "") out.push(""); }
+    blocks.forEach(function (b) {
+      var t = b.text.replace(/\s+/g, " ").trim(); if (!t) return;
+      if (b.t === "scene") { blank(); t = stripSceneNo(t); out.push(/^(INT|EXT|INT\.\/EXT|I\/E|EST)[. ]/i.test(t) ? t.toUpperCase() : "." + t); out.push(""); }
+      else if (b.t === "trans") { blank(); out.push(TRANS_RE.test(t.toUpperCase()) ? t.toUpperCase() : t); out.push(""); }
+      else if (b.t === "char") { blank(); out.push(cleanCue(t)); }
+      else if (b.t === "paren") {
+        if (!prev || (prev.t !== "char" && prev.t !== "dlg" && prev.t !== "paren")) { blank(); out.push(t); }
+        else out.push(t.charAt(0) === "(" ? t : "(" + t + ")");
+      } else if (b.t === "dlg") {
+        if (prev && prev.t === "dlg" && !b.br) out[out.length - 1] += " " + t;
+        else if (!prev || (prev.t !== "char" && prev.t !== "paren" && prev.t !== "dlg")) { blank(); out.push(t); }
+        else out.push(t);
+      } else {
+        if (prev && prev.t === "action" && !b.br) out[out.length - 1] += " " + t;
+        else { blank(); out.push(t); }
+      }
+      prev = { t: b.t };
+    });
+    var head = "";
+    if (tp && tp.title) {
+      head = "Title: " + tp.title + "\nCredit: Written by\n" + (tp.author ? "Author: " + tp.author + "\n" : "") + (tp.notes ? "Notes: " + tp.notes + "\n" : "") + "\n====\n\n";
+    }
+    return head + out.join("\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+  }
+  // Classify lines that carry an indent (points from the action margin) and a gap flag.
+  function classifyIndented(lines) {
+    var blocks = [], inDlg = false;
+    lines.forEach(function (l) {
+      var t = l.text.trim(), off = l.off; if (!t) { inDlg = false; return; }
+      if (/^\(?MORE\)?$/i.test(t) || /^\(CONT'D\)$|^\(CONTINUED\)$|^CONTINUED:?$/i.test(t)) return;
+      var b;
+      if (off < 25) {
+        b = SCENE_ANY.test(t) ? { t: "scene" } : TRANS_ANY.test(t.toUpperCase()) && t === t.toUpperCase() ? { t: "trans" } : { t: "action" };
+        inDlg = false;
+      } else if (off >= 255 || (TRANS_ANY.test(t) && off > 150)) { b = { t: "trans" }; inDlg = false; }
+      else if (off >= 130 && isCue(t)) { b = { t: "char" }; inDlg = true; }
+      else if (t.charAt(0) === "(" && off >= 60) b = { t: "paren" };
+      else if (off >= 40 && inDlg) b = { t: "dlg" };
+      else if (off >= 40 && isCue(t)) { b = { t: "char" }; inDlg = true; }
+      else if (off >= 40) b = { t: "dlg" };
+      else { b = { t: "action" }; inDlg = false; }
+      b.text = t; b.br = !!l.gap; blocks.push(b);
+    });
+    return blocks;
+  }
+  // No layout to go on: lean on screenplay habits. Blank lines (or paragraph ends) separate blocks.
+  function classifyPlain(paras) {
+    var blocks = [];
+    for (var k = 0; k < paras.length; k++) {
+      var lines = paras[k], first = lines[0].trim();
+      if (SCENE_ANY.test(first)) { blocks.push({ t: "scene", text: first, br: true }); lines = lines.slice(1); if (!lines.length) continue; first = lines[0].trim(); }
+      if (TRANS_ANY.test(first) && lines.length === 1) { blocks.push({ t: "trans", text: first, br: true }); continue; }
+      if (isCue(first)) {
+        blocks.push({ t: "char", text: first, br: true });
+        var rest = lines.slice(1);
+        // Word and some exports put the speech in its own paragraph(s): take the next one or two
+        if (!rest.length) {
+          while (k + 1 < paras.length && paras[k + 1][0].trim().charAt(0) === "(" && paras[k + 1].length === 1) { blocks.push({ t: "paren", text: paras[++k][0], br: false }); }
+          if (k + 1 < paras.length && !SCENE_ANY.test(paras[k + 1][0]) && !isCue(paras[k + 1][0].trim())) rest = paras[++k];
+        }
+        rest.forEach(function (l, n) { l = l.trim(); blocks.push(l.charAt(0) === "(" ? { t: "paren", text: l } : { t: "dlg", text: l, br: n === 0 ? false : false }); });
+        continue;
+      }
+      lines.forEach(function (l, n) { blocks.push({ t: "action", text: l.trim(), br: n === 0 }); });
+    }
+    return blocks;
+  }
+  function titleFromLines(ls) {
+    // a title page: the first line is the title; the line after "by" / "written by" names the writer
+    var tp = { title: "", author: "", notes: "" }, txt = ls.map(function (l) { return l.trim(); }).filter(Boolean);
+    if (!txt.length) return null;
+    tp.title = txt[0].replace(/^"|"$/g, "");
+    var k = 1; while (k < txt.length && txt[k] === txt[k].toUpperCase() && !/^(written )?by\b/i.test(txt[k]) && k < 3) { tp.title += ": " + txt[k]; k++; }
+    for (var n = k; n < txt.length; n++) if (/^((written|screenplay|story)\s+)?by\b:?$/i.test(txt[n]) || /^written by\b/i.test(txt[n])) {
+      var rest = txt[n].replace(/^((written|screenplay|story)\s+)?by\b:?\s*/i, "");
+      var m2 = n + 1; while (!rest && m2 < txt.length && /^((written|screenplay|story)\s+)?by\b:?$/i.test(txt[m2])) m2++;
+      tp.author = rest || txt[m2] || ""; txt.splice(n, rest ? 1 : m2 - n + 1); break;
+    }
+    var notes = txt.slice(k).filter(function (l) { return l !== tp.author; });
+    tp.notes = notes.join(" · ").slice(0, 200);
+    return tp;
+  }
+  function plainToFountain(text) {
+    text = text.replace(/\r\n?/g, "\n").replace(/\t/g, "    ").replace(/\f/g, "\n");
+    if (/^\s*title:/im.test(text.slice(0, 400)) || /\n====\n/.test(text)) return text;  // already Fountain with a title page
+    var raw = text.split("\n"), ind = raw.filter(function (l) { return l.trim(); }).map(function (l) { return l.match(/^ */)[0].length; });
+    var minI = Math.min.apply(null, ind.length ? ind : [0]), spread = ind.filter(function (n) { return n - minI >= 8; }).length;
+    if (spread > ind.length * 0.2) {
+      // laid out with spaces, as a screenplay printed to text: ~10 spaces per inch
+      var lines = [], gap = false, tpi = raw.findIndex(function (l) { return SCENE_ANY.test(l.trim()) || /^FADE IN/i.test(l.trim()); }), tp2 = null;
+      if (tpi > 0 && raw.slice(0, tpi).filter(function (l) { return l.trim(); }).length <= 10) { tp2 = titleFromLines(raw.slice(0, tpi)); raw = raw.slice(tpi); }
+      raw.forEach(function (l) { if (!l.trim()) { gap = true; lines.push({ text: "", off: 0 }); return; } lines.push({ text: l, off: (l.match(/^ */)[0].length - minI) * 7.2, gap: gap }); gap = false; });
+      return blocksToFountain(classifyIndented(lines), tp2);
+    }
+    var looksFountain = /\n\s*\n[A-Z][A-Z .'\-]+(\s*\(.*\))?\n[^\n]+/.test("\n\n" + text);
+    if (looksFountain) return text;
+    var paras = text.split(/\n\s*\n/).map(function (p) { return p.split("\n").filter(function (l) { return l.trim(); }); }).filter(function (p) { return p.length; });
+    var fs = paras.findIndex(function (p) { return SCENE_ANY.test(p[0]) || /^FADE IN/i.test(p[0].trim()); }), tp = null;
+    if (fs > 0 && fs <= 8 && paras.slice(0, fs).every(function (p) { return p.join(" ").length < 120; })) { tp = titleFromLines([].concat.apply([], paras.slice(0, fs))); paras = paras.slice(fs); }
+    return blocksToFountain(classifyPlain(paras), tp);
+  }
+  function fdxToFountain(xml) {
+    var d = new DOMParser().parseFromString(xml, "application/xml");
+    if (d.getElementsByTagName("parsererror").length) throw new Error("That Final Draft file couldn't be read.");
+    var paraText = function (p) { return Array.prototype.map.call(p.getElementsByTagName("Text"), function (t) { return t.textContent; }).join(""); };
+    var content = d.querySelector("FinalDraft > Content") || d.querySelector("Content"), blocks = [];
+    Array.prototype.forEach.call(content ? content.children : [], function (p) {
+      if (p.tagName !== "Paragraph") return;
+      var ty = (p.getAttribute("Type") || "Action").toLowerCase(), t = paraText(p).trim(); if (!t) return;
+      var k = /scene/.test(ty) ? "scene" : /character/.test(ty) ? "char" : /parenthetical/.test(ty) ? "paren" : /dialogue/.test(ty) ? "dlg" : /transition/.test(ty) ? "trans" : "action";
+      if (k === "action" && SCENE_ANY.test(t)) k = "scene";
+      blocks.push({ t: k, text: t, br: true });
+    });
+    var tpEl = d.querySelector("TitlePage"), tp = null;
+    if (tpEl) tp = titleFromLines(Array.prototype.map.call(tpEl.getElementsByTagName("Paragraph"), paraText));
+    return blocksToFountain(blocks, tp);
+  }
+  async function unzip(buf, want) {
+    var dv = new DataView(buf), e = buf.byteLength - 22;
+    while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--;
+    if (e < 0) throw new Error("That doesn't look like a Word file.");
+    var n = dv.getUint16(e + 10, true), at = dv.getUint32(e + 16, true), found = {};
+    for (var k = 0; k < n; k++) {
+      var method = dv.getUint16(at + 10, true), size = dv.getUint32(at + 20, true), nl = dv.getUint16(at + 28, true), xl = dv.getUint16(at + 30, true), cl = dv.getUint16(at + 32, true), lh = dv.getUint32(at + 42, true);
+      var name = new TextDecoder().decode(new Uint8Array(buf, at + 46, nl));
+      if (want.indexOf(name) >= 0) {
+        var start = lh + 30 + dv.getUint16(lh + 26, true) + dv.getUint16(lh + 28, true), data = new Uint8Array(buf, start, size);
+        if (method === 8) data = new Uint8Array(await new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer());
+        found[name] = new TextDecoder().decode(data);
+      }
+      at += 46 + nl + xl + cl;
+    }
+    return found;
+  }
+  async function docxToFountain(buf) {
+    var files = await unzip(buf, ["word/document.xml", "word/styles.xml"]);
+    if (!files["word/document.xml"]) throw new Error("That Word file has no text in it.");
+    var W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+    function attr(el, a) { return el ? el.getAttributeNS(W, a) || el.getAttribute("w:" + a) : null; }
+    function first(el, tag) { return el.getElementsByTagNameNS(W, tag)[0] || null; }
+    var styles = {};
+    if (files["word/styles.xml"]) {
+      var sd = new DOMParser().parseFromString(files["word/styles.xml"], "application/xml");
+      Array.prototype.forEach.call(sd.getElementsByTagNameNS(W, "style"), function (st) {
+        var id = attr(st, "styleId"), ppr = first(st, "pPr"), ind = ppr && first(ppr, "ind"), jc = ppr && first(ppr, "jc"), nm = first(st, "name");
+        styles[id] = { name: (attr(nm, "val") || id || "").toLowerCase(), left: ind ? +(attr(ind, "left") || attr(ind, "start") || 0) : null, jc: jc ? attr(jc, "val") : null, based: attr(first(st, "basedOn"), "val") };
+      });
+    }
+    function styleOf(id) { var s = styles[id], hops = 0, out = { name: s ? s.name : "", left: null, jc: null }; while (s && hops++ < 6) { if (out.left === null && s.left !== null) out.left = s.left; if (!out.jc && s.jc) out.jc = s.jc; s = styles[s.based]; } return out; }
+    var dd = new DOMParser().parseFromString(files["word/document.xml"], "application/xml"), paras = [];
+    Array.prototype.forEach.call(dd.getElementsByTagNameNS(W, "p"), function (p) {
+      var t = ""; Array.prototype.forEach.call(p.getElementsByTagNameNS(W, "*"), function (n) { if (n.localName === "t") t += n.textContent; else if (n.localName === "tab") t += " "; else if (n.localName === "br") t += "\n"; });
+      var ppr = first(p, "pPr"), ps = ppr && first(ppr, "pStyle"), st = styleOf(ps ? attr(ps, "val") : "Normal"), ind = ppr && first(ppr, "ind"), jc = ppr && first(ppr, "jc");
+      var left = ind && (attr(ind, "left") || attr(ind, "start")) !== null ? +(attr(ind, "left") || attr(ind, "start")) : st.left;
+      paras.push({ text: t, name: st.name, left: left === null ? null : left / 20, jc: (jc && attr(jc, "val")) || st.jc });
+    });
+    var named = paras.filter(function (p) { return /scene|slug|charac|dialog|paren|transit/.test(p.name); }).length;
+    var lefts = paras.filter(function (p) { return p.text.trim() && p.left !== null; }).map(function (p) { return p.left; });
+    var tpLines = [], body = paras;
+    var firstScene = paras.findIndex(function (p) { return SCENE_ANY.test(p.text) || /^FADE IN/i.test(p.text.trim()) || /scene|slug/.test(p.name); });
+    if (firstScene > 0 && firstScene < 25) { tpLines = paras.slice(0, firstScene).map(function (p) { return p.text; }); body = paras.slice(firstScene); }
+    var tp = tpLines.length ? titleFromLines(tpLines) : null, blocks;
+    if (named > body.length * 0.2) {
+      blocks = body.filter(function (p) { return p.text.trim(); }).map(function (p) {
+        var nm = p.name, t = p.text.trim();
+        var k = /scene|slug/.test(nm) ? "scene" : /charac/.test(nm) ? "char" : /paren/.test(nm) ? "paren" : /dialog/.test(nm) ? "dlg" : /transit/.test(nm) ? "trans" : SCENE_ANY.test(t) ? "scene" : "action";
+        return { t: k, text: t, br: true };
+      });
+    } else if (lefts.length && Math.max.apply(null, lefts) - Math.min.apply(null, lefts) >= 50) {
+      var minL = Math.min.apply(null, lefts);
+      blocks = classifyIndented(body.map(function (p) { return { text: p.text, off: p.jc === "right" ? 300 : (p.left === null ? 0 : p.left - minL), gap: true }; }));
+    } else {
+      blocks = classifyPlain(body.filter(function (p) { return p.text.trim(); }).map(function (p) { return p.text.split("\n"); }));
+    }
+    return blocksToFountain(blocks, tp);
+  }
+  async function pdfToFountain(buf, onPage) {
+    if (!window.pdfjsLib) { await loadScript(PDFJS + "pdf.min.js"); window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js"; }
+    var pdf = await window.pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise, pages = [];
+    for (var n = 1; n <= pdf.numPages; n++) {
+      onPage && onPage(n, pdf.numPages);
+      var page = await pdf.getPage(n), vp = page.getViewport({ scale: 1 }), tc = await page.getTextContent(), rows = [];
+      tc.items.forEach(function (it) {
+        if (!it.str || !it.str.trim() && !rows.length) return;
+        var x = it.transform[4], y = it.transform[5], r = rows.filter(function (r) { return Math.abs(r.y - y) < 2.5; })[0];
+        if (!r) { r = { y: y, items: [] }; rows.push(r); }
+        r.items.push({ x: x, w: it.width, s: it.str });
+      });
+      rows.forEach(function (r) {
+        r.items.sort(function (a, b) { return a.x - b.x; });
+        var t = "", end = null;
+        r.items.forEach(function (it) { if (end !== null && it.x - end > 1.5 && !/\s$/.test(t) && !/^\s/.test(it.s)) t += " "; t += it.s; end = it.x + it.w; });
+        r.x = r.items.filter(function (it) { return it.s.trim(); }).map(function (it) { return it.x; })[0]; r.text = t.replace(/\s+/g, " ").trim(); r.end = end;
+      });
+      rows = rows.filter(function (r) { return r.text; }).sort(function (a, b) { return b.y - a.y; });
+      // page numbers and running headers/footers
+      rows = rows.filter(function (r) { return !((r.y > vp.height - 60 || r.y < 50) && /^(\d+\.?|page \d+( of \d+)?|\d+ ?\/ ?\d+)$/i.test(r.text)); });
+      pages.push({ rows: rows, w: vp.width });
+    }
+    // the action margin: the most common left edge
+    var counts = {}; pages.forEach(function (p) { p.rows.forEach(function (r) { var k = Math.round(r.x / 4) * 4; counts[k] = (counts[k] || 0) + 1; }); });
+    // the leftmost edge many lines share (dialogue lines can outnumber action, so not simply the commonest)
+    var totalRows = 0; Object.keys(counts).forEach(function (k) { totalRows += counts[k]; });
+    var margin = +Object.keys(counts).map(Number).sort(function (a, b) { return a - b; }).filter(function (k) { return counts[k] >= Math.max(3, totalRows * 0.05); })[0] || 72;
+    var tp = null, start = 0;
+    if (pages.length > 1 && !pages[0].rows.some(function (r) { return SCENE_ANY.test(r.text) || /^FADE IN/.test(r.text); })) { tp = titleFromLines(pages[0].rows.map(function (r) { return r.text; })); start = 1; }
+    var lines = [];
+    pages.slice(start).forEach(function (p) {
+      var prevY = null;
+      p.rows.forEach(function (r) {
+        var centred = Math.abs((r.x + r.end) / 2 - p.w / 2) < 12 && r.x - margin > 60;
+        var off = r.x - margin, gap = prevY !== null && prevY - r.y > 17;
+        if (r.x < margin - 20 && /^\d+[A-Z]?\.?\s/.test(r.text)) { r.text = r.text.replace(/^\d+[A-Z]?\.?\s+/, ""); off = 0; }  // scene number in the margin
+        lines.push({ text: centred && !isCue(r.text) && r.text.charAt(0) !== "(" ? r.text : r.text, off: off, gap: gap || prevY === null });
+        prevY = r.y;
+      });
+    });
+    return blocksToFountain(classifyIndented(lines), tp);
+  }
+  async function fileToFountain(f) {
+    var ext = (f.name.match(/\.([^.]+)$/) || [, ""])[1].toLowerCase(), buf = await f.arrayBuffer();
+    if (ext === "pdf" || f.type === "application/pdf") return pdfToFountain(buf, function (n, of) { $("byoMsg").textContent = "Reading the PDF, page " + n + " of " + of + "..."; });
+    if (ext === "fdx") return fdxToFountain(new TextDecoder().decode(buf));
+    if (ext === "docx") return docxToFountain(buf);
+    if (ext === "doc" || ext === "pages" || ext === "rtf") throw new Error("That format can't be read here. Save it as PDF, Word (.docx) or Final Draft (.fdx) and upload that.");
+    return plainToFountain(new TextDecoder().decode(buf));
+  }
   $("fileIn").onchange = function () {
-    var f = this.files && this.files[0]; if (!f) return;
-    var rd = new FileReader();
-    rd.onload = function () { addOwn("", String(rd.result)); };
-    rd.onerror = function () { $("byoMsg").textContent = "Couldn't read that file. Try saving it as plain text (.fountain or .txt)."; };
-    rd.readAsText(f); this.value = "";
+    var f = this.files && this.files[0]; this.value = ""; if (!f) return;
+    $("byoMsg").textContent = "Reading “" + f.name + "”...";
+    fileToFountain(f).then(function (text) {
+      var tp = titlePage(text), base = f.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").trim();
+      addOwn(tp.title ? "" : base, text);
+    }).catch(function (err) {
+      $("byoMsg").textContent = (err && err.message && /format|Word|Final Draft|PDF|text/.test(err.message)) ? err.message : "Couldn't read that file. Try saving it as PDF or Fountain and uploading again.";
+      console.warn(err);
+    });
   };
-  $("pasteBtn").onclick = function () { var open = $("paste").hidden; $("paste").hidden = !open; this.setAttribute("aria-expanded", String(open)); if (open) $("pasteText").focus(); };
-  $("pasteCancel").onclick = function () { $("paste").hidden = true; $("pasteBtn").setAttribute("aria-expanded", "false"); };
-  $("paste").addEventListener("submit", function (ev) {
-    ev.preventDefault();
-    addOwn($("pasteName").value, $("pasteText").value);
-    if ($("pasteText").value.trim()) { $("pasteText").value = ""; $("pasteName").value = ""; $("paste").hidden = true; $("pasteBtn").setAttribute("aria-expanded", "false"); }
-  });
 
   /* light / dark */
   function isDark() { var a = document.documentElement.getAttribute("data-theme"); return a ? a === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
